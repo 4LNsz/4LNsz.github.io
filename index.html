@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alan Sena · Software Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #080a0e; --bg2: #0d1117; --bg3: #131920; --surface: #161d27;
+      --border: rgba(255,255,255,0.06); --border-hover: rgba(255,255,255,0.14);
+      --text: #e8edf2; --text-muted: #5a6a7a; --text-secondary: #8899aa;
+      --accent: #4f9eff; --accent2: #7ecfff;
+      --accent-dim: rgba(79,158,255,0.08); --accent-glow: rgba(79,158,255,0.15);
+      --green: #3dd68c; --amber: #f5a623;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; font-size: 14px; line-height: 1.7; overflow-x: hidden; cursor: none; }
+    .cursor { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.15s ease; mix-blend-mode: screen; }
+    .cursor-ring { width: 32px; height: 32px; border: 1px solid rgba(79,158,255,0.4); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; }
+    body:has(a:hover) .cursor, body:has(.lang-opt:hover) .cursor { transform: scale(2.5); }
+    body:has(a:hover) .cursor-ring, body:has(.lang-opt:hover) .cursor-ring { transform: scale(1.5); border-color: rgba(79,158,255,0.7); }
+    body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 1000; opacity: 0.4; }
+
+    /* Nav */
+    nav { position: fixed; top: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 3rem; background: rgba(8,10,14,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 100; animation: fadeDown 0.8s ease both; }
+    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-right { display: flex; align-items: center; gap: 2rem; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; cursor: none; }
+    .nav-links a:hover { color: var(--accent); }
+    .lang-btn { display: flex; align-items: center; background: var(--bg3); border: 1px solid var(--border); border-radius: 2px; overflow: hidden; }
+    .lang-opt { padding: 0.35rem 0.65rem; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; color: var(--text-muted); transition: all 0.2s; cursor: none; user-select: none; }
+    .lang-opt.active { background: var(--accent); color: #080a0e; font-weight: 500; }
+    .lang-opt:not(.active):hover { color: var(--accent); }
+    .lang-divider { width: 1px; height: 16px; background: var(--border); }
+
+    /* Layout */
+    section { padding: 7rem 0; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 3rem; }
+
+    /* Hero */
+    #hero { min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 70% 50%, rgba(79,158,255,0.04) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 20% 80%, rgba(61,214,140,0.03) 0%, transparent 60%); }
+    .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%); opacity: 0.4; }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent-dim); border: 1px solid rgba(79,158,255,0.2); color: var(--accent); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.4rem 1rem; border-radius: 2px; margin-bottom: 2rem; animation: fadeUp 0.8s 0.2s ease both; }
+    .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+    .hero-name { font-family: 'Syne', sans-serif; font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.04em; color: var(--text); margin-bottom: 0.5rem; animation: fadeUp 0.8s 0.3s ease both; }
+    .hero-name .accent { color: var(--accent); }
+    .hero-role { font-family: 'Syne', sans-serif; font-size: clamp(1rem, 2.5vw, 1.4rem); font-weight: 500; color: var(--text-secondary); letter-spacing: 0.02em; margin-bottom: 2rem; animation: fadeUp 0.8s 0.4s ease both; }
+    .hero-desc { max-width: 520px; color: var(--text-secondary); font-size: 13px; line-height: 1.9; margin-bottom: 3rem; animation: fadeUp 0.8s 0.5s ease both; }
+    .hero-desc strong { color: var(--text); font-weight: 500; }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.8s 0.6s ease both; }
+    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.75rem; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: all 0.25s ease; cursor: none; }
+    .btn-primary { background: var(--accent); color: #080a0e; font-weight: 500; }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(79,158,255,0.25); }
+    .btn-ghost { border: 1px solid var(--border-hover); color: var(--text-secondary); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .hero-scroll { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--text-muted); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; animation: fadeUp 1s 1s ease both; }
+    .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--accent), transparent); animation: scrollLine 1.5s ease infinite; }
+    @keyframes scrollLine { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform: scaleY(1); transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+    /* Section */
+    .section-label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
+    .section-title { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; letter-spacing: -0.03em; color: var(--text); margin-bottom: 3.5rem; line-height: 1.1; }
+    .section-title span { color: var(--accent); }
+
+    /* About */
+    #about .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .about-text p { color: var(--text-secondary); font-size: 13px; line-height: 1.9; margin-bottom: 1.25rem; }
+    .about-text strong { color: var(--text); font-weight: 500; }
+
+    /* Principles — replaces stats */
+    .principles { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .principle-item { background: var(--bg2); padding: 1.25rem 1.5rem; display: flex; align-items: flex-start; gap: 1rem; transition: background 0.2s; }
+    .principle-item:hover { background: var(--surface); }
+    .principle-icon { color: var(--accent); font-size: 13px; margin-top: 2px; flex-shrink: 0; width: 18px; }
+    .principle-title { font-size: 12px; font-weight: 500; color: var(--text); letter-spacing: 0.04em; margin-bottom: 0.2rem; }
+    .principle-desc { font-size: 11px; color: var(--text-muted); line-height: 1.6; }
+
+    /* Stack */
+    #stack .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .stack-group { background: var(--bg2); padding: 1.75rem; transition: background 0.2s; }
+    .stack-group:hover { background: var(--surface); }
+    .stack-group-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
+    .badge-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .badge { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--bg3); border: 1px solid var(--border); color: var(--text-secondary); font-size: 11px; padding: 0.35rem 0.75rem; border-radius: 2px; letter-spacing: 0.04em; transition: all 0.2s; }
+    .badge:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+    .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    .badge-dot.green { background: var(--green); }
+    .badge-dot.amber { background: var(--amber); }
+    .badge-dot.muted { background: var(--text-muted); }
+
+    /* Timeline */
+    #experience .timeline { position: relative; }
+    .timeline::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 0; width: 1px; background: linear-gradient(to bottom, var(--accent), var(--border) 80%, transparent); }
+    .timeline-item { padding-left: 2.5rem; position: relative; margin-bottom: 3rem; opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .timeline-item.visible { opacity: 1; transform: translateY(0); }
+    .timeline-dot { position: absolute; left: -4px; top: 8px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); box-shadow: 0 0 12px var(--accent-glow); }
+    .timeline-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+    .timeline-company { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+    .timeline-period { font-size: 11px; color: var(--text-muted); letter-spacing: 0.06em; background: var(--bg3); border: 1px solid var(--border); padding: 0.2rem 0.6rem; border-radius: 2px; }
+    .timeline-role { font-size: 12px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.75rem; }
+    .timeline-desc { color: var(--text-secondary); font-size: 13px; line-height: 1.9; max-width: 620px; }
+    .timeline-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+    .tag { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); background: var(--bg3); border: 1px solid var(--border); padding: 0.2rem 0.6rem; border-radius: 2px; }
+
+    /* Contact */
+    #contact { background: var(--bg2); border-top: 1px solid var(--border); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .contact-text p { color: var(--text-secondary); font-size: 13px; line-height: 1.9; margin-bottom: 2rem; }
+    .contact-links { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+    .contact-link { display: flex; align-items: center; justify-content: space-between; background: var(--bg2); padding: 1.1rem 1.25rem; text-decoration: none; transition: background 0.2s; }
+    .contact-link:hover { background: var(--surface); }
+    .contact-link:hover .cl-arrow { color: var(--accent); transform: translateX(4px); }
+    .cl-left { display: flex; align-items: center; gap: 0.75rem; }
+    .cl-icon { color: var(--accent); font-size: 13px; width: 20px; }
+    .cl-label { font-size: 12px; color: var(--text); letter-spacing: 0.04em; }
+    .cl-sub { font-size: 11px; color: var(--text-muted); }
+    .cl-arrow { color: var(--text-muted); transition: all 0.2s; font-size: 12px; }
+
+    footer { border-top: 1px solid var(--border); padding: 2rem 3rem; display: flex; align-items: center; justify-content: space-between; background: var(--bg); }
+    .footer-left { font-size: 11px; color: var(--text-muted); letter-spacing: 0.06em; }
+    .footer-left span { color: var(--accent); }
+    .footer-right { font-size: 11px; color: var(--text-muted); }
+
+    [data-t] { transition: opacity 0.15s ease; }
+    body.lang-switching [data-t] { opacity: 0; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .container { padding: 0 1.5rem; }
+      section { padding: 5rem 0; }
+      #about .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <nav>
+    <a href="#hero" class="nav-logo">alan<span>.</span>sena</a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#about" data-t="nav.about">About</a></li>
+        <li><a href="#stack" data-t="nav.stack">Stack</a></li>
+        <li><a href="#experience" data-t="nav.experience">Experience</a></li>
+        <li><a href="#contact" data-t="nav.contact">Contact</a></li>
+      </ul>
+      <div class="lang-btn">
+        <span class="lang-opt active" id="opt-en" onclick="setLang('en')">EN</span>
+        <div class="lang-divider"></div>
+        <span class="lang-opt" id="opt-pt" onclick="setLang('pt')">PT</span>
+      </div>
+    </div>
+  </nav>
+
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-tag" data-t="hero.tag">Available for new opportunities</div>
+        <h1 class="hero-name">Alan<br /><span class="accent">Sena</span></h1>
+        <p class="hero-role" data-t="hero.role">Software Engineer · Back-end · High-Performance Systems</p>
+        <p class="hero-desc" data-t="hero.desc">Specialized in <strong>high-concurrency systems</strong> and <strong>real-time simulation environments</strong>. I live under the hood — architecting logic that holds for hundreds of simultaneous users, hunting bottlenecks, and turning heavy infrastructure into lean, scalable solutions.</p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-primary" data-t="hero.cta1">Get in touch →</a>
+          <a href="#experience" class="btn btn-ghost" data-t="hero.cta2">View experience</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+      <span data-t="hero.scroll">scroll</span>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <p class="section-label reveal" data-t="about.label">// about</p>
+      <h2 class="section-title reveal reveal-delay-1" data-t="about.title">What I <span>do</span></h2>
+      <div class="about-grid">
+        <div class="about-text reveal reveal-delay-2">
+          <p data-t="about.p1">I'm a <strong>Back-end Engineer</strong> focused on what happens below the surface. My day-to-day revolves around architecting complex logic, diagnosing performance issues, and refactoring systems that are consuming more hardware than they should.</p>
+          <p data-t="about.p2">Most of my experience lives inside <strong>FiveM roleplay environments</strong> — where real-time simulation at scale isn't optional, it's the product. That means concurrency, state persistence, and server health are constant concerns.</p>
+          <p data-t="about.p3">I've also led back-end teams, defined technical roadmaps, and translated community needs into sustainable engineering solutions. When the stack demands it, I navigate <strong>React and Vue.js</strong> with full autonomy — but back-end is where I'm most at home.</p>
+        </div>
+        <div class="reveal reveal-delay-3">
+          <div class="principles">
+            <div class="principle-item">
+              <span class="principle-icon">→</span>
+              <div><div class="principle-title" data-t="about.pr1.title">Performance first</div><div class="principle-desc" data-t="about.pr1.desc">If it works but wastes resources, it's not done. Optimization is part of the deliverable.</div></div>
+            </div>
+            <div class="principle-item">
+              <span class="principle-icon">→</span>
+              <div><div class="principle-title" data-t="about.pr2.title">Systems thinking</div><div class="principle-desc" data-t="about.pr2.desc">Every component affects the whole. I design with bottlenecks in mind from the start.</div></div>
+            </div>
+            <div class="principle-item">
+              <span class="principle-icon">→</span>
+              <div><div class="principle-title" data-t="about.pr3.title">Lean infrastructure</div><div class="principle-desc" data-t="about.pr3.desc">Heavy doesn't mean robust. The best systems do more with less.</div></div>
+            </div>
+            <div class="principle-item">
+              <span class="principle-icon">→</span>
+              <div><div class="principle-title" data-t="about.pr4.title">Ownership</div><div class="principle-desc" data-t="about.pr4.desc">I don't just write code — I own outcomes, from architecture decisions to production health.</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stack" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+    <div class="container">
+      <p class="section-label reveal" data-t="stack.label">// stack</p>
+      <h2 class="section-title reveal reveal-delay-1" data-t="stack.title">Tools of the <span>trade</span></h2>
+      <div class="stack-grid reveal reveal-delay-2">
+        <div class="stack-group">
+          <div class="stack-group-label" data-t="stack.g1">Languages</div>
+          <div class="badge-list">
+            <span class="badge"><span class="badge-dot green"></span>Lua</span>
+            <span class="badge"><span class="badge-dot"></span>TypeScript</span>
+            <span class="badge"><span class="badge-dot"></span>JavaScript</span>
+            <span class="badge"><span class="badge-dot muted"></span>Python</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-group-label" data-t="stack.g2">Platform & Runtime</div>
+          <div class="badge-list">
+            <span class="badge"><span class="badge-dot green"></span>FiveM</span>
+            <span class="badge"><span class="badge-dot green"></span>CFX.RE</span>
+            <span class="badge"><span class="badge-dot"></span>Node.js</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-group-label" data-t="stack.g3">Database & Infra</div>
+          <div class="badge-list">
+            <span class="badge"><span class="badge-dot amber"></span>MySQL</span>
+            <span class="badge"><span class="badge-dot amber"></span>MariaDB</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-group-label" data-t="stack.g4">When needed</div>
+          <div class="badge-list">
+            <span class="badge"><span class="badge-dot"></span>React</span>
+            <span class="badge"><span class="badge-dot"></span>Vue.js</span>
+            <span class="badge"><span class="badge-dot"></span>Figma</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-group-label" data-t="stack.g5">Tools</div>
+          <div class="badge-list">
+            <span class="badge"><span class="badge-dot"></span>Git</span>
+            <span class="badge"><span class="badge-dot"></span>VS Code</span>
+            <span class="badge"><span class="badge-dot"></span>Jira</span>
+            <span class="badge"><span class="badge-dot"></span>Trello</span>
+          </div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-group-label" data-t="stack.g6">Focus areas</div>
+          <div class="badge-list">
+            <span class="badge"><span class="badge-dot green"></span><span data-t="stack.perf">Performance</span></span>
+            <span class="badge"><span class="badge-dot green"></span><span data-t="stack.conc">Concurrency</span></span>
+            <span class="badge"><span class="badge-dot"></span><span data-t="stack.arch">Architecture</span></span>
+            <span class="badge"><span class="badge-dot"></span><span data-t="stack.scal">Scalability</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="container">
+      <p class="section-label reveal" data-t="exp.label">// experience</p>
+      <h2 class="section-title reveal reveal-delay-1" data-t="exp.title">Where I've <span>worked</span></h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-meta"><span class="timeline-company">WinsVue</span><span class="timeline-period" data-t="exp.w.period">Aug 2025 — Apr 2026</span></div>
+          <div class="timeline-role" data-t="exp.w.role">Back-end Developer</div>
+          <p class="timeline-desc" data-t="exp.w.desc">Developed and maintained high-complexity ecosystems for real-time roleplay systems with high user concurrency. Led refactoring initiatives that resulted in drastic reductions in CPU and RAM consumption across critical infrastructure. Contributed to technical decision-making, system planning, and the update roadmap.</p>
+          <div class="timeline-tags"><span class="tag">Lua</span><span class="tag">TypeScript</span><span class="tag">FiveM</span><span class="tag">React</span><span class="tag">Vue.js</span><span class="tag">Performance</span></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-meta"><span class="timeline-company">Energy</span><span class="timeline-period" data-t="exp.e.period">Aug 2022 — Jun 2025</span></div>
+          <div class="timeline-role" data-t="exp.e.role">Software Developer</div>
+          <p class="timeline-desc" data-t="exp.e.desc">Led a back-end development team — role distribution, goal-setting, and product quality. Delivered new features, system optimizations, and operational improvements. Restructured core systems, creating cleaner and more maintainable workflows for the team.</p>
+          <div class="timeline-tags"><span class="tag">Lua</span><span class="tag">JavaScript</span><span class="tag">FiveM</span><span class="tag">Team Lead</span><span class="tag">Architecture</span></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-meta"><span class="timeline-company">Garty Group</span><span class="timeline-period" data-t="exp.g.period">Jan 2022 — Mar 2022</span></div>
+          <div class="timeline-role" data-t="exp.g.role">Software Developer</div>
+          <p class="timeline-desc" data-t="exp.g.desc">Back-end developer for a FiveM-focused company. Provided support for 4 distinct servers, delivering custom functionalities and operational solutions tailored to each environment.</p>
+          <div class="timeline-tags"><span class="tag">Lua</span><span class="tag">FiveM</span><span class="tag">CFX.RE</span><span class="tag">Multi-server</span></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:var(--text-muted);box-shadow:none;"></div>
+          <div class="timeline-meta"><span class="timeline-company" style="color:var(--text-secondary);">UniFavip Wyden</span><span class="timeline-period" data-t="exp.u.period">Jan 2020 — Dec 2024</span></div>
+          <div class="timeline-role" style="color:var(--text-muted);" data-t="exp.u.role">Bachelor's · Computer Science</div>
+          <p class="timeline-desc" data-t="exp.u.desc">Graduated with a Bachelor's degree in Computer Science.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container">
+      <p class="section-label reveal" data-t="contact.label">// contact</p>
+      <h2 class="section-title reveal reveal-delay-1" data-t="contact.title">Let's <span>talk</span></h2>
+      <div class="contact-grid">
+        <div class="contact-text reveal reveal-delay-2">
+          <p data-t="contact.desc">Open to new opportunities, technical conversations, or just a good exchange about back-end architecture and performance engineering. Reach out through any of the channels on the right.</p>
+          <a href="mailto:alansoarescomercial@hotmail.com" class="btn btn-primary" data-t="contact.cta">Send an email →</a>
+        </div>
+        <div class="reveal reveal-delay-3">
+          <div class="contact-links">
+            <a href="https://www.linkedin.com/in/4lnsz/" target="_blank" class="contact-link"><div class="cl-left"><span class="cl-icon">in</span><div><div class="cl-label">LinkedIn</div><div class="cl-sub">linkedin.com/in/4lnsz</div></div></div><span class="cl-arrow">→</span></a>
+            <a href="https://github.com/4LNsz" target="_blank" class="contact-link"><div class="cl-left"><span class="cl-icon">gh</span><div><div class="cl-label">GitHub</div><div class="cl-sub">github.com/4LNsz</div></div></div><span class="cl-arrow">→</span></a>
+            <a href="https://twitter.com/4LNsz" target="_blank" class="contact-link"><div class="cl-left"><span class="cl-icon">tw</span><div><div class="cl-label">Twitter / X</div><div class="cl-sub">@4LNsz</div></div></div><span class="cl-arrow">→</span></a>
+            <a href="https://discord.com/users/4LNsz" target="_blank" class="contact-link"><div class="cl-left"><span class="cl-icon">dc</span><div><div class="cl-label">Discord</div><div class="cl-sub">4LNsz</div></div></div><span class="cl-arrow">→</span></a>
+            <a href="mailto:alansoarescomercial@hotmail.com" class="contact-link"><div class="cl-left"><span class="cl-icon">@</span><div><div class="cl-label">Email</div><div class="cl-sub">alansoarescomercial@hotmail.com</div></div></div><span class="cl-arrow">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-left">alan<span>.</span>sena · software engineer</div>
+    <div class="footer-right">Caruaru, BR · 2026</div>
+  </footer>
+
+  <script>
+    const i18n = {
+      en: {
+        'nav.about':'About','nav.stack':'Stack','nav.experience':'Experience','nav.contact':'Contact',
+        'hero.tag':'Available for new opportunities',
+        'hero.role':'Software Engineer · Back-end · High-Performance Systems',
+        'hero.desc':'Specialized in <strong>high-concurrency systems</strong> and <strong>real-time simulation environments</strong>. I live under the hood — architecting logic that holds for hundreds of simultaneous users, hunting bottlenecks, and turning heavy infrastructure into lean, scalable solutions.',
+        'hero.cta1':'Get in touch →','hero.cta2':'View experience','hero.scroll':'scroll',
+        'about.label':'// about','about.title':'What I <span>do</span>',
+        'about.p1':"I'm a <strong>Back-end Engineer</strong> focused on what happens below the surface. My day-to-day revolves around architecting complex logic, diagnosing performance issues, and refactoring systems that are consuming more hardware than they should.",
+        'about.p2':"Most of my experience lives inside <strong>FiveM roleplay environments</strong> — where real-time simulation at scale isn't optional, it's the product. That means concurrency, state persistence, and server health are constant concerns.",
+        'about.p3':"I've also led back-end teams, defined technical roadmaps, and translated community needs into sustainable engineering solutions. When the stack demands it, I navigate <strong>React and Vue.js</strong> with full autonomy — but back-end is where I'm most at home.",
+        'about.pr1.title':'Performance first','about.pr1.desc':"If it works but wastes resources, it's not done. Optimization is part of the deliverable.",
+        'about.pr2.title':'Systems thinking','about.pr2.desc':'Every component affects the whole. I design with bottlenecks in mind from the start.',
+        'about.pr3.title':'Lean infrastructure','about.pr3.desc':'Heavy does not mean robust. The best systems do more with less.',
+        'about.pr4.title':'Ownership','about.pr4.desc':"I don't just write code — I own outcomes, from architecture decisions to production health.",
+        'stack.label':'// stack','stack.title':'Tools of the <span>trade</span>',
+        'stack.g1':'Languages','stack.g2':'Platform & Runtime','stack.g3':'Database & Infra',
+        'stack.g4':'When needed','stack.g5':'Tools','stack.g6':'Focus areas',
+        'stack.perf':'Performance','stack.conc':'Concurrency','stack.arch':'Architecture','stack.scal':'Scalability',
+        'exp.label':'// experience','exp.title':"Where I've <span>worked</span>",
+        'exp.w.period':'Aug 2025 — Apr 2026','exp.w.role':'Back-end Developer',
+        'exp.w.desc':'Developed and maintained high-complexity ecosystems for real-time roleplay systems with high user concurrency. Led refactoring initiatives that resulted in drastic reductions in CPU and RAM consumption across critical infrastructure. Contributed to technical decision-making, system planning, and the update roadmap.',
+        'exp.e.period':'Aug 2022 — Jun 2025','exp.e.role':'Software Developer',
+        'exp.e.desc':'Led a back-end development team — role distribution, goal-setting, and product quality. Delivered new features, system optimizations, and operational improvements. Restructured core systems, creating cleaner and more maintainable workflows for the team.',
+        'exp.g.period':'Jan 2022 — Mar 2022','exp.g.role':'Software Developer',
+        'exp.g.desc':'Back-end developer for a FiveM-focused company. Provided support for 4 distinct servers, delivering custom functionalities and operational solutions tailored to each environment.',
+        'exp.u.period':'Jan 2020 — Dec 2024','exp.u.role':"Bachelor's · Computer Science",
+        'exp.u.desc':"Graduated with a Bachelor's degree in Computer Science.",
+        'contact.label':'// contact','contact.title':"Let's <span>talk</span>",
+        'contact.desc':'Open to new opportunities, technical conversations, or just a good exchange about back-end architecture and performance engineering. Reach out through any of the channels on the right.',
+        'contact.cta':'Send an email →'
+      },
+      pt: {
+        'nav.about':'Sobre','nav.stack':'Stack','nav.experience':'Experiência','nav.contact':'Contato',
+        'hero.tag':'Aberto a novas oportunidades',
+        'hero.role':'Engenheiro de Software · Back-end · Sistemas de Alta Performance',
+        'hero.desc':'Especializado em <strong>sistemas de alta concorrência</strong> e <strong>ambientes de simulação em tempo real</strong>. Vivo debaixo do capô — arquitetando lógica que aguenta centenas de usuários simultâneos, caçando gargalos e transformando infraestruturas pesadas em soluções leves e escaláveis.',
+        'hero.cta1':'Entrar em contato →','hero.cta2':'Ver experiência','hero.scroll':'rolar',
+        'about.label':'// sobre','about.title':'O que eu <span>faço</span>',
+        'about.p1':'Sou um <strong>Engenheiro de Back-end</strong> focado no que acontece abaixo da superfície. Minha rotina envolve arquitetar lógicas complexas, diagnosticar problemas de performance e refatorar sistemas que consomem mais hardware do que deveriam.',
+        'about.p2':'Grande parte da minha experiência vive dentro de <strong>ambientes de roleplay no FiveM</strong> — onde simulação em tempo real em escala não é opcional, é o produto. Isso significa que concorrência, persistência de estado e saúde do servidor são preocupações constantes.',
+        'about.p3':'Também liderei equipes de back-end, defini roadmaps técnicos e traduzi necessidades da comunidade em soluções de engenharia sustentáveis. Quando a stack exige, navego pelo <strong>React e Vue.js</strong> com total autonomia — mas o back-end é onde me sinto em casa.',
+        'about.pr1.title':'Performance em primeiro lugar','about.pr1.desc':'Se funciona mas desperdiça recursos, não está pronto. Otimização faz parte da entrega.',
+        'about.pr2.title':'Visão sistêmica','about.pr2.desc':'Cada componente afeta o todo. Projeto já pensando nos gargalos desde o início.',
+        'about.pr3.title':'Infraestrutura enxuta','about.pr3.desc':'Pesado não significa robusto. Os melhores sistemas fazem mais com menos.',
+        'about.pr4.title':'Dono do resultado','about.pr4.desc':'Não apenas escrevo código — sou responsável pelos resultados, das decisões de arquitetura à saúde em produção.',
+        'stack.label':'// stack','stack.title':'Ferramentas do <span>ofício</span>',
+        'stack.g1':'Linguagens','stack.g2':'Plataforma & Runtime','stack.g3':'Banco de Dados & Infra',
+        'stack.g4':'Quando necessário','stack.g5':'Ferramentas','stack.g6':'Áreas de foco',
+        'stack.perf':'Performance','stack.conc':'Concorrência','stack.arch':'Arquitetura','stack.scal':'Escalabilidade',
+        'exp.label':'// experiência','exp.title':'Onde eu já <span>trabalhei</span>',
+        'exp.w.period':'Ago 2025 — Abr 2026','exp.w.role':'Desenvolvedor Back-end',
+        'exp.w.desc':'Desenvolvi e mantive ecossistemas de alta complexidade para sistemas de roleplay em tempo real com alta concorrência de usuários. Liderei iniciativas de refatoração que resultaram em reduções drásticas no consumo de CPU e RAM em infraestruturas críticas. Contribuí para tomadas de decisão técnicas, planejamento de sistemas e roadmap de atualizações.',
+        'exp.e.period':'Ago 2022 — Jun 2025','exp.e.role':'Desenvolvedor de Software',
+        'exp.e.desc':'Liderei uma equipe de desenvolvimento back-end — distribuição de funções, definição de objetivos e qualidade do produto. Entreguei novas funcionalidades, otimizações de sistemas e melhorias operacionais. Reestruturei sistemas core, criando fluxos mais limpos e fáceis de manter para a equipe.',
+        'exp.g.period':'Jan 2022 — Mar 2022','exp.g.role':'Desenvolvedor de Software',
+        'exp.g.desc':'Desenvolvedor back-end para uma empresa focada em FiveM. Prestei suporte a 4 servidores distintos, entregando funcionalidades customizadas e soluções operacionais adaptadas às necessidades de cada ambiente.',
+        'exp.u.period':'Jan 2020 — Dez 2024','exp.u.role':'Bacharelado · Ciência da Computação',
+        'exp.u.desc':'Graduado em Ciência da Computação pela UniFavip Wyden.',
+        'contact.label':'// contato','contact.title':'Vamos <span>conversar</span>',
+        'contact.desc':'Aberto a novas oportunidades, conversas técnicas ou apenas uma boa troca sobre arquitetura back-end e engenharia de performance. Entre em contato por qualquer canal ao lado.',
+        'contact.cta':'Enviar um e-mail →'
+      }
+    };
+
+    let currentLang = 'en';
+
+    function applyLang(lang) {
+      const dict = i18n[lang];
+      document.querySelectorAll('[data-t]').forEach(el => {
+        const v = dict[el.getAttribute('data-t')];
+        if (v !== undefined) el.innerHTML = v;
+      });
+      document.getElementById('opt-en').classList.toggle('active', lang === 'en');
+      document.getElementById('opt-pt').classList.toggle('active', lang === 'pt');
+      document.documentElement.lang = lang;
+      currentLang = lang;
+      localStorage.setItem('lang', lang);
+    }
+
+    function setLang(lang) {
+      if (lang === currentLang) return;
+      document.body.classList.add('lang-switching');
+      setTimeout(() => { applyLang(lang); document.body.classList.remove('lang-switching'); }, 180);
+    }
+
+    (function () {
+      const saved = localStorage.getItem('lang');
+      if (saved && i18n[saved]) { applyLang(saved); return; }
+      const bl = (navigator.language || 'en').toLowerCase();
+      applyLang(bl.startsWith('pt') ? 'pt' : 'en');
+    })();
+
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx - 4 + 'px'; cursor.style.top = my - 4 + 'px';
+    });
+    (function animRing() {
+      rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+      ring.style.left = rx - 16 + 'px'; ring.style.top = ry - 16 + 'px';
+      requestAnimationFrame(animRing);
+    })();
+
+    // Scroll reveal
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal, .timeline-item').forEach(el => obs.observe(el));
+
+    // Active nav
+    const secs = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let cur = '';
+      secs.forEach(s => { if (window.scrollY >= s.offsetTop - 200) cur = s.id; });
+      navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--accent)' : ''; });
+    });
+  </script>
+</body>
+</html>

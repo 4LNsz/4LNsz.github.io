@@ -8,6 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
     :root {
       --bg: #080a0e; --bg2: #0d1117; --bg3: #131920; --surface: #161d27;
       --border: rgba(255,255,255,0.06); --border-hover: rgba(255,255,255,0.14);
@@ -17,23 +18,19 @@
       --green: #3dd68c; --amber: #f5a623;
     }
     html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; font-size: 14px; line-height: 1.7; overflow-x: hidden; cursor: none; }
-    .cursor { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transition: transform 0.15s ease; mix-blend-mode: screen; }
-    .cursor-ring { width: 32px; height: 32px; border: 1px solid rgba(79,158,255,0.4); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; }
-    body:has(a:hover) .cursor, body:has(.lang-opt:hover) .cursor { transform: scale(2.5); }
-    body:has(a:hover) .cursor-ring, body:has(.lang-opt:hover) .cursor-ring { transform: scale(1.5); border-color: rgba(79,158,255,0.7); }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; font-size: 14px; line-height: 1.7; overflow-x: hidden; }
     body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 1000; opacity: 0.4; }
 
     /* Nav */
     nav { position: fixed; top: 0; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 3rem; background: rgba(8,10,14,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); z-index: 100; animation: fadeDown 0.8s ease both; }
-    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
+    .nav-logo { font-family: 'DM Mono', monospace; font-weight: 500; font-size: 1rem; letter-spacing: 0.02em; color: var(--text); text-decoration: none; }
     .nav-logo span { color: var(--accent); }
     .nav-right { display: flex; align-items: center; gap: 2rem; }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; cursor: none; }
+    .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
     .nav-links a:hover { color: var(--accent); }
     .lang-btn { display: flex; align-items: center; background: var(--bg3); border: 1px solid var(--border); border-radius: 2px; overflow: hidden; }
-    .lang-opt { padding: 0.35rem 0.65rem; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; color: var(--text-muted); transition: all 0.2s; cursor: none; user-select: none; }
+    .lang-opt { padding: 0.35rem 0.65rem; font-size: 11px; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; color: var(--text-muted); transition: all 0.2s; user-select: none; }
     .lang-opt.active { background: var(--accent); color: #080a0e; font-weight: 500; }
     .lang-opt:not(.active):hover { color: var(--accent); }
     .lang-divider { width: 1px; height: 16px; background: var(--border); }
@@ -46,17 +43,17 @@
     #hero { min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; }
     .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 70% 50%, rgba(79,158,255,0.04) 0%, transparent 70%), radial-gradient(ellipse 40% 60% at 20% 80%, rgba(61,214,140,0.03) 0%, transparent 60%); }
     .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%); opacity: 0.4; }
-    .hero-content { position: relative; z-index: 1; }
-    .hero-tag { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent-dim); border: 1px solid rgba(79,158,255,0.2); color: var(--accent); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.4rem 1rem; border-radius: 2px; margin-bottom: 2rem; animation: fadeUp 0.8s 0.2s ease both; }
+    .hero-content { position: relative; z-index: 1; width: 100%; max-width: 620px; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent-dim); border: 1px solid rgba(79,158,255,0.2); color: var(--accent); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.4rem 1rem; border-radius: 2px; margin-bottom: 2rem; animation: fadeUp 0.8s 0.2s ease both; white-space: nowrap; min-height: 32px; }
     .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
     .hero-name { font-family: 'Syne', sans-serif; font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.04em; color: var(--text); margin-bottom: 0.5rem; animation: fadeUp 0.8s 0.3s ease both; }
     .hero-name .accent { color: var(--accent); }
-    .hero-role { font-family: 'Syne', sans-serif; font-size: clamp(1rem, 2.5vw, 1.4rem); font-weight: 500; color: var(--text-secondary); letter-spacing: 0.02em; margin-bottom: 2rem; animation: fadeUp 0.8s 0.4s ease both; }
-    .hero-desc { max-width: 520px; color: var(--text-secondary); font-size: 13px; line-height: 1.9; margin-bottom: 3rem; animation: fadeUp 0.8s 0.5s ease both; }
+    .hero-role { font-family: 'Syne', sans-serif; font-size: clamp(1rem, 2.5vw, 1.4rem); font-weight: 500; color: var(--text-secondary); letter-spacing: 0.02em; margin-bottom: 2rem; animation: fadeUp 0.8s 0.4s ease both; min-height: 2em; }
+    .hero-desc { width: 520px; max-width: 100%; color: var(--text-secondary); font-size: 13px; line-height: 1.9; margin-bottom: 3rem; animation: fadeUp 0.8s 0.5s ease both; min-height: 8rem; }
     .hero-desc strong { color: var(--text); font-weight: 500; }
     .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.8s 0.6s ease both; }
-    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.75rem; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: all 0.25s ease; cursor: none; }
+    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.75rem; font-family: 'DM Mono', monospace; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: all 0.25s ease; }
     .btn-primary { background: var(--accent); color: #080a0e; font-weight: 500; }
     .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(79,158,255,0.25); }
     .btn-ghost { border: 1px solid var(--border-hover); color: var(--text-secondary); }
@@ -104,8 +101,8 @@
     .timeline-dot { position: absolute; left: -4px; top: 8px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); border: 2px solid var(--bg); box-shadow: 0 0 12px var(--accent-glow); }
     .timeline-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
     .timeline-company { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
-    .timeline-period { font-size: 11px; color: var(--text-muted); letter-spacing: 0.06em; background: var(--bg3); border: 1px solid var(--border); padding: 0.2rem 0.6rem; border-radius: 2px; }
-    .timeline-role { font-size: 12px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.75rem; }
+    .timeline-period { font-size: 11px; color: var(--text-muted); letter-spacing: 0.06em; background: var(--bg3); border: 1px solid var(--border); padding: 0.2rem 0.6rem; border-radius: 2px; white-space: nowrap; }
+    .timeline-role { font-size: 12px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.75rem; white-space: nowrap; }
     .timeline-desc { color: var(--text-secondary); font-size: 13px; line-height: 1.9; max-width: 620px; }
     .timeline-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
     .tag { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); background: var(--bg3); border: 1px solid var(--border); padding: 0.2rem 0.6rem; border-radius: 2px; }
@@ -152,11 +149,8 @@
 </head>
 <body>
 
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
-
   <nav>
-    <a href="#hero" class="nav-logo">alan<span>.</span>sena</a>
+    <a href="#hero" class="nav-logo">4lnsz</a>
     <div class="nav-right">
       <ul class="nav-links">
         <li><a href="#about" data-t="nav.about">About</a></li>
@@ -345,7 +339,7 @@
   </section>
 
   <footer>
-    <div class="footer-left">alan<span>.</span>sena · software engineer</div>
+    <div class="footer-left">4lns<span>z</span> · software engineer</div>
     <div class="footer-right">Caruaru, BR · 2026</div>
   </footer>
 
@@ -441,20 +435,6 @@
       if (saved && i18n[saved]) { applyLang(saved); return; }
       const bl = (navigator.language || 'en').toLowerCase();
       applyLang(bl.startsWith('pt') ? 'pt' : 'en');
-    })();
-
-    // Cursor
-    const cursor = document.getElementById('cursor');
-    const ring = document.getElementById('cursorRing');
-    let mx = 0, my = 0, rx = 0, ry = 0;
-    document.addEventListener('mousemove', e => {
-      mx = e.clientX; my = e.clientY;
-      cursor.style.left = mx - 4 + 'px'; cursor.style.top = my - 4 + 'px';
-    });
-    (function animRing() {
-      rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-      ring.style.left = rx - 16 + 'px'; ring.style.top = ry - 16 + 'px';
-      requestAnimationFrame(animRing);
     })();
 
     // Scroll reveal

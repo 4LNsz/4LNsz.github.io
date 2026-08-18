@@ -14,6 +14,12 @@ as a static build to GitHub Pages.
 There are no tests and no linter. Verify changes by running `npm run build`
 and checking the dev server visually.
 
+**npm, not pnpm.** `package-lock.json` is the lockfile the Pages workflow
+installs from with `npm ci`. A `pnpm-lock.yaml` and `pnpm-workspace.yaml`
+used to sit alongside it, so the versions resolved locally and the ones
+CI built with could drift apart without anyone noticing. Do not
+reintroduce a second lockfile.
+
 Two build-time environment variables, both set by the Pages workflow from
 `actions/configure-pages` outputs, both with local fallbacks:
 

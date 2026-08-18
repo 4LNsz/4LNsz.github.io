@@ -1,0 +1,226 @@
+/* The header floats over the page, so it needs to answer two questions
+   at every scroll position: is it readable, and is it in the way?
+
+   It used to answer neither. mix-blend-mode: difference made it legible
+   over any backdrop without a background of its own — but "legible" is
+   not the same as "not in the way". Inverted glyphs sitting directly on
+   body copy read as damage to the text underneath, and the effect is
+   worst over the large display type this page is built from.
+
+   Now:
+     .is-stuck   past the hero, it takes a scrim of its own ramp, so it
+                 sits ON the page instead of inside it.
+     .is-hidden  scrolling down, it leaves entirely — nothing overlaps
+                 while reading. Scrolling up brings it back, so
+                 navigation is always one gesture away.
+
+   Dropping the blend also means everything here can use the ordinary
+   theme tokens, instead of a fixed ink and a ladder of opacities. */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 800;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px var(--pad);
+  min-height: var(--header-h);
+  color: var(--fg);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.3s ease,
+              border-color 0.3s ease;
+}
+
+header.is-stuck {
+  background: var(--header-bg);
+  border-bottom-color: var(--line);
+  /* Progressive: without support the scrim is simply more opaque. */
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  header.is-stuck { background: var(--bg); }
+}
+
+header.is-hidden { transform: translateY(-100%); }
+
+.brand {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.02em;
+  padding: 8px 0;
+  white-space: nowrap;
+  color: var(--fg);
+  transition: color 0.25s;
+}
+.brand em { font-style: normal; color: var(--fg-subtle); transition: color 0.25s; }
+.brand:hover em,
+.brand:focus-visible em { color: var(--signal); }
+
+/* ── desktop nav ─────────────────────────────────────────── */
+.nav { display: flex; gap: clamp(14px, 2vw, 26px); align-items: center; }
+.nav a {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--fg-muted);
+  padding: 8px 0;
+  border-bottom: 1px solid transparent;
+  transition: color 0.25s, border-color 0.25s;
+}
+.nav a:hover,
+.nav a:focus-visible { color: var(--fg); border-bottom-color: var(--signal); }
+.nav a[aria-current="true"] { color: var(--fg); border-bottom-color: var(--signal); }
+.nav a i { font-style: normal; color: var(--fg-subtle); margin-right: 5px; }
+.nav a:hover i,
+.nav a[aria-current="true"] i { color: var(--signal); }
+
+.hud { display: flex; align-items: center; gap: 4px; }
+
+/* ── icon buttons ────────────────────────────────────────
+   The visual glyph stays small; ::after expands the hit area to --tap
+   without disturbing layout. */
+.icon-btn {
+  position: relative;
+  background: none;
+  border: none;
+  color: var(--fg-muted);
+  cursor: pointer;
+  padding: 6px;
+  display: grid;
+  place-items: center;
+  transition: color 0.25s;
+}
+.icon-btn:hover,
+.icon-btn:focus-visible { color: var(--fg); }
+.icon-btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--tap);
+  height: var(--tap);
+  transform: translate(-50%, -50%);
+}
+.icon-btn svg { width: 16px; height: 16px; }
+
+/* ── language switch ─────────────────────────────────────── */
+.lang {
+  display: flex;
+  gap: 1px;
+  align-items: center;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+.lang button {
+  position: relative;
+  background: none;
+  border: none;
+  color: var(--fg-subtle);
+  font: inherit;
+  cursor: pointer;
+  padding: 12px 5px;
+  transition: color 0.25s, border-color 0.25s;
+  text-transform: uppercase;
+  border-bottom: 1px solid transparent;
+}
+.lang button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: var(--tap);
+  width: 100%;
+  height: var(--tap);
+  transform: translate(-50%, -50%);
+}
+.lang button[aria-current="true"] { color: var(--fg); border-bottom-color: var(--signal); }
+.lang button:hover,
+.lang button:focus-visible { color: var(--fg); }
+/* --fg-faint is a decorative-stroke token and this is a rendered glyph,
+   so it takes the lowest tone that is still a TEXT tone. */
+.lang span { color: var(--fg-subtle); }
+
+/* ── burger ──────────────────────────────────────────────── */
+.nav-toggle { display: none; }
+.nav-toggle i {
+  display: block;
+  width: 17px;
+  height: 1.5px;
+  background: currentColor;
+  transition: transform 0.3s ease, opacity 0.2s ease;
+}
+.nav-toggle i + i { margin-top: 4px; }
+.nav-toggle[aria-expanded="true"] i:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] i:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] i:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+
+/* ── mobile drawer ───────────────────────────────────────── */
+.nav-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 790;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: calc(var(--header-h) + 28px) var(--pad) var(--pad);
+  background: var(--bg);
+  overflow-y: auto;
+  visibility: hidden;
+  opacity: 0;
+  /* Asymmetric on purpose. Opening flips visibility instantly (0s) so
+     nav.js can move focus into the panel in the same tick — a
+     visibility:hidden element refuses .focus(), and interpolating
+     visibility across the fade makes whether it lands a race.
+     Closing delays the flip until the fade has finished. */
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+.nav-drawer.open {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.3s ease, visibility 0s linear 0s;
+}
+
+.nav-drawer a {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: clamp(12px, 2.4vh, 20px) 0;
+  border-bottom: var(--rule);
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: clamp(24px, 7vw, 44px);
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  color: var(--fg);
+  transition: color 0.2s;
+}
+.nav-drawer a i {
+  font-style: normal;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.13em;
+  color: var(--signal);
+}
+.nav-drawer a:hover,
+.nav-drawer a:focus-visible,
+.nav-drawer a[aria-current="true"] { color: var(--signal); }
+
+@media (max-width: 900px) {
+  .nav { display: none; }
+  .nav-toggle { display: grid; }
+  .nav-drawer { display: flex; }
+}
+
+/* The drawer is a full-page overlay; the page behind it must not scroll. */
+html.nav-open, html.nav-open body { overflow: hidden; }

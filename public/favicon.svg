@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Ramp values from src/styles/tokens.css: --ink-900 and --aqua.
+       The tab strip follows the OS, not the site's own toggle, so the
+       plate inverts on prefers-color-scheme rather than [data-theme]. -->
+  <style>
+    .plate { fill: #0a1413; }
+    .mark  { fill: #45dfd0; }
+    @media (prefers-color-scheme: light) {
+      .plate { fill: #f3f0e8; }
+      .mark  { fill: #0a6a63; }
+    }
+  </style>
+
+  <rect class="plate" width="64" height="64" rx="14"/>
+
+  <!-- A blocky "4": at 16px the counter is the only thing that reads,
+       so it is oversized and the strokes are heavy. -->
+  <path class="mark" d="M33.5 12h9.2v23.4h5.6v8.1h-5.6V52h-9.2v-8.5H15.2v-7.6L31.4 12h2.1zm-.9 23.4V22.9L23.7 35.4h8.9z"/>
+</svg>

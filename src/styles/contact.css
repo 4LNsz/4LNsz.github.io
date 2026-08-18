@@ -1,0 +1,168 @@
+/* Section 05 sits in a well one step below the page field. It used to
+   flip to the opposite ramp, which meant dark mode ended on a slab of
+   light paper — see the note at the top of tokens.css. */
+/* Vertical padding comes from the shared --section-y rule in base.css,
+   which also zeroes the bottom — the footer closes this section. */
+#contact {
+  background: var(--bg-sunken);
+  color: var(--fg);
+}
+
+/* The last oversized element on the page, and the last one left from
+   the design the hero already shed twice: "ALAN" at up to 330px, then
+   the statement at up to 76px. At 190px this ran to a slab of letters
+   that shouted a greeting.
+
+   It now sits in the same register as the hero name (up to 62px), which
+   is the largest type the page allows anywhere. Section 05 gets its
+   weight from the channel cards below, not from the headline. */
+.contact-big {
+  font-family: var(--f-display);
+  font-weight: var(--w-display);
+  font-stretch: var(--display-wdth);
+  text-transform: uppercase;
+  font-size: clamp(30px, 5vw, 66px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--fg);
+}
+/* splitChars() groups characters into .wd wrappers separated by real
+   text nodes — without them a split headline has no whitespace anywhere
+   and cannot wrap at all. */
+.contact-big .wd { display: inline-block; }
+.contact-big .ch { display: inline-block; }
+
+/* ── channels ────────────────────────────────────────────
+   auto-fit means the column count follows the available width with no
+   breakpoints of its own: three across on a desktop, two on a tablet,
+   one on a phone, and nothing to keep in sync.
+
+   The old version paired a bespoke Discord card (icon + note + raw ID +
+   two buttons in one flex row) with a separate three-column link strip.
+   Both are gone; every channel is now the same object. */
+.channels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: 12px;
+  margin-top: clamp(34px, 5vw, 56px);
+}
+
+.card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 104px;
+  padding: 22px 52px 22px 22px;   /* right pad reserves the arrow's lane */
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.card__text { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.card__k { color: var(--fg-subtle); transition: color 0.25s; }
+
+/* ── featured channel ────────────────────────────────────
+   Spans every track, so it works at any column count the auto-fit
+   settles on — no breakpoint of its own. The accent edge and the mark
+   carry the emphasis, which is why the section needs no sentence
+   telling the reader this is the one to use. */
+.card--featured {
+  grid-column: 1 / -1;
+  min-height: 128px;
+  padding-left: 26px;
+  border-color: var(--signal);
+  background: linear-gradient(to right, var(--signal-wash), transparent 60%), var(--surface);
+  overflow: hidden;
+}
+/* The accent edge. Inset by the radius so it does not square off the
+   rounded corners. */
+.card--featured::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--signal);
+}
+.card__mark {
+  width: clamp(30px, 4vw, 38px);
+  height: auto;
+  flex: 0 0 auto;
+  fill: var(--signal);
+}
+/* One step up from the other cards' eyebrows. The tones in tokens.css
+   are calibrated against --surface, and this card's left edge is
+   --surface plus the accent wash: --fg-subtle measures 3.7:1 there. */
+.card--featured .card__k { color: var(--fg-muted); }
+.card--featured .card__val { font-size: clamp(22px, 3.4vw, 32px); }
+.card__sub {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--fg-muted);
+}
+
+.card__val {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: clamp(19px, 2.2vw, 26px);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--fg);
+}
+/* An address, not a name: mono at a size that fits the narrowest card
+   without the line breaking mid-domain. */
+.card__val--mono {
+  font-family: var(--f-mono);
+  font-weight: 400;
+  font-size: clamp(11px, 1.15vw, 13px);
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.card__go {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-family: var(--f-mono);
+  font-size: 15px;
+  line-height: 1;
+  color: var(--fg-subtle);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.25s;
+}
+
+/* Nothing here moves the card itself. The previous social links slid on
+   hover while a magnetic script also dragged them toward the pointer,
+   so adjacent targets overlapped each other. Only the arrow travels,
+   and only inside its own reserved lane. */
+.card:hover,
+.card:focus-visible {
+  background: var(--surface-2);
+  border-color: var(--signal);
+}
+/* Keep the accent wash on the featured card — the flat surface-2 above
+   would strip the very thing that marks it out. */
+.card--featured:hover,
+.card--featured:focus-visible {
+  background: linear-gradient(to right, var(--signal-wash), transparent 70%), var(--surface-2);
+}
+.card:hover .card__k,
+.card:focus-visible .card__k { color: var(--fg-muted); }
+.card:hover .card__go,
+.card:focus-visible .card__go { color: var(--signal); transform: translate(3px, -3px); }
+
+/* Touch has no hover: :active is the only press feedback available. */
+.card:active { background: var(--surface-2); border-color: var(--signal); }
+
+footer {
+  display: flex;
+  justify-content: center;
+  padding: 26px var(--pad);
+  margin-top: clamp(50px, 8vw, 90px);
+  border-top: var(--rule);
+  color: var(--fg-subtle);
+}

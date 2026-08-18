@@ -1,0 +1,194 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   DESIGN TOKENS — the single source of truth for colour and rhythm.
+
+   ── The system, in two layers ────────────────────────────────────────
+
+   1. PRIMITIVES — two tonal ramps, defined once, theme-independent.
+      INK   is a teal-cast dark ramp (hue ~172, low chroma).
+      PAPER is a warm sand light ramp (hue ~45, low chroma).
+      Neither ramp contains pure #000 or #fff. A page built from a ramp
+      has depth; a page built from one background and its inverse does not.
+
+   2. SEMANTICS — each theme maps ONE ramp onto roles: surface levels,
+      text tones, lines. Dark uses INK throughout. Light uses PAPER
+      throughout. A theme never mixes them.
+
+   ── Sections separate by ELEVATION, not inversion ────────────────────
+
+   #practice and #contact used to flip to the opposite ramp mid-page, so
+   dark mode served two large slabs of light paper. That is not a dark
+   theme — it is two themes fighting on one page, and it wrecks night
+   legibility exactly where the reader has adapted to a dark field.
+
+   Section separation now comes from the ramp's own steps:
+     --bg          the page field          (hero, profile, stack, path)
+     --surface     raised one step         (marquee band, #practice)
+     --bg-sunken   a well below the field  (#contact, hero meta strip)
+     --surface-2   raised two steps        (chips, hovered rows)
+
+   Rule: no component file may hardcode a colour or dim text with
+   opacity. Add a token here.
+
+   Contrast against its own surface (WCAG 2.1, equal in both themes):
+     --fg          ~15.8 : 1   AAA — headings, primary copy
+     --fg-muted     ~7.9 : 1   AAA — secondary copy, notes
+     --fg-subtle    ~5.0 : 1   AA  — small mono labels, meta, counters
+     --fg-faint          —     DECORATIVE ONLY. Never put text in it.
+     --signal      5.7–11.6:1  AA  — accent, safe for small text
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── type ─────────────────────────────────────────────
+     Archivo is one variable family doing two jobs: a grotesque for
+     running text, and the same design stretched along its `wdth` axis
+     for the oversized display type. One face, two registers — which is
+     why --display-wdth exists rather than a second font.
+
+     It replaced Bricolage Grotesque, which reads fine but has become a
+     default: it is the house face of half the portfolio templates and
+     of most machine-generated layouts. Newsreader went with it — a
+     serif for body copy pulled the page toward editorial when the
+     subject is back-end engineering. */
+  --f-display: "Archivo", "Segoe UI", system-ui, sans-serif;
+  --f-text: "Archivo", "Segoe UI", system-ui, sans-serif;
+  /* Chivo Mono is Archivo's stablemate — same foundry (Omnibus-Type),
+     same design language. It replaced JetBrains Mono, which is the
+     default terminal face of nearly every developer portfolio and of
+     most machine-generated layouts; accurate as code, generic as
+     identity. */
+  --f-mono: "Chivo Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  /* wdth axis value for the huge type. Archivo's range is 62.5–125. */
+  --display-wdth: 118%;
+
+  /* ── rhythm ───────────────────────────────────────────── */
+  --pad: clamp(18px, 4vw, 64px);
+  --rule: 1px solid var(--line);
+
+  /* Vertical rhythm between sections. ONE value, applied by the shared
+     rule in base.css — every section used to carry its own padding, and
+     some pushed it onto inner elements instead, so the gaps between
+     consecutive sections came out 117 / 198 / 187 / 225px. Change the
+     page's breathing room here, never per section. */
+  --section-y: clamp(52px, 7.5vh, 104px);
+
+  --r-sm: 3px;
+  --r-md: 6px;
+  --r-lg: 12px;
+  --r-pill: 99px;
+
+  /* Smallest interactive box. Below this, touch accuracy collapses. */
+  --tap: 44px;
+
+  /* How far a row hover bleeds past its own box, so the leading number
+     or date is not flush against the edge of the highlight. Must stay
+     under --pad at every width or the bleed pushes past the section and
+     the page scrolls sideways: at 390px --pad is 15.6px and this is
+     10px. */
+  --row-inset: clamp(10px, 1.4vw, 20px);
+
+  /* Header height, so section anchors can clear it. */
+  --header-h: 58px;
+
+  /* ═══ 1 · PRIMITIVES ═══════════════════════════════════ */
+
+  /* INK — teal-cast dark ramp */
+  --ink-950: #060d0c;
+  --ink-900: #0a1413;
+  --ink-850: #0d1817;
+  --ink-800: #101b19;
+  --ink-700: #162422;
+  --ink-600: #1e2f2c;
+  --ink-500: #2c413d;
+  --ink-400: #45605b;
+  --ink-300: #718884;
+  --ink-200: #93aaa5;
+  --ink-100: #c3d4d0;
+  --ink-050: #e8f2f0;
+
+  /* PAPER — warm sand light ramp */
+  --paper-050: #faf8f2;
+  --paper-100: #f3f0e8;
+  --paper-150: #eeeae1;
+  --paper-200: #eae6db;
+  --paper-300: #e1dccf;
+  --paper-400: #d5cfbf;
+  --paper-500: #c0b8a4;
+  --paper-600: #9a917f;
+  --paper-700: #6b665c;
+  --paper-800: #4d4841;
+  --paper-900: #171614;
+
+  /* ACCENT — one hue, two lightnesses. Each is contrast-safe for small
+     text on the ramp it belongs to; they are not interchangeable. */
+  --aqua: #45dfd0;   /* for INK surfaces   — 11.6:1 on --ink-900  */
+  --teal: #0a6a63;   /* for PAPER surfaces —  5.7:1 on --paper-100 */
+}
+
+/* ═══ 2 · SEMANTICS ══════════════════════════════════════ */
+
+/* ── DARK · default ─────────────────────────────────────── */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: var(--ink-900);
+  --bg-sunken: var(--ink-950);
+  --surface: var(--ink-850);
+  --surface-2: var(--ink-700);
+  --line: var(--ink-600);
+  --line-strong: var(--ink-500);
+
+  --fg: var(--ink-050);
+  --fg-muted: var(--ink-200);
+  --fg-subtle: var(--ink-300);
+  --fg-faint: var(--ink-400);
+
+  --signal: var(--aqua);
+  --signal-ink: var(--ink-950);
+  --signal-wash: rgba(69, 223, 208, 0.12);
+
+  /* The header floats over content, so it needs a scrim of its own
+     ramp — see header.css. */
+  --header-bg: rgba(10, 20, 19, 0.82);
+
+  /* material: dark emits */
+  --grain: 0.07;
+  --w-display: 700;                 /* light-on-dark blooms — pull weight back */
+  --dot-glow: 0 0 10px var(--signal), 0 0 24px rgba(69, 223, 208, 0.38);
+  --ambient:
+    radial-gradient(58% 52% at 20% 12%, rgba(69, 223, 208, 0.14), transparent 68%),
+    radial-gradient(45% 42% at 88% 72%, rgba(69, 223, 208, 0.06), transparent 70%);
+  --vignette: none;
+  --lift: 0 14px 40px -18px rgba(0, 0, 0, 0.85);
+}
+
+/* ── LIGHT ──────────────────────────────────────────────── */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: var(--paper-100);
+  --bg-sunken: var(--paper-200);
+  --surface: var(--paper-150);
+  --surface-2: var(--paper-300);
+  --line: var(--paper-400);
+  --line-strong: var(--paper-500);
+
+  --fg: var(--paper-900);
+  --fg-muted: var(--paper-800);
+  --fg-subtle: var(--paper-700);
+  --fg-faint: var(--paper-600);
+
+  --signal: var(--teal);
+  --signal-ink: var(--paper-050);
+  --signal-wash: rgba(10, 106, 99, 0.1);
+
+  --header-bg: rgba(243, 240, 232, 0.82);
+
+  /* material: light absorbs */
+  --grain: 0.045;
+  --w-display: 800;                 /* ink on paper can carry more weight */
+  --dot-glow: none;
+  --ambient: none;
+  --vignette: radial-gradient(125% 85% at 50% -5%, transparent 52%, rgba(23, 22, 20, 0.06));
+  --lift: 0 14px 38px -20px rgba(45, 40, 30, 0.32);
+}

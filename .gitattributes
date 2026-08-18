@@ -1,0 +1,7 @@
+# Keep the repository LF-only regardless of the OS committing to it.
+* text=auto eol=lf
+
+# Binary assets must never be line-ending normalised.
+*.png binary
+*.jpg binary
+*.pdf binary

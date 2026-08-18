@@ -1,0 +1,302 @@
+#hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  /* flex-start, not flex-end. The hero is taller than its content, and
+     flex-end handed every spare pixel to the space ABOVE the first
+     child — which is what made the top of the screen read as empty. The
+     slack now goes to .hero-body, which centres itself in whatever is
+     left between the strip and the fold. */
+  justify-content: flex-start;
+  /* Clears the fixed header rather than guessing at it. */
+  padding-top: calc(var(--header-h) + clamp(20px, 6vh, 80px));
+  padding-bottom: clamp(18px, 3vh, 48px);
+  position: relative;
+}
+
+/* ambient bloom — dark theme only, driven by --ambient */
+#hero::before {
+  content: "";
+  position: absolute;
+  inset: -25% -12% 10% -12%;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--ambient);
+  transition: background 0.6s ease;
+}
+
+/* ── the strip ───────────────────────────────────────────
+   Five cells divided by hairlines, sitting between rules. It replaced
+   two separate bands: a top row holding status, clock and a scroll cue
+   with 60% of its width as air, and a three-cell strip under the name.
+   Neither was full, and both said "here is a row of data".
+
+   Cells, not a flex row with space-between: inside a cell, empty space
+   reads as the field having room. Between two loose items it reads as
+   something missing. */
+.hero-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  border-top: var(--rule);
+  border-bottom: var(--rule);
+  background: var(--bg-sunken);
+}
+.hero-strip > div {
+  padding: 13px 16px 15px;
+  border-right: var(--rule);
+  min-width: 0;
+}
+.hero-strip > div:last-child { border-right: none; }
+.hero-strip .k { color: var(--fg-subtle); display: block; margin-bottom: 6px; }
+.hero-strip .v {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+  overflow-wrap: anywhere;
+}
+
+/* Five cells stop holding their labels here; three, then two. The
+   trailing cell spans the full row so a lone orphan never sits in a
+   half-width box. */
+@media (max-width: 1100px) {
+  .hero-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .hero-strip > div:nth-child(3n) { border-right: none; }
+  .hero-strip > div:nth-child(-n + 3) { border-bottom: var(--rule); }
+}
+@media (max-width: 700px) {
+  .hero-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-strip > div { padding: 11px 12px 13px; }
+  .hero-strip > div:nth-child(n) { border-right: var(--rule); border-bottom: var(--rule); }
+  .hero-strip > div:nth-child(2n) { border-right: none; }
+  .hero-strip > div:last-child { grid-column: 1 / -1; border-right: none; border-bottom: none; }
+}
+
+/* ── body ────────────────────────────────────────────────
+   Two attempts at this screen failed the same way. First "ALAN" at up
+   to 330px; then, with the name gone, the statement at up to 76px. Both
+   were one element blown up until it filled the fold, and scale alone
+   is not composition — the second read no better than the first.
+
+   So: nothing is oversized. The name is the largest thing on the screen
+   at a size a person would actually set it, the statement reads as the
+   sentence it is, and the running system sits beside them as an equal
+   rather than as wallpaper behind them. */
+.hero-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(20px, 4vw, 56px);
+  align-items: center;
+  /* auto on both sides: takes the leftover height and splits it evenly,
+     so the block sits centred under the strip instead of piling the
+     slack above everything. */
+  margin-block: auto;
+  padding-block: clamp(18px, 4vh, 56px);
+}
+@media (min-width: 940px) {
+  .hero-body { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }
+}
+
+/* Stacked, the rig sat between the statement and the meta strip and
+   pushed the strip 32px below the fold — so the first screen ended on a
+   half-cut row of data. `display: contents` dissolves .hero-body into
+   the hero's own column so the two can be reordered independently:
+   identity and facts complete above the fold, the running system
+   directly beneath, which is a better invitation to scroll than a
+   clipped table. */
+@media (max-width: 939px) {
+  .hero-body { display: contents; }
+  .hero-main { order: 1; margin-block: auto 0; }
+  .hero-rig { order: 2; margin-top: clamp(18px, 3vh, 32px); margin-bottom: auto; }
+}
+
+.hero-eyebrow { color: var(--signal); margin-bottom: 14px; }
+
+.hero-name {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-stretch: var(--display-wdth);
+  font-size: clamp(34px, 4.6vw, 62px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  color: var(--fg);
+}
+
+.hero-statement {
+  margin-top: clamp(16px, 2.4vh, 24px);
+  max-width: 42ch;
+  font-family: var(--f-text);
+  font-size: clamp(16px, 1.45vw, 19px);
+  font-weight: 400;
+  line-height: 1.55;
+  letter-spacing: -0.005em;
+  color: var(--fg-muted);
+}
+
+/* ── the rig ─────────────────────────────────────────────
+   The simulation is bounded and framed on purpose: as a full-bleed
+   background it read as decoration, which is the one thing it is not.
+   Inside a box with its readout attached, it reads as an instrument —
+   a system running, with its cost on the dial. */
+.hero-rig {
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  overflow: hidden;
+}
+.hero-rig__field {
+  display: block;
+  width: 100%;
+  height: clamp(150px, 30vh, 300px);
+}
+/* Stacked, the rig sits under the type instead of beside it, so its
+   height comes straight off the fold. */
+@media (max-width: 939px) {
+  .hero-rig__field { height: clamp(140px, 20vh, 200px); }
+}
+
+.hero-status { display: flex; align-items: center; gap: 9px; }
+.hero-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  background: var(--signal);
+  box-shadow: var(--dot-glow);
+  animation: blip 2.4s ease-in-out infinite;
+}
+@keyframes blip {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.72); }
+}
+
+/* ── instrument readout ──────────────────────────────────
+   Attached to the bottom of the rig, sharing its frame — a dial on the
+   machine rather than a card floating near it. */
+.instr {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px clamp(14px, 2.2vw, 26px);
+  padding: 12px clamp(12px, 1.6vw, 16px);
+  border-top: 1px solid var(--line);
+  background: var(--bg-sunken);
+}
+
+.instr__stat { display: flex; align-items: baseline; gap: 10px; }
+.instr__k { color: var(--fg-subtle); white-space: nowrap; }
+.instr__v {
+  font-family: var(--f-mono);
+  font-size: clamp(15px, 1.6vw, 19px);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+  /* Fixed width so the digits changing every frame cannot shuffle the
+     row beside them. */
+  min-width: 5ch;
+}
+
+.instr__budget-label {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  color: var(--fg-subtle);
+  font-variant-numeric: tabular-nums;
+  margin-left: -4px;
+}
+
+.instr__budget {
+  flex: 1 1 120px;
+  min-width: 90px;
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.instr__budget i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: var(--signal);
+  transition: transform 0.18s linear, background-color 0.3s;
+}
+/* Over one frame's budget. --signal is the page's positive accent, so
+   the warning state is signalled by the bar going flat and pale rather
+   than by introducing a red that exists in no token. */
+.hero-instr.is-over .instr__budget i { background: var(--fg-muted); }
+
+.instr__load {
+  margin-left: auto;
+  min-height: var(--tap);
+  padding: 0 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  background: none;
+  cursor: pointer;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg);
+  white-space: nowrap;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+}
+.instr__load:hover,
+.instr__load:focus-visible,
+.instr__load:active {
+  border-color: var(--signal);
+  background: var(--signal-wash);
+  color: var(--signal);
+}
+
+/* On a phone the readout wraps to two rows, and its own padding is what
+   pushes the hero past the fold — so it tightens rather than the type. */
+@media (max-width: 560px) {
+  .instr { gap: 10px 14px; padding: 10px 12px; }
+  .instr__stat { gap: 8px; }
+  .instr__v { font-size: 15px; min-width: 4.5ch; }
+  /* The bar stays inline with the figures rather than claiming a row of
+     its own — three stacked rows of readout cost more of the fold than
+     the readout is worth. */
+  .instr__load { margin-left: 0; width: 100%; min-height: 40px; }
+  .instr__budget { flex: 1 1 60px; min-width: 60px; }
+}
+
+/* ── marquee ─────────────────────────────────────────────
+   A raised band. Between the hero and section 01 the page would
+   otherwise be one uninterrupted field of --bg. */
+.marquee {
+  overflow: hidden;
+  border-top: var(--rule);
+  border-bottom: var(--rule);
+  padding: 12px 0;
+  display: flex;
+  white-space: nowrap;
+  user-select: none;
+  background: var(--surface);
+}
+.marquee__row { display: flex; flex: 0 0 auto; will-change: transform; }
+.marquee span {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: clamp(14px, 2vw, 24px);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  padding: 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: var(--fg);
+}
+.marquee span::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  background: var(--signal);
+  border-radius: 50%;
+  flex: 0 0 auto;
+  box-shadow: var(--dot-glow);
+}

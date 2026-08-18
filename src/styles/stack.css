@@ -1,0 +1,137 @@
+/* Index table, deliberately not cards.
+   Vertical padding comes from the shared --section-y rule in base.css. */
+
+/* Narrow first: number and name on one line, chips wrapping underneath.
+   Three columns only once there is room for the chip cluster to sit
+   opposite the name rather than fold under it. */
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 12px 12px;
+  align-items: center;
+  padding: 20px 0;
+  border-top: var(--rule);
+}
+.row:last-child { border-bottom: var(--rule); }
+
+/* ── hover fill ──────────────────────────────────────────
+   The fill is a RAISED TONE, not the foreground colour, and the text
+   never inverts.
+
+   The previous version filled with var(--fg) and flipped the text to
+   var(--bg). Enter and leave ran on two different clocks — the fill on a
+   GSAP tween, the colour on a class toggled the instant the pointer
+   crossed the edge — so on mouse-leave the text snapped back to --fg
+   while the fill was still --fg for the length of the retract.
+   Foreground on foreground: the row went blank.
+
+   Tying legibility to animation timing cannot be made safe; any dropped
+   frame resurfaces it. Contrast now holds at every point of the
+   transition because it no longer depends on one. */
+.row__fill {
+  position: absolute;
+  /* Bleeds --row-inset past the row on both sides. The row itself keeps
+     its box, so the hairlines stay on the page grid while the highlight
+     opens a margin around the number instead of starting flush on it.
+     .row therefore must NOT clip its overflow. */
+  inset: 0 calc(var(--row-inset) * -1);
+  z-index: 0;
+  background: var(--surface);
+  transform: scaleX(0);
+  /* Grows from the left on enter, retracts to the right on leave — the
+     origin flips in the :hover rule. A row is read left-to-right, so a
+     horizontal wipe tracks the eye; the previous vertical scale read as
+     the row inflating in place. */
+  transform-origin: right;
+  transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* The accent rides the bottom edge INSIDE the fill, so it is scaled by
+   the same transform and arrives exactly with it — one gesture, no
+   second timeline to keep in step.
+
+   It replaced a 3px bar on the left edge, which sat where the row
+   number starts and so needed the number and name nudged sideways to
+   clear it. Moving text on hover is the thing being avoided here. */
+.row__fill::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--signal);
+}
+
+.row > *:not(.row__fill) { position: relative; z-index: 1; }
+
+.row__n {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--fg-subtle);
+  font-variant-numeric: tabular-nums;
+}
+.row__name {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: clamp(20px, 5vw, 34px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+.row__items {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  font-style: normal;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding: 6px 11px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  border-radius: var(--r-pill);
+  color: var(--fg-muted);
+}
+
+@media (min-width: 860px) {
+  .row {
+    grid-template-columns: 56px minmax(0, 1fr) minmax(0, 1.4fr);
+    gap: 24px;
+    padding: clamp(20px, 2.4vw, 28px) 0;
+  }
+  .row__items { grid-column: 3; justify-content: flex-end; }
+}
+
+/* Guarded on (hover: hover): on touch, :hover latches after a tap and
+   the row stays lit until you tap elsewhere.
+
+   Nothing here moves. The row lights up in place: the tonal fill wipes
+   across, the accent arrives on the bottom edge with it, the number
+   takes the signal colour and the chips brighten. No element changes
+   position, so the eye never has to re-find what it was reading. */
+@media (hover: hover) {
+  .row:hover .row__fill {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  .row:hover .row__n { color: var(--signal); }
+  .row:hover .chip {
+    border-color: var(--signal);
+    background: var(--bg);
+    color: var(--fg);
+  }
+}
+
+.row__n { transition: color 0.3s ease; }
+.chip { transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease; }

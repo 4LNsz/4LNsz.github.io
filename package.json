@@ -1,0 +1,19 @@
+{
+  "name": "4lnsz-portfolio",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Personal portfolio — Alan (4LNsz), software engineer.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4001"
+  },
+  "dependencies": {
+    "gsap": "^3.13.0",
+    "lenis": "^1.3.11"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
+}

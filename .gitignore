@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.DS_Store
+*.local
+.vite/
+
+# Claude Code scaffolding, not part of the project
+.claude/

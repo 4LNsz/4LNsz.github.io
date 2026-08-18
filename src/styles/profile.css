@@ -1,0 +1,68 @@
+/* Vertical padding comes from the shared --section-y rule in base.css.
+
+   A row of live GitHub figures used to sit at the top of this section —
+   public repo count, dominant language, last push. It was removed rather
+   than fixed: those numbers only see public repositories, and Alan's
+   work lives in private repositories owned by the client. The block was
+   accurate about GitHub and wrong about him, which is worse than
+   absent. Do not reintroduce it. */
+
+/* ── the presentation ────────────────────────────────────
+   Two columns on a wide screen: the heading holds its own column so the
+   prose keeps a readable measure instead of running the full 1680px. */
+.pf-about {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px clamp(24px, 5vw, 70px);
+  margin-bottom: clamp(40px, 6vw, 76px);
+}
+@media (min-width: 860px) {
+  .pf-about { grid-template-columns: minmax(140px, 0.35fr) minmax(0, 1fr); }
+}
+
+.pf-h { color: var(--fg-subtle); }
+
+.pf-prose { max-width: 68ch; }
+.pf-prose p {
+  font-family: var(--f-text);
+  font-size: clamp(15px, 1.35vw, 18px);
+  line-height: 1.62;
+  color: var(--fg-muted);
+}
+.pf-prose p + p { margin-top: 1em; }
+/* The opening paragraph leads, so it carries the primary tone. */
+.pf-prose p:first-child { color: var(--fg); }
+
+/* ── the lists ───────────────────────────────────────────
+   auto-fit, so a fifth block added to the locale file finds its own
+   column with no breakpoint to update. */
+.pf-blocks {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: clamp(26px, 3vw, 44px);
+}
+
+.pf-block { border-top: 2px solid var(--line); padding-top: 16px; }
+.pf-block .pf-h { margin-bottom: 14px; }
+
+.pf-list { list-style: none; }
+.pf-list li {
+  position: relative;
+  padding-left: 16px;
+  font-family: var(--f-text);
+  font-size: clamp(14px, 1.15vw, 15px);
+  line-height: 1.5;
+  color: var(--fg);
+}
+.pf-list li + li { margin-top: 10px; }
+/* A signal tick rather than a bullet glyph — the page marks things with
+   rules and accents, not with typographic dots. */
+.pf-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 7px;
+  height: 1px;
+  background: var(--signal);
+}

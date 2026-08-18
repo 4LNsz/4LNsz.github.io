@@ -1,0 +1,136 @@
+/* Section 03 sits one step ABOVE the page field. It used to flip to the
+   opposite ramp, which meant dark mode served a full-height slab of
+   light paper mid-scroll — see the note at the top of tokens.css.
+
+   LAYOUT SAFETY: the stacked column is the DEFAULT and the pinned
+   horizontal scroll is opt-in via .is-horizontal, which choreography.js
+   adds only after it has built the pin that makes the track navigable.
+
+   The reverse — horizontal by default, .is-stacked to opt out — makes
+   the unreachable layout the fallback: .practice-pin clips with
+   overflow:hidden, so any path where the pin fails to build (a JS
+   error, the intro timeline never completing) leaves panels 02-04
+   clipped with no way to reach them. Defaulting to the layout that
+   needs no JS means a failure costs the animation, not the content. */
+/* Vertical padding comes from the shared --section-y rule in base.css.
+   This section used to push its own spacing onto .practice-head and
+   .practice-pin instead, which is why its gaps did not match the rest. */
+#practice {
+  background: var(--surface);
+  color: var(--fg);
+  border-block: var(--rule);
+}
+
+.practice-pin { position: relative; }
+.practice-track { display: flex; flex-direction: column; align-items: stretch; }
+
+.panel {
+  flex: 0 0 auto;
+  border-bottom: var(--rule);
+  padding: clamp(26px, 4vw, 48px) var(--pad);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  transition: background-color 0.35s ease;
+}
+
+.panel__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+.panel__n {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: clamp(40px, 9vw, 100px);
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--fg-faint);
+  transition: color 0.35s, -webkit-text-stroke-color 0.35s;
+}
+.panel__label {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  text-align: right;
+}
+.panel__ttl {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: clamp(22px, 5.2vw, 42px);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  color: var(--fg);
+}
+.panel__desc {
+  font-family: var(--f-text);
+  font-weight: 400;
+  font-size: clamp(15px, 1.4vw, 19px);
+  line-height: 1.55;
+  color: var(--fg-muted);
+  max-width: 44ch;
+}
+.panel__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; }
+.panel__tags i {
+  font-style: normal;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 11px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  border-radius: var(--r-pill);
+  color: var(--fg-muted);
+}
+
+@media (hover: hover) {
+  .panel:hover { background: var(--surface-2); }
+  .panel:hover .panel__n { color: var(--signal); -webkit-text-stroke-color: var(--signal); }
+}
+
+/* The progress rail and the counter describe the horizontal
+   interaction. Stacked, there is nothing for them to report. */
+.practice-progress,
+.practice-foot { display: none; }
+
+/* ── horizontal mode ─────────────────────────────────────── */
+#practice.is-horizontal .practice-pin { overflow: hidden; }
+#practice.is-horizontal .practice-track { flex-direction: row; will-change: transform; }
+#practice.is-horizontal .panel {
+  flex: 0 0 min(78vw, 620px);
+  border-bottom: none;
+  border-right: var(--rule);
+  padding: clamp(28px, 3.4vw, 52px);
+  gap: 36px;
+}
+#practice.is-horizontal .practice-progress {
+  display: block;
+  height: 2px;
+  background: var(--line);
+  margin: 0 var(--pad);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+#practice.is-horizontal .practice-progress i {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--signal);
+}
+#practice.is-horizontal .practice-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px var(--pad) 0;
+  color: var(--fg-subtle);
+}
+
+#practice:not(.is-horizontal) .panel:last-child { border-bottom: none; }

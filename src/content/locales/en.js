@@ -60,8 +60,27 @@ export default {
     about: [
       "My expertise lies in Lua and high-concurrency simulation systems — environments where the challenge isn’t just making the code work, but ensuring it runs flawlessly for hundreds of simultaneous users.",
       "I thrive on solving performance headaches. My routine involves architecting complex logic and, more importantly, hunting down bottlenecks. I have a proven track record of analyzing systems under stress to find ways to slash hardware consumption (CPU/RAM), turning resource-heavy infrastructures into lean, scalable solutions.",
-      "Beyond the technical side, I have experience leading teams and defining roadmaps, ensuring that technical delivery stays aligned with business goals.",
+      // A third paragraph sat here — "Beyond the technical side, I have
+      // experience leading teams and defining roadmaps…". The fact did
+      // not leave the page: section 04 records managing the back-end
+      // team at Energy, which is where it happened. Here it was the same
+      // information told a second time.
     ],
+    /**
+     * Five short blocks, not six long ones.
+     *
+     * This list reached twenty items, and the effect was the opposite of
+     * the one intended: a wall of bullets nobody reads, restating what
+     * sections 02, 03 and 04 already say. Two rules keep it short:
+     *
+     *   1. If a fact already appears in another section, it does NOT
+     *      repeat here.
+     *   2. A two-word fact becomes `chips`, not `items` — the renderer
+     *      emits pills instead of bulleted lines.
+     *
+     * Nothing was reworded to make it shorter, only removed: every line
+     * left is still identical to the source that marks it.
+     */
     blocks: [
       {
         // [AL] Nationality and the 2018 start, both confirmed by Alan.
@@ -83,53 +102,45 @@ export default {
         ],
       },
       {
-        // [CV] The four summary bullets, which are exactly the
-        // specialisms Alan claims for himself.
+        // [CV] The profile headline, word for word: "Lua Specialist |
+        // High-Performance Systems & Scalability | Back-end
+        // Optimization". Three lines — and they are the three he chose
+        // to introduce himself with.
+        //
+        // Four others left, every one for repetition and none for doubt
+        // about the fact: React/Vue.js (the Front-end row in section
+        // 02), MySQL/MariaDB (the Data row in 02), monitoring and
+        // end-to-end architecture (panels 03 and 04 of section 03),
+        // FiveM (the Platform row in 02 and Garty Group in 04) and
+        // running-cost reduction (panel 02 of section 03).
         title: "Specialisms",
         items: [
-          // [CV] Profile headline: "Lua Specialist | High-Performance
-          // Systems & Scalability | Back-end Optimization".
           "Lua — high-performance, scalable systems",
           "Cutting CPU and RAM consumption",
-          "Building logic for real-time environments with high user density",
-          "Reducing operational costs and latency through intelligent refactoring",
-          "Back-end first, fully autonomous in React and Vue.js",
-          "MySQL/MariaDB, server monitoring and end-to-end software architecture",
-          "High concurrency and real-time — including FiveM / Roleplay",
+          "High concurrency and real-time",
         ],
       },
       {
-        // [CV] Method, from the summary and WinsVue bullets that did NOT
-        // make it into section 04's condensed notes.
-        title: "How I work",
-        items: [
-          "Anticipating bottlenecks at planning time and defining the most efficient architecture",
-          "Analysing systems under stress to find where hardware consumption can be cut",
-          "Translating business needs into sustainable technical solutions",
-          "Keeping technical delivery aligned with business goals",
-        ],
-      },
-      {
-        // [AL] Native first, then by relevance to
-        // international work.
+        // [AL] Native first, then by relevance to international work.
+        // In `chips` because they are two-word labels: as list lines
+        // they took three full rows to say what three pills say at a
+        // glance.
         title: "Languages",
-        items: [
-          "Portuguese — native",
-          "English — intermediate",
-          "Spanish — intermediate",
-        ],
+        chips: ["PT · native", "EN · intermediate", "ES · intermediate"],
       },
       {
-        // [AL] Any arrangement works, remote preferred,
-        // and he is willing to relocate. That last line is also what
-        // signals reach without having to declare that he wants out of
-        // where he is.
+        // [AL] Any arrangement works. Three words, no ranking between
+        // them.
+        //
+        // There was a "· preferred" on remote and a fourth chip, "Open
+        // to relocation". Alan asked for both to go, and it reads
+        // better: the preference turned a list of open options into a
+        // request, and announcing willingness to relocate answers a
+        // question nobody has asked yet — that is conversation, not
+        // shop window. Both facts are still true; they are just not
+        // published. Do not reintroduce them unless he asks.
         title: "Availability",
-        items: [
-          "Remote — preferred",
-          "On-site or hybrid, no restriction",
-          "Open to relocation",
-        ],
+        chips: ["Remote", "On-site", "Hybrid"],
       },
       {
         // [CV] Certifications section. It lives here and NOT in section
@@ -140,12 +151,18 @@ export default {
         title: "Certifications",
         items: ["IV Semana Nacional da Área da Tecnologia da Informação — 5 certificates"],
       },
-      // A "Top skills" block sat here, filled from LinkedIn's Top Skills
-      // field — TypeScript, UX and Figma. Alan confirmed those are not
-      // his main competencies: that field is derived from endorsements,
-      // not curated. The real ones are already in Specialisms, in the
-      // order his own headline states them. Do not repopulate it from
-      // Top Skills.
+      // Two blocks left entirely.
+      //
+      // "Top skills" came from LinkedIn's Top Skills field — TypeScript,
+      // UX and Figma. Alan confirmed those are not his main
+      // competencies: that field is derived from endorsements, not
+      // curated. Do not repopulate it from there.
+      //
+      // "How I work" carried four lines of method already stated
+      // elsewhere: "analysing systems under stress" is the second
+      // paragraph of the introduction, and anticipating bottlenecks,
+      // architecture and business alignment are panels 02 and 03 of
+      // section 03.
     ],
   },
 

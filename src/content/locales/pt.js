@@ -59,8 +59,26 @@ export default {
     about: [
       "Sou um Engenheiro de Software focado em Back-end e sistemas de simulação em tempo real, onde o maior desafio é manter ambientes estáveis e performáticos para centenas de usuários simultâneos.",
       "Gosto de lidar com o que está “debaixo do capô”. Minha rotina envolve arquitetar lógicas complexas e, principalmente, resolver gargalos de performance. Tenho o hábito de analisar sistemas sob estresse para encontrar formas de reduzir o consumo de hardware (CPU/RAM), transformando infraestruturas pesadas em soluções leves e escaláveis.",
-      "Além da parte técnica, tenho experiência gerenciando equipes e definindo roadmaps, garantindo que a entrega técnica esteja alinhada aos objetivos do negócio.",
+      // Um terceiro parágrafo ficava aqui — "Além da parte técnica,
+      // tenho experiência gerenciando equipes e definindo roadmaps…".
+      // O fato não sumiu da página: a seção 04 registra a gestão da
+      // equipe de back-end na Energy, que é onde ela aconteceu. Aqui
+      // era a mesma informação contada uma segunda vez.
     ],
+    /**
+     * Cinco blocos curtos, não seis longos.
+     *
+     * Esta lista chegou a ter vinte itens, e o efeito era o oposto do
+     * pretendido: uma parede de tópicos que ninguém lê, repetindo o que
+     * as seções 02, 03 e 04 já dizem. Duas regras a mantêm curta:
+     *
+     *   1. Se o fato já aparece em outra seção, ele NÃO se repete aqui.
+     *   2. Fato de duas palavras vira `chips`, não `items` — o
+     *      renderizador emite pílulas em vez de linhas com marcador.
+     *
+     * Nada foi reescrito para encurtar, só removido: cada linha que
+     * sobrou continua idêntica à fonte que a marca.
+     */
     blocks: [
       {
         // [AL] Nacionalidade e o início em 2018, confirmados por Alan.
@@ -82,68 +100,66 @@ export default {
         ],
       },
       {
-        // [CV] Os quatro tópicos do resumo, que são exatamente as
-        // especialidades que Alan declara.
+        // [CV] A headline do perfil, palavra por palavra: "Especialista
+        // em Lua | Sistemas de Alta Performance & Escala | Otimização de
+        // CPU e RAM". Três linhas — e são as três que ele mesmo escolheu
+        // para se apresentar.
+        //
+        // Saíram daqui outras quatro, todas por repetição e nenhuma por
+        // dúvida sobre o fato: React/Vue.js (linha Front-end da seção
+        // 02), MySQL/MariaDB (linha Dados da 02), monitoramento e
+        // arquitetura de ponta a ponta (painéis 03 e 04 da seção 03),
+        // FiveM (linha Plataforma da 02 e a Garty Group na 04) e
+        // redução de custo operacional (painel 02 da seção 03).
         title: "Especialidades",
         items: [
-          // [CV] Headline do perfil: "Especialista em Lua | Sistemas de
-          // Alta Performance & Escala | Otimização de CPU e RAM".
           "Lua — alta performance e escala",
           "Otimização de consumo de CPU e RAM",
-          "Lógica para ambientes de alta concorrência",
-          "Redução de custos operacionais por refatoração de sistemas críticos",
-          "Back-end com autonomia para transitar em React e Vue.js",
-          "MySQL/MariaDB, monitoramento de servidores e arquitetura de ponta a ponta",
-          "Alta concorrência e tempo real — inclusive FiveM / Roleplay",
+          "Alta concorrência e tempo real",
         ],
       },
       {
-        // [CV] Método declarado nos bullets do resumo e do cargo na
-        // WinsVue que NÃO entraram nas notas condensadas da seção 04.
-        title: "Como eu trabalho",
-        items: [
-          "Antecipar gargalos no planejamento e definir a arquitetura mais eficiente",
-          "Analisar sistemas sob estresse para encontrar onde cortar consumo de hardware",
-          "Traduzir necessidade de negócio em solução técnica sustentável",
-          "Manter a entrega técnica alinhada aos objetivos do negócio",
-        ],
-      },
-      {
-        // [AL] Nativo primeiro, depois por relevância
-        // para trabalho internacional.
+        // [AL] Nativo primeiro, depois por relevância para trabalho
+        // internacional. Em `chips` porque são rótulos de duas palavras:
+        // como linhas de lista ocupavam três linhas inteiras para dizer
+        // o que três pílulas dizem de relance.
         title: "Idiomas",
-        items: [
-          "Português — nativo",
-          "Inglês — intermediário",
-          "Espanhol — intermediário",
-        ],
+        chips: ["PT · nativo", "EN · intermediário", "ES · intermediário"],
       },
       {
-        // [AL] Aceita qualquer arranjo, prefere remoto,
-        // e tem disponibilidade para mudar de cidade. A última linha é
-        // também o que sinaliza alcance sem precisar declarar que ele
-        // quer sair de onde está.
+        // [AL] Aceita qualquer arranjo. Três palavras, sem hierarquia
+        // entre elas.
+        //
+        // Havia um "· preferência" no remoto e um quarto chip,
+        // "Disponível para mudança". Alan mandou tirar os dois, e a
+        // leitura melhora: a preferência transformava uma lista de
+        // opções abertas num pedido, e anunciar disponibilidade para
+        // mudar responde uma pergunta que ninguém fez ainda — é assunto
+        // de conversa, não de vitrine. Os dois fatos continuam
+        // verdadeiros; só não são publicados. Não reintroduzir sem ele
+        // pedir.
         title: "Disponibilidade",
-        items: [
-          "Remoto — preferência",
-          "Presencial ou híbrido, sem restrição",
-          "Disponível para mudança",
-        ],
+        chips: ["Remoto", "Presencial", "Híbrido"],
       },
       {
         // [CV] Seção Certifications. Fica aqui e NÃO na seção 04: são
         // credenciais que crescem em número, e lista é a forma certa
         // para isso. A formação em si vive na linha do tempo do 04 —
-        // repetir os dois lugares era a duplicação que Alan apontou.
+        // repetir nos dois lugares era a duplicação que Alan apontou.
         title: "Certificações",
         items: ["IV Semana Nacional da Área da Tecnologia da Informação — 5 certificados"],
       },
-      // O bloco "Principais competências" ficava aqui, preenchido com o
-      // campo Top Skills do LinkedIn — TypeScript, UX e Figma. Alan
-      // confirmou que não são as competências principais dele: aquele
-      // campo é derivado de endossos, não curado. As competências reais
-      // já estão em Especialidades, na ordem que a própria headline
-      // dele declara. Não repopular a partir de Top Skills.
+      // Dois blocos saíram inteiros.
+      //
+      // "Principais competências" vinha do campo Top Skills do LinkedIn
+      // — TypeScript, UX e Figma. Alan confirmou que não são as
+      // competências principais dele: aquele campo é derivado de
+      // endossos, não curado. Não repopular a partir dele.
+      //
+      // "Como eu trabalho" tinha quatro linhas de método já ditas em
+      // outro lugar: "analisar sistemas sob estresse" é o segundo
+      // parágrafo da apresentação, e antecipar gargalos, arquitetura e
+      // alinhamento com o negócio são os painéis 02 e 03 da seção 03.
     ],
   },
 

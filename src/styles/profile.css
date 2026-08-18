@@ -34,11 +34,18 @@
 .pf-prose p:first-child { color: var(--fg); }
 
 /* ── the lists ───────────────────────────────────────────
-   auto-fit, so a fifth block added to the locale file finds its own
-   column with no breakpoint to update. */
+   auto-fit, so a sixth block added to the locale file finds its own
+   column with no breakpoint to update.
+
+   The track minimum is 200px, not 240px. The blocks are short now — two
+   or three lines each, or a row of chips — and at 240px a 1440px screen
+   fits exactly four of the five, which strands the last one alone at the
+   start of a second row under three empty cells. 200px puts all five on
+   one line from about 1270px up; below that they break 3+2, which reads
+   as a grid rather than as an orphan. */
 .pf-blocks {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
   gap: clamp(26px, 3vw, 44px);
 }
 
@@ -65,4 +72,12 @@
   width: 7px;
   height: 1px;
   background: var(--signal);
+}
+
+/* Chip rows, for blocks whose facts are two words each. The pill itself
+   is .chip from stack.css — same object, one definition. */
+.pf-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }

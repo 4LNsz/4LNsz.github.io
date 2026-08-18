@@ -21,19 +21,38 @@ export function renderProfile() {
       ${about.map((_, i) => `<p data-i18n="profile.about.${i}"></p>`).join("")}
     </div>`;
 
-  // A block with no items renders nothing at all, so emptying a list in
+  // A block carries EITHER `items` or `chips`, and the difference is
+  // about length, not about kind. `items` is a bulleted line, for a
+  // fact that needs a clause. `chips` is a row of pills, for facts that
+  // are two words each — three languages and four working arrangements
+  // took seven full-width lines to say what eleven pills say at a
+  // glance, and that density is what made section 01 read as a wall.
+  //
+  // The pill reuses .chip from stack.css rather than defining a second
+  // one: it is the same object, and base.css already lists .chip among
+  // the elements that cross-fade on a theme change.
+  //
+  // A block with neither renders nothing at all, so emptying a list in
   // the locale file removes its heading too.
   document.getElementById("profile-blocks").innerHTML = blocks
-    .map((b, i) =>
-      b.items?.length
+    .map((b, i) => {
+      const body = b.chips?.length
+        ? `<div class="pf-chips">${b.chips
+            .map((_, j) => `<i class="chip" data-i18n="profile.blocks.${i}.chips.${j}"></i>`)
+            .join("")}</div>`
+        : b.items?.length
+          ? `<ul class="pf-list">${b.items
+              .map((_, j) => `<li data-i18n="profile.blocks.${i}.items.${j}"></li>`)
+              .join("")}</ul>`
+          : "";
+
+      return body
         ? `
     <section class="pf-block rv">
       <h3 class="pf-h mono-xs" data-i18n="profile.blocks.${i}.title"></h3>
-      <ul class="pf-list">
-        ${b.items.map((_, j) => `<li data-i18n="profile.blocks.${i}.items.${j}"></li>`).join("")}
-      </ul>
+      ${body}
     </section>`
-        : ""
-    )
+        : "";
+    })
     .join("");
 }

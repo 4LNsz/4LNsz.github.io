@@ -35,18 +35,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62.5..125,300..800&family=Chivo+Mono:wght@300..600&display=swap" rel="stylesheet">
+<!-- Set before the first paint, not from the deferred module in
+     src/main.js: base.css hides the hero and every .rv element behind
+     `html.js`, and a module that runs after the browser has already
+     painted would show them settled for one frame and then yank them
+     back down to animate. -->
+<script>document.documentElement.classList.add("js");</script>
 </head>
 
 <body>
 
 <a class="skip" href="#main" data-i18n="ui.skip"></a>
-
-<!-- ══ PRELOADER ══ -->
-<div id="loader" aria-hidden="true">
-  <div class="loader-mask"><span id="loader-word">ALAN</span></div>
-  <div class="loader-count" id="loader-count">000</div>
-  <div class="loader-bar"><i id="loader-fill"></i></div>
-</div>
 
 <!-- ══ HEADER ══ -->
 <header>
@@ -206,9 +205,9 @@
 
 </main>
 
-<!-- No <noscript> fallback needed: the pre-animation states are scoped to
-     html.js and #loader is hidden by html:not(.js), both in base.css, so
-     a bundle that never runs leaves the page fully readable. -->
+<!-- No <noscript> fallback needed: the pre-animation states are scoped
+     to html.js in base.css, so a bundle that never runs leaves the page
+     fully readable. -->
 
 <script type="module" src="/src/main.js"></script>
 </body>

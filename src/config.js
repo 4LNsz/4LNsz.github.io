@@ -78,6 +78,5 @@ export const THEME = {
 };
 
 export const MOTION = {
-  lenis: { lerp: 0.085, wheelMultiplier: 1, smoothWheel: true },
   marqueeSecs: 26,
 };

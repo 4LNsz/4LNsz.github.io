@@ -3,8 +3,6 @@
 *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { -webkit-text-size-adjust: 100%; }
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
 
 body {
   background: var(--bg);
@@ -19,7 +17,7 @@ body {
 
 /* The header is fixed, so any anchor jump would land with the target
    tucked underneath it. */
-section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
+section[id], main[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 
 /* One rhythm for the whole page. #hero sizes itself to the viewport and
    #contact is closed by its footer, so neither takes the bottom half. */
@@ -29,7 +27,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 /* Theme cross-fade. Scoped to the elements that actually carry a themed
    surface — a blanket `* { transition }` would also animate every GSAP
    colour tween and the hover states below. */
-body, #loader, #practice, #contact, .panel, .card, .row, .path-row,
+body, #practice, #contact, .panel, .card, .row, .path-row,
 .sec-head, .marquee, .hero-strip > div, footer, .nav-drawer, .panel__tags i,
 .chip {
   transition:
@@ -114,7 +112,7 @@ img, svg { max-width: 100%; }
 .wrap {
   padding-left: var(--pad);
   padding-right: var(--pad);
-  max-width: 1680px;
+  max-width: var(--wrap-max);
   margin: 0 auto;
 }
 
@@ -144,11 +142,35 @@ html.js .rv-x { opacity: 0; }
 html.reduced .rv,
 html.reduced .rv-x { opacity: 1 !important; transform: none !important; }
 
+/* The hero block and the marquee, same contract, different reason.
+   These used to need no pre-state: the preloader was a full-screen
+   curtain that sat on top until motion/intro.js had already applied the
+   from-state underneath it, so nothing was ever seen in place first.
+   With the curtain gone the pre-state has to be in the stylesheet, or
+   the first painted frame shows the hero settled and the timeline then
+   yanks it 26px down to animate it in.
+
+   `html.js` is set by an inline script in <head> for exactly this
+   reason — a deferred module can run after the first paint, which is
+   the frame being protected. */
+html.js .hero-main > *,
+html.js .hero-rig,
+html.js .hero-strip > div,
+html.js .marquee { opacity: 0; }
+html.reduced .hero-main > *,
+html.reduced .hero-rig,
+html.reduced .hero-strip > div,
+html.reduced .marquee { opacity: 1 !important; }
+
 /* Belt-and-braces: if JS never runs at all, the OS preference still
    wins over the .rv pre-states, which JS would otherwise have cleared. */
 @media (prefers-reduced-motion: reduce) {
   html.js .rv,
   html.js .rv-x { opacity: 1 !important; transform: none !important; }
+  html.js .hero-main > *,
+  html.js .hero-rig,
+  html.js .hero-strip > div,
+  html.js .marquee { opacity: 1 !important; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -157,5 +179,3 @@ html.reduced .rv-x { opacity: 1 !important; transform: none !important; }
   }
 }
 
-/* No-JS: the loader would otherwise sit on top of the page forever. */
-html:not(.js) #loader { display: none; }

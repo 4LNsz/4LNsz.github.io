@@ -3,43 +3,38 @@ import { reducedMotion } from "../core/env.js";
 import { buildScroll } from "./choreography.js";
 
 /**
- * Preloader: counter 000 -> 100, then the curtain wipes up and hands off
- * to the hero reveal. buildScroll() runs at the end so ScrollTrigger
- * measures a settled layout.
+ * Hero reveal.
+ *
+ * There is no preloader any more. The page used to open on a full-screen
+ * curtain counting 000 -> 100 over a fixed 1.9s tween — a progress bar
+ * measuring nothing, in front of a page that was already parsed and
+ * painted behind it. Worse, the whole reveal hung off `window.load`,
+ * which waits on the Google Fonts stylesheet, so a slow font CDN held
+ * the curtain over the site and a 2.5s watchdog existed only to cut it
+ * loose. All of that is gone: the content is the first thing painted and
+ * it only lifts into place.
+ *
+ * The pre-states live in base.css under `html.js`, the same contract
+ * .rv uses — set in CSS so the first frame is already correct, and never
+ * applied at all if the bundle fails to load.
+ *
+ * buildScroll() runs first, not last: it is what arms every scroll
+ * reveal on the page, and a visitor who scrolls during the 1.2s hero
+ * timeline must not out-run it.
  */
 export function playIntro() {
-  const loader = document.getElementById("loader");
-  const count = document.getElementById("loader-count");
-  const fill = document.getElementById("loader-fill");
+  buildScroll();
 
   if (reducedMotion) {
-    loader.style.display = "none";
-    gsap.set(".hero-eyebrow, .hero-name, .hero-statement, .hero-rig", { opacity: 1, y: 0 });
-    gsap.set(".rv", { opacity: 1, y: 0 });
-    gsap.set(".rv-x", { opacity: 1, x: 0 });
-    buildScroll();
+    gsap.set(".hero-eyebrow, .hero-name, .hero-statement, .hero-rig, .hero-strip > div, .marquee", {
+      opacity: 1,
+      y: 0,
+    });
     return;
   }
 
-  const n = { v: 0 };
-
   gsap
     .timeline()
-    .to("#loader-word", { y: "0%", duration: 0.9, ease: "power4.out" }, 0)
-    .to(
-      n,
-      {
-        v: 100,
-        duration: 1.9,
-        ease: "power2.inOut",
-        onUpdate: () => (count.textContent = String(Math.round(n.v)).padStart(3, "0")),
-      },
-      0.15
-    )
-    .to(fill, { width: "100%", duration: 1.9, ease: "power2.inOut" }, 0.15)
-    .to("#loader-word", { y: "-105%", duration: 0.6, ease: "power3.in" }, "+=0.15")
-    .to(count, { opacity: 0, duration: 0.4 }, "<")
-    .to(loader, { yPercent: -100, duration: 1, ease: "expo.inOut", onStart: () => loader.classList.add("done") }, "-=0.2")
     /* The name used to arrive character by character, back when it was
        the only thing on the screen. It is one element among several
        now, so the block lifts in reading order instead. */
@@ -47,17 +42,13 @@ export function playIntro() {
       ".hero-eyebrow, .hero-name, .hero-statement, .hero-rig",
       { opacity: 0, y: 26 },
       { opacity: 1, y: 0, stagger: 0.09, duration: 0.9, ease: "power3.out" },
-      "-=0.65"
+      0
     )
     .fromTo(
       ".hero-strip > div",
       { opacity: 0, y: 16 },
       { opacity: 1, y: 0, stagger: 0.06, duration: 0.7, ease: "power3.out" },
-      "-=0.7"
+      0.06
     )
-    .fromTo(".marquee", { opacity: 0 }, { opacity: 1, duration: 0.8 }, "-=0.6")
-    .add(() => {
-      loader.style.display = "none";
-      buildScroll();
-    });
+    .fromTo(".marquee", { opacity: 0 }, { opacity: 1, duration: 0.8 }, 0.2);
 }

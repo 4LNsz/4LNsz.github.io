@@ -6,7 +6,7 @@ import "./styles/main.css";
 import { applyI18n, mountLangSwitch, onLangChange } from "./core/i18n.js";
 import { mountThemeToggle } from "./core/theme.js";
 import { resplitAll } from "./core/split.js";
-import { initSmoothScroll, initAnchors } from "./core/smooth-scroll.js";
+import { initAnchors } from "./core/anchors.js";
 import { mountNav, mountHeaderChrome } from "./core/nav.js";
 import { reducedMotion } from "./core/env.js";
 
@@ -64,7 +64,6 @@ mountLangSwitch();
 mountThemeToggle();
 mountNav();
 mountHeaderChrome();
-initSmoothScroll();
 initAnchors();
 startClock();
 
@@ -85,40 +84,27 @@ onLangChange(() => field?.repaintPanel());
 document.getElementById("year").textContent = new Date().getFullYear();
 
 /**
- * Curtain-up, guarded three ways.
+ * Curtain-up — except there is no curtain any more.
  *
- * The reveal used to hang off a bare `window.addEventListener("load")`,
- * and everything the visitor reads — buildScroll, the .rv reveals, the
- * whole page behind the preloader — waited on that one event.
+ * This used to be a three-way guard (readyState, a `load` listener and a
+ * 2.5s watchdog) whose only job was deciding when to lift the preloader.
+ * `load` does not fire until every subresource has settled, including
+ * the Google Fonts stylesheet, so a slow or blocked font CDN held a
+ * full-screen curtain over a page that was already painted behind it.
  *
- * The guard that matters is the watchdog. `load` does not fire until
- * every subresource has settled, and that includes the Google Fonts
- * stylesheet in index.html. If fonts.googleapis.com is slow, proxied,
- * or blocked outright, `load` is delayed by exactly that much and the
- * visitor stares at the preloader the whole time. Nothing in the intro
- * depends on those fonts arriving, so after 2.5s it starts regardless.
- *
- *   1. readyState — belt and braces if `load` has already gone by.
- *   2. the listener — the normal path.
- *   3. the watchdog — the one that changes behaviour in the field.
- *
- * `once` plus the `started` flag make the three paths idempotent:
- * whichever wins, the other two are no-ops.
+ * With the preloader gone the page has nothing to wait for: the markup
+ * is rendered, so it plays now.
  */
-let started = false;
+booted = true;
+playIntro();
 
-function start() {
-  if (started) return;
-  started = true;
-  clearTimeout(watchdog);
-  booted = true;
-  playIntro();
-}
-
-const watchdog = setTimeout(start, 2500);
-
-if (document.readyState === "complete") start();
-else window.addEventListener("load", start, { once: true });
+/**
+ * Web fonts change text metrics, and text metrics change the height of
+ * every section — which is to say every ScrollTrigger start, end and pin
+ * distance measured before they arrive. The intro no longer waits for
+ * them, so re-measure once when they land.
+ */
+document.fonts?.ready.then(() => ScrollTrigger.refresh());
 
 /**
  * ScrollTrigger.refresh() is expensive — it re-measures every trigger and

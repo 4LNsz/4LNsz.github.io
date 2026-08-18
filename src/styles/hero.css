@@ -11,14 +11,50 @@
   /* Clears the fixed header rather than guessing at it. */
   padding-top: calc(var(--header-h) + clamp(20px, 6vh, 80px));
   padding-bottom: clamp(18px, 3vh, 48px);
-  position: relative;
 }
 
-/* ambient bloom — dark theme only, driven by --ambient */
-#hero::before {
+/* ── ambient bloom ───────────────────────────────────────
+   Dark theme only, driven by --ambient. It hangs off #main and NOT off
+   #hero, and that is the whole point of this block.
+
+   It used to be `#hero::before` at `inset: -25% -12% 10% -12%`. #hero
+   is a .wrap: it stops growing at --wrap-max and then centres itself,
+   so the bloom's box stopped growing with it, at 1680 * 1.24 = 2083px,
+   while the screen kept going. Past roughly 2080px of viewport both of
+   its vertical edges landed inside the picture.
+
+   That would be harmless if the gradients had finished by then. They
+   have not — measured at the box's own left edge the wash still carries
+   alpha 0.069, and 0.037 at the right. Over --bg that is rgb(14,34,32)
+   meeting rgb(10,20,19) along a dead-straight line several hundred
+   pixels tall. On an ultrawide the glow stopped reading as atmosphere
+   and started reading as a tinted rectangle laid over the page.
+
+   THE RULE: a gradient may be cut off by the edge of the screen, never
+   by a box inside it. #main is the full client width at every viewport,
+   so `inset-inline: 0` puts both cuts exactly where the screen ends and
+   what a 3440px display shows is what a 1440px one already showed — a
+   wash running off both sides.
+
+   Not `calc(50% - 50vw)` on the old box: vw counts the scrollbar, so
+   that overhangs the visible area by half a scrollbar. body's
+   overflow-x is `hidden`, which clips but stays programmatically
+   scrollable — measured, the page could be nudged 8px sideways. #main
+   has no scrollbar in its width, so there is nothing to overhang.
+
+   The height is svh rather than a percentage because there is no longer
+   a hero-shaped containing block to take a percentage of. #hero is
+   `min-height: 100svh` and its content fits inside that, so the two
+   agree; if a narrow screen ever makes the hero taller, the bloom
+   simply covers less of it, which is what a bloom should do. */
+#main { position: relative; }
+
+#main::before {
   content: "";
   position: absolute;
-  inset: -25% -12% 10% -12%;
+  inset-inline: 0;
+  top: -25svh;
+  height: 115svh;
   z-index: -1;
   pointer-events: none;
   background: var(--ambient);

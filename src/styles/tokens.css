@@ -63,6 +63,9 @@
 
   /* ── rhythm ───────────────────────────────────────────── */
   --pad: clamp(18px, 4vw, 64px);
+  /* The page column. .wrap in base.css centres in it; section 03 falls
+     back to it once its horizontal track stops overflowing. */
+  --wrap-max: 1680px;
   --rule: 1px solid var(--line);
 
   /* Vertical rhythm between sections. ONE value, applied by the shared

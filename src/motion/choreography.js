@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import { DESKTOP, MOBILE, reducedMotion } from "../core/env.js";
+import { DESKTOP, MOBILE, ULTRAWIDE, reducedMotion } from "../core/env.js";
 
 let ctx = null;
 
@@ -54,9 +54,14 @@ export function buildScroll() {
       );
     });
 
+    /* Three layouts, one per width band — see the note in core/env.js
+       for why the top band exists. matchMedia re-runs these on every
+       crossing and reverts the one it leaves, so the class each helper
+       adds is always removed by the same mechanism that added it. */
     const mm = gsap.matchMedia();
-    mm.add(DESKTOP, buildHorizontalPractice);
     mm.add(MOBILE, buildStackedPractice);
+    mm.add(DESKTOP, buildHorizontalPractice);
+    mm.add(ULTRAWIDE, buildGridPractice);
 
     /* contact headline, character by character */
     gsap.fromTo(
@@ -151,4 +156,32 @@ function buildStackedPractice() {
       { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", scrollTrigger: { trigger: panel, start: "top 88%" } }
     );
   });
+}
+
+/**
+ * Ultrawide: no pin, no clipping, no progress rail — the panels are all
+ * on screen at once, so the whole horizontal apparatus would be
+ * describing an interaction that isn't there. All that is left is the
+ * reveal, and it fires once for the whole grid rather than per panel:
+ * they share a row, so staggering them off their own positions would
+ * make panels on the same line arrive at different times.
+ */
+function buildGridPractice() {
+  const section = document.getElementById("practice");
+  section.classList.add("is-grid");
+
+  gsap.fromTo(
+    ".panel",
+    { opacity: 0, y: 30 },
+    {
+      opacity: 1,
+      y: 0,
+      stagger: 0.08,
+      duration: 0.8,
+      ease: "power3.out",
+      scrollTrigger: { trigger: "#practice-pin", start: "top 82%" },
+    }
+  );
+
+  return () => section.classList.remove("is-grid");
 }

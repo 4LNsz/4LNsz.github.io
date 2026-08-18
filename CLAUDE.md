@@ -44,11 +44,11 @@ src/
     theme.js            dark/light, persisted to localStorage
     nav.js              mobile drawer, header scrim/auto-hide, active section
     split.js            char/word splitting for text animations
-    smooth-scroll.js    Lenis + ScrollTrigger wiring, getLenis()
+    anchors.js          anchor jump + the focus move that goes with it
     env.js              reduced-motion flag, breakpoint constants
   sections/*.js         render functions — build DOM, emit data-i18n keys
   motion/
-    intro.js            preloader timeline
+    intro.js            hero reveal timeline
     choreography.js     all ScrollTrigger work
     field.js            the hero simulation + its instrument readout
   styles/
@@ -140,6 +140,46 @@ be reversed (`.is-stacked` opting *out* of a clipped horizontal default),
 which meant any failure to build the pin hid panels 02–04 with no way to
 reach them.
 
+**A gradient may be cut off by the edge of the screen, never by a box
+inside it.** The hero's ambient bloom used to be `#hero::before` inset
+-12% horizontally. `#hero` is a `.wrap`, so it stops growing at
+`--wrap-max` and centres — and so did the bloom, at 2083px, while the
+screen kept going. The gradients still carry alpha where their box ends
+(0.069 left, 0.037 right, measured), so past ~2080px of viewport the
+glow finished on two dead-straight vertical lines and read as a tinted
+rectangle laid over the page. It now hangs off `#main`, which is the
+full client width at every viewport, with `inset-inline: 0`. Not
+`calc(50% - 50vw)`: `vw` counts the scrollbar, and `body`'s `overflow-x:
+hidden` clips without preventing programmatic scroll, so that version
+let the page be nudged 8px sideways. Anything decorative and soft —
+bloom, vignette, grain — anchors to the viewport or to `#main`, never to
+a width-capped column.
+
+**Never pin a track that does not overflow.** Section 03 has three
+layouts and `core/env.js` owns the two boundaries: `MOBILE` stacks,
+`DESKTOP` pins the horizontal track, `ULTRAWIDE` (≥2200px) lays the
+panels out as a static grid inside the normal page column. The middle
+band is capped because the track stops growing at 795px — four panels at
+`min(78vw, 620px)` — so above ~2200px there is nothing left to scroll:
+measured at 2560px the pin had 49px of travel and at 3440px the panels
+filled 2480 of 3440px with the rest of the row empty, under a caption
+telling the visitor to scroll sideways. The rail and the counter are
+scoped to `.is-horizontal` for the same reason — they describe an
+interaction, so they must not appear where it does not exist. The three
+queries in `env.js` and the `@media (min-width: 2200px)` block in
+`practice.css` are one decision written twice; change both.
+
+**There is no preloader and no smooth-scroll library.** The page used to
+open on a full-screen curtain counting 000→100 over a fixed tween — a
+progress bar measuring nothing, in front of a page already painted
+behind it — gated on `window.load`, which waits on the Google Fonts
+stylesheet. Lenis lerped every wheel event at 0.085, so the page kept
+coasting after the gesture stopped, and ScrollTrigger, the header
+auto-hide and the drawer's scroll lock all had to be routed through it.
+Both are gone at Alan's request. `core/anchors.js` is what is left: a
+click handler that exists only because `preventDefault` is needed to
+move focus with the jump. Do not reintroduce either.
+
 **Nothing may move an interactive element out from under the pointer.**
 The social links used to slide on hover while a `[data-magnetic]` script
 dragged them toward the cursor; adjacent targets overlapped each other
@@ -165,6 +205,16 @@ file. Renderers derive indices from array length, so the counters and
 `data-i18n` keys follow automatically. `stack.rows[].items` is an array —
 one chip per entry.
 
+**Add a profile block.** One object in `profile.blocks` in *every* locale
+file, carrying either `items` (bulleted lines, for a fact that needs a
+clause) or `chips` (pills, for facts that are two words each). The choice
+is about length, not kind — three languages and four working
+arrangements took seven full-width lines to say what eleven pills say at
+a glance, and that density is what made section 01 read as a wall. Keep
+it that way: this list reached twenty items once and had to be cut back
+to five. If a fact already appears in section 02, 03 or 04, it does not
+repeat here.
+
 **Add a contact channel.** One object in `SITE.channels` in `config.js`.
 The grid is `auto-fit`, so the column count absorbs it with no CSS
 change. Set `mono: true` for machine-ish values (addresses), and
@@ -176,7 +226,7 @@ carry small text on `--ink-900`, `--teal` to carry it on `--paper-100`.
 Replacing one means re-checking the other.
 
 **Retune motion.** Durations and easings live in `motion/`. Global
-constants (Lenis lerp, marquee speed) live in `config.js` under `MOTION`.
+constants (marquee speed) live in `config.js` under `MOTION`.
 
 **Regenerate `og.jpg`.** It is a canvas render, committed as a static
 asset. There is no build step for it — redraw and replace the file.
@@ -229,6 +279,11 @@ engineer's site argues against him:
   via `invalidateOnRefresh` — do not cache `scrollWidth` in a variable.
 - Hover styling is wrapped in `@media (hover: hover)`. On touch, `:hover`
   latches after a tap and the element stays lit until you tap elsewhere.
-- The intro is gated on `window.load` *plus* a 2.5s watchdog, because
-  `load` waits on the Google Fonts stylesheet. Without the watchdog a
-  slow or blocked font CDN holds the preloader over the whole page.
+- The hero's pre-animation state lives in `base.css` under `html.js`, and
+  `html.js` is set by an inline script in `<head>` — not by `main.js`.
+  A deferred module can run after the browser's first paint, which would
+  show the hero settled for one frame before the timeline yanked it back
+  down to animate it in. The preloader used to cover that frame.
+- `document.fonts.ready` triggers one `ScrollTrigger.refresh()`. The
+  intro no longer waits for the font stylesheet, so every trigger is
+  first measured against fallback metrics.

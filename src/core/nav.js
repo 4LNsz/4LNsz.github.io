@@ -1,5 +1,4 @@
 import { t, onLangChange } from "./i18n.js";
-import { getLenis } from "./smooth-scroll.js";
 
 const MOBILE_Q = "(min-width: 901px)";
 
@@ -39,16 +38,13 @@ export function mountNav() {
     drawerOpen = next;
 
     drawer.classList.toggle("open", drawerOpen);
+    // The lock is `html.nav-open { overflow: hidden }` in header.css and
+    // nothing else. It used to need a lenis.stop() beside it, because
+    // the library kept its own scroll loop running behind the overlay.
     root.classList.toggle("nav-open", drawerOpen);
     toggle.setAttribute("aria-expanded", String(drawerOpen));
     drawer.setAttribute("aria-hidden", String(!drawerOpen));
     label();
-
-    // Lenis keeps its own scroll loop running; the CSS overflow lock does
-    // not reach it, so the page would still glide behind the panel.
-    const lenis = getLenis();
-    if (drawerOpen) lenis?.stop();
-    else lenis?.start();
 
     if (drawerOpen) {
       lastFocus = document.activeElement;

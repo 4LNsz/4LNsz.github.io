@@ -20,6 +20,16 @@ used to sit alongside it, so the versions resolved locally and the ones
 CI built with could drift apart without anyone noticing. Do not
 reintroduce a second lockfile.
 
+**Actions track their current major, and `.nvmrc` tracks the Node you
+develop on.** The workflow pins `checkout@v7`, `setup-node@v7`,
+`configure-pages@v6`, `upload-pages-artifact@v5` and `deploy-pages@v5`.
+Older majors ran on Node 20, which the runners now force onto Node 24
+with a deprecation warning on every build; `upload-pages-artifact@v5` is
+the one that carries `upload-artifact@v7` and clears that warning at the
+source. `.nvmrc` moved 20 → 24 in the same pass, because Node 20 is past
+end of life and CI building on a different major from the one Alan runs
+locally is the same silent-drift trap the second lockfile was.
+
 Two build-time environment variables, both set by the Pages workflow from
 `actions/configure-pages` outputs, both with local fallbacks:
 

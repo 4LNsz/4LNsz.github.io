@@ -76,9 +76,22 @@ startClock();
  * "Reset" at the ceiling), so a language switch has to reach it too.
  * render() is registered on onLangChange first, so applyI18n has always
  * run by the time repaintPanel reads t().
+ *
+ * SCOPED TO THE PANEL, and that is not a micro-optimisation. applyI18n
+ * writes textContent on every [data-i18n] node it finds, and
+ * .contact-big is one of them — whose characters render() has just
+ * wrapped in .ch spans two lines earlier. A document-wide pass here
+ * flattened them straight back into a text node, so by the time
+ * buildScroll() looked for ".contact-big .ch" there was nothing there:
+ * the headline's character reveal never played and GSAP logged
+ * "target .contact-big .ch not found" on every single load.
+ *
+ * The pipeline in CLAUDE.md — render -> applyI18n -> resplitAll — holds
+ * inside render(). Any applyI18n() outside it either takes a root, as
+ * this one does, or has to resplit after itself.
  */
 const field = initField();
-applyI18n();
+applyI18n(document.getElementById("hero-instr"));
 onLangChange(() => field?.repaintPanel());
 
 document.getElementById("year").textContent = new Date().getFullYear();

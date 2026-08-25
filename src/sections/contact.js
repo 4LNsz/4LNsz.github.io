@@ -27,6 +27,13 @@ export function renderContact() {
       const attrs = external ? ' target="_blank" rel="noopener noreferrer"' : "";
       const cls = `card${c.featured ? " card--featured" : ""}`;
 
+      // Optional desktop-app scheme. It rides as a data attribute rather
+      // than as the href on purpose — core/applink.js explains why at
+      // length. Absent the attribute the card is an ordinary link, so a
+      // channel without an app, or a browser where the module never
+      // ran, loses nothing.
+      const appAttr = c.app ? ` data-app="${c.app}"` : "";
+
       // The featured card's eyebrow is localised prose; the rest label
       // themselves with the channel name, which is not translated.
       const eyebrow = c.featured
@@ -39,7 +46,7 @@ export function renderContact() {
       const sub = c.featured && c.value ? `<span class="card__sub">${c.value}</span>` : "";
 
       return `
-    <a class="${cls}" href="${c.url}"${attrs} aria-label="${[c.label, c.value].filter(Boolean).join(": ")}">
+    <a class="${cls}" href="${c.url}"${attrs}${appAttr} aria-label="${[c.label, c.value].filter(Boolean).join(": ")}">
       ${c.featured ? DISCORD_MARK : ""}
       <span class="card__text">
         ${eyebrow}

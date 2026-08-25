@@ -36,6 +36,19 @@ export const SITE = {
        * Add `value: "<username>"` here to show one.
        */
       url: `https://discord.com/users/${DISCORD_ID}`,
+      /**
+       * Optional. A custom scheme the desktop client registers with the
+       * OS, so the card opens the app instead of a browser tab for
+       * anyone who has it installed.
+       *
+       * It is NOT the href — `url` stays the https one. core/applink.js
+       * tries this first and falls back to `url`, and the long comment
+       * at the top of that file is the argument for why round that way
+       * and not the other. Short version: a scheme with no handler
+       * registered is a dead click, and this is the channel the whole
+       * section points at.
+       */
+      app: `discord://-/users/${DISCORD_ID}`,
       /** Exactly one channel may be featured — it spans the whole grid. */
       featured: true,
     },

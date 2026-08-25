@@ -7,6 +7,7 @@ import { applyI18n, mountLangSwitch, onLangChange } from "./core/i18n.js";
 import { mountThemeToggle } from "./core/theme.js";
 import { resplitAll } from "./core/split.js";
 import { initAnchors } from "./core/anchors.js";
+import { mountAppLinks } from "./core/applink.js";
 import { mountNav, mountHeaderChrome } from "./core/nav.js";
 import { reducedMotion } from "./core/env.js";
 
@@ -65,6 +66,9 @@ mountThemeToggle();
 mountNav();
 mountHeaderChrome();
 initAnchors();
+// Delegated on document, so it survives the re-render a language
+// switch performs on the channel cards.
+mountAppLinks();
 startClock();
 
 /**

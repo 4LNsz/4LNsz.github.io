@@ -18,22 +18,41 @@
  *
  * So the scheme is an enhancement layered on top. No browser will tell
  * a page whether a protocol is registered; every technique for finding
- * out is a heuristic, and the ones that guess wrong either open a tab
- * nobody asked for or do nothing at all. This one is built to fail
- * towards ARRIVING SOMEWHERE: in the worst case the visitor lands on
- * the same web page the plain link would have given them, plus, on
- * Firefox, a dialog to dismiss. The one outcome it will not produce is
- * a click that goes nowhere.
+ * out is a heuristic. This one is built to fail towards ARRIVING
+ * SOMEWHERE: worst case the visitor lands on the same web page the
+ * plain link would have given them. The one outcome it must not produce
+ * is a click that goes nowhere.
  */
-
-/** How long to wait for the OS to take the handoff before giving up. */
-const FALLBACK_MS = 900;
 
 /**
- * A wall-clock gap this much larger than FALLBACK_MS means our timer
- * was frozen, not that the handoff failed — see the note at its use.
+ * How long to keep watching before deciding nobody answered.
+ *
+ * Was 900ms. A cold desktop client on Windows can take longer than that
+ * to grab focus, and the cost of being early is the exact bug this file
+ * shipped with: the app opens AND a browser tab opens behind it. The
+ * cost of being late is a slightly longer wait in the case where the
+ * app is not installed at all, which is the cheaper mistake.
  */
-const STALL_MS = 2500;
+const FALLBACK_MS = 1500;
+
+/**
+ * How often to re-check. Cheap: two property reads.
+ *
+ * There was a third constant here, a slack window: overshoot the
+ * deadline by more than 800ms and the fallback was suppressed, on the
+ * theory that our timers had been frozen by a browser modal rather than
+ * merely running late. It is gone, and it should not come back.
+ *
+ * It could not tell "a modal froze us" from "this timer was throttled",
+ * and throttling is common — measured, it swallowed the fallback
+ * outright in a backgrounded tab. The two mistakes are not symmetrical:
+ * guessing wrong the other way costs one browser tab the visitor can
+ * close, while this guess costs them a click that does nothing, which
+ * is the single outcome this whole file exists to prevent. Focus and
+ * visibility already answer the question the slack window was guessing
+ * at.
+ */
+const POLL_MS = 100;
 
 export function mountAppLinks() {
   document.addEventListener("click", (e) => {
@@ -51,40 +70,64 @@ export function mountAppLinks() {
   });
 }
 
+/**
+ * Try the app; navigate to the web URL only if nothing took the click.
+ *
+ * THE SIGNAL IS OS FOCUS, NOT PAGE VISIBILITY, and getting that wrong
+ * is what made the first version open the app and a browser tab at the
+ * same time. document.hidden answers "is this TAB backgrounded or this
+ * window minimised" — a browser window that merely loses focus to
+ * another application is still, by that definition, visible. So when
+ * Discord came up over the top, document.hidden stayed false, the
+ * timeout concluded that nobody had answered, and it opened the web
+ * page underneath the app that had just launched.
+ *
+ * document.hasFocus() is the question actually being asked: does this
+ * document still have the input focus, or did something else take it.
+ * It is checked on a poll rather than once at the deadline, so a blur
+ * that happens and is undone inside the window — the visitor clicking
+ * straight back to the browser — still counts as an answer.
+ */
 function handoff(app, web) {
-  const started = Date.now();
-  let handedOff = false;
+  let settled = false;
 
-  // The tab losing visibility is the one honest signal that the OS
-  // switched to the app. It is not guaranteed to fire — hence the
-  // timeout below rather than a promise on this alone.
-  const onHide = () => {
-    if (document.hidden) handedOff = true;
+  const stop = () => {
+    settled = true;
+    window.removeEventListener("blur", stop);
+    window.removeEventListener("pagehide", stop);
+    document.removeEventListener("visibilitychange", stop);
   };
-  document.addEventListener("visibilitychange", onHide);
+
+  window.addEventListener("blur", stop);
+  window.addEventListener("pagehide", stop);
+  document.addEventListener("visibilitychange", stop);
 
   // Assigning location, not window.open: a custom scheme opened in a
   // new tab leaves an empty tab behind once the OS takes over.
   window.location.href = app;
 
-  setTimeout(() => {
-    document.removeEventListener("visibilitychange", onHide);
+  const deadline = Date.now() + FALLBACK_MS;
 
-    // The app has focus. Nothing left to do.
-    if (handedOff || document.hidden) return;
+  const tick = () => {
+    if (settled) return;
 
-    // Chrome and Safari can stop timers while their own "Open Discord?"
-    // permission prompt is up. A gap far longer than the delay we asked
-    // for means the visitor was reading that prompt — sending them to
-    // the web page on top of it would navigate away from a decision
-    // they were in the middle of making.
-    if (Date.now() - started > STALL_MS) return;
+    // Something else has the focus, or the tab went away. Either way
+    // the click was answered.
+    if (!document.hasFocus() || document.hidden) return stop();
+
+    if (Date.now() < deadline) {
+      setTimeout(tick, POLL_MS);
+      return;
+    }
+
+    stop();
 
     // Same tab, even though the link itself is target="_blank". A
-    // window.open() here fires roughly a second after the click, so the
-    // gesture that would have authorised it has expired and the popup
-    // blocker eats it. A same-tab navigation always lands, and Back
-    // returns to the portfolio.
+    // window.open() this long after the click has lost the gesture that
+    // would authorise it, so the popup blocker eats it. A same-tab
+    // navigation always lands, and Back returns to the portfolio.
     window.location.href = web;
-  }, FALLBACK_MS);
+  };
+
+  setTimeout(tick, POLL_MS);
 }

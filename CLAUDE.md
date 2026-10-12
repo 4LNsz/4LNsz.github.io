@@ -203,6 +203,15 @@ appear in either source. A portfolio is evidence someone is asked about
 in an interview; an invented line is a question they cannot answer.
 If a fact is missing, ask for it or leave the space out.
 
+**No availability badge.** "Disponível para projetos", a small line
+with a dot under the name, came over from the page before this one
+with no source behind it. Alan had it removed on 2026-10-12, in his
+words because it looks like something an AI wrote. It is the stock
+line of a generated portfolio, and it spoke to one of the two
+audiences only. The two doors on the first screen already say how to
+reach him. Do not bring back a status pill, an "open to work" line or
+anything of that family.
+
 **A field with no data stays empty.** The sheet has tables, and tables
 tempt a row to be filled. A path row with no `note` renders an empty
 cell. Nothing is written to balance it.
@@ -418,6 +427,14 @@ the ruby arc; each is re-aimed with the readout, and a session that
 wanders out of reach of its callout is let go for the nearest one. A
 leader that ended on empty field would be a caption about nothing.
 
+A leader never runs through a numeral of the ring. It has to cross the
+band they stand in, and where it crosses moves with the layout and with
+the session it follows, so `layoutLeaders()` clips every line to the
+sheet minus a box round each numeral: the line passes behind the
+figure. Taking one line out of the title block was enough to put a
+leader straight through the 12; do not solve that by nudging the
+callouts.
+
 On a phone `#hero-mini` repeats three figures of the readout straight
 under the dial, because the readout itself is a screen and a half
 further down. `paintPanel()` writes both from the same variables.
@@ -488,6 +505,20 @@ together:
   "a huge 4": the header's A-quatro with no CSS to size it. The inline
   SVGs carry `width` and `height` attributes for the same reason, so a
   page that ever does paint without its stylesheet stays in proportion.
+- A browser never asks again for a tab icon it has already fetched from
+  the same address; a forced reload does not clear it. When the mark
+  replaced the old icon at `/favicon.svg`, the deploy was right and
+  Alan's tab still showed the old one. `vite.config.js` now appends the
+  file's own hash to the two icon links (`favicon.svg?v=…`), so changing
+  an icon changes its address. Do not type a version into `index.html`
+  by hand; the links there stay bare.
+- The dial is measured with `offsetWidth`, never `getBoundingClientRect()`.
+  The entrance scales it from 0.97, and the re-measure the fonts trigger
+  usually lands inside that second, so the bounding box was the scaled
+  one: the field was sized 2% small and every leader stopped a few
+  pixels short of its session. It shipped that way. Positions taken from
+  the dial's rect have to come from its centre, which a scale about the
+  centre does not move.
 - `document.fonts.ready` triggers one re-measure: the scroll triggers,
   the leader lines, the career diagram, and the lettering the record
   draws on its canvas. Nothing waits for the font files, so everything

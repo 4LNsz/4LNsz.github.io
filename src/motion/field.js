@@ -176,11 +176,15 @@ export function initField() {
 
   /* ── sizing ─────────────────────────────────────────────── */
   function resize() {
-    const r = canvas.getBoundingClientRect();
     // Cap DPR at 2: beyond that the pixel count doubles again for a
     // difference nobody sees on a field of small dots.
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const size = Math.max(2, Math.round(r.width));
+    // The laid-out width, not the bounding box. The entrance scales the
+    // dial from 0.97, and this runs again when the fonts land, which is
+    // usually inside that second: the bounding box was the scaled one,
+    // so the field was sized 2% small, drawn 2% soft, and every leader
+    // ended a few pixels short of the session it names.
+    const size = Math.max(2, canvas.offsetWidth);
     R = size / 2;
     canvas.width = Math.round(size * dpr);
     canvas.height = Math.round(size * dpr);
@@ -373,7 +377,7 @@ export function initField() {
   const angle = (ms) => (ms / BUDGET_MS) * TAU - Math.PI / 2;
 
   function buildRing() {
-    const S = Math.round(dial.getBoundingClientRect().width);
+    const S = dial.offsetWidth;   // laid-out width; see resize()
     const band = (S - R * 2) / 2;
     // Everything in the ring scales with the band the stylesheet gives
     // it, so the phone-sized dial is the same drawing, not a cropped one.
@@ -678,6 +682,28 @@ export function initField() {
     const dr = dial.getBoundingClientRect();
     leaders.setAttribute("viewBox", `0 0 ${sr.width} ${sr.height}`);
 
+    // A leader has to cross the band the numerals stand in, and where it
+    // crosses depends on how the callouts fell and on where its session
+    // has wandered to: sooner or later one runs through a numeral. So
+    // the numerals are cut out of the lines. Each leader is clipped to
+    // the sheet minus a box round every numeral, and one that reaches a
+    // numeral passes behind it instead of through it. The ring's own
+    // units are pixels of the dial, so its text sits where it says.
+    //
+    // The boxes are placed from the dial's centre, not its corner. The
+    // entrance scales the dial about its centre, and this runs again
+    // when the fonts land, which can be inside that second: measured
+    // from the corner, every box came out six pixels to one side.
+    const ox = dr.left - sr.left + (dr.width - geo.S) / 2, oy = dr.top - sr.top + (dr.height - geo.S) / 2, pad = 4;
+    const holes = [...ring.querySelectorAll("text")].map((t) => {
+      const size = parseFloat(getComputedStyle(t).fontSize), w = t.getComputedTextLength();
+      // Figures stand on the baseline and reach about 0.72 of the size.
+      const x = ox + +t.getAttribute("x") - w / 2 - pad, y = oy + +t.getAttribute("y") - size * 0.72 - pad;
+      return `M${x} ${y}h${w + pad * 2}v${size * 0.72 + pad * 2}h${-(w + pad * 2)}Z`;
+    });
+    const clear = svgEl(svgEl(leaders, "defs", {}), "clipPath", { id: "leaders-clear" });
+    svgEl(clear, "path", { d: `M0 0H${sr.width}V${sr.height}H0Z${holes.join("")}`, "clip-rule": "evenodd" });
+
     const bubbles = [...sheet.querySelectorAll(".callouts .n")];
     const half = Math.ceil(bubbles.length / 2);
 
@@ -694,7 +720,7 @@ export function initField() {
           kind,
           bx: (left ? br.right : br.left) - sr.left,
           by: br.top - sr.top + br.height / 2,
-          path: svgEl(leaders, "path", {}),
+          path: svgEl(leaders, "path", { "clip-path": "url(#leaders-clear)" }),
           // The arc needs no terminal of its own: the hollow dot at its
           // live end, drawn with the ring, is the terminal.
           end: kind === "arc" ? null : svgEl(leaders, "circle", { class: kind === "ring" ? "on" : "at", r: kind === "session" ? 5.5 : kind === "link" ? 4 : 3.2 }),

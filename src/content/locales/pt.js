@@ -5,8 +5,6 @@
  *   [AL]  Confirmado diretamente por Alan nesta conversa
  *   [SIM] Descreve o que motion/field.js faz, não o Alan; muda junto
  *         com aquele código
- *   [?]   Sem fonte ainda: herdado, e aguardando o Alan confirmar ou
- *         mandar tirar. Não é um marcador para criar linhas novas
  *
  * Nada é inferido, arredondado ou "preenchido para compor". Se um fato
  * não estiver em nenhuma das duas, ele não entra aqui — mesmo que soe
@@ -27,11 +25,6 @@ export default {
   },
 
   hero: {
-    // [?] SEM FONTE. A linha veio do site anterior a este redesenho e
-    // nunca recebeu marcador: não está no currículo nem no GitHub, e
-    // fala com um só dos dois públicos da página. Fica como estava até
-    // o Alan dizer de onde vem ou mandar tirar. Não reescrever por ele.
-    status: "Disponível para projetos",
     // [CV] Primeira frase do resumo do LinkedIn, na íntegra. Estava com
     // duas frases e ocupava seis linhas antes do ALAN, o que deixava a
     // primeira tela pesada — o resto do resumo está no PDF, a um clique.

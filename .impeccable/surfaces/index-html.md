@@ -35,10 +35,13 @@ decision comps under `.impeccable/mocks/decision/`: `calibre-page.png`,
 `horario-sec.png` for the career diagram, `marca-refino.png`.
 
 Unresolved, and Alan's to decide: whether the source links on rows stay
-once he has lived with them; and where `hero.status` comes from (the
-line predates this build, carries no source marker, and speaks to one
-of the two audiences only; it is flagged `[?]` in the locale files and
-left as it was).
+once he has lived with them.
+
+Resolved by Alan on 2026-10-12: `hero.status` ("Disponível para
+projetos") is removed. It predated this build, carried no source and
+spoke to one of the two audiences only; he had it taken out because it
+reads as AI-written. The `[?]` marker it was the only holder of went
+with it.
 
 Resolved by Alan on 2026-10-12: the dark ground is graphite, not blued
 steel. He saw the page in both, beside the Base preview the graphite

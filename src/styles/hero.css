@@ -47,17 +47,6 @@
 }
 .hero-role span { display: block; }
 .hero-role span + span { color: var(--fg-muted); }
-.hero-status {
-  margin-top: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font: 600 0.875rem/1.3 var(--f-label);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--fg-muted);
-}
-.hero-status::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--signal); flex: none; }
 
 .hero-statement {
   max-width: 21em;

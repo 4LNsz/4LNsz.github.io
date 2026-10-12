@@ -66,6 +66,10 @@ The page demonstrates performance instead of claiming it `[REPO]`.
   In his words: he works in FiveM today, but the page presents a
   developer in general `[AL, 2026-10-11]`.
 - The Discord ID is never printed on the page.
+- **No availability line** `[AL, 2026-10-12]`. "Disponível para
+  projetos" was inherited from the previous page and removed at his
+  request: to him it reads as AI-written. Nothing of that family comes
+  back.
 - A fact appears in one section only.
 - Every number on the hero readout is measured at runtime. None may
   become decorative.

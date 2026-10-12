@@ -5,8 +5,6 @@
  *   [AL]  Confirmed directly by Alan in conversation
  *   [SIM] Describes what motion/field.js does, not Alan; it changes
  *         when that code does
- *   [?]   No source yet: inherited, and waiting for Alan to confirm it
- *         or have it removed. Not a marker for writing new lines under
  *
  * Nothing is inferred, rounded, or "filled in to balance the layout".
  * If a fact is in neither source it does not belong here, however
@@ -27,12 +25,6 @@ export default {
   },
 
   hero: {
-    // [?] UNSOURCED. The line came from the site that predates this
-    // redesign and never carried a marker: it is in neither the CV nor
-    // GitHub, and it speaks to one of the page's two audiences only. It
-    // stays as it was until Alan says where it comes from or has it
-    // removed. Do not reword it for him.
-    status: "Available for projects",
     // [CV] Opening sentence of the LinkedIn summary, verbatim from the
     // English export — not translated from the Portuguese one. It ran
     // to two sentences and six lines above the ALAN, which made the

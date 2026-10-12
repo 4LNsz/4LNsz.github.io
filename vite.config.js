@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { defineConfig } from "vite";
 import { SITE } from "./src/config.js";
 import { channelCell } from "./src/sections/contact.js";
@@ -70,9 +72,33 @@ function staticCard() {
   };
 }
 
+/**
+ * Gives each icon a URL that changes when the icon does.
+ *
+ * A browser keeps tab icons in a store of its own, keyed by URL, and a
+ * reload does not ask for them again, not even a forced one. The mark
+ * replaced a teal 4 that had lived at /favicon.svg, the server sent the
+ * new file from the first request, and the old one stayed in the tab of
+ * everyone who had been here before, Alan included.
+ *
+ * So the link carries the first eight digits of the file's own hash as
+ * a query. A static host ignores the query and serves the same file;
+ * the browser sees an address it has never fetched. The files keep
+ * their well-known names in public/, which is where brand/src/build.mjs
+ * writes one of them and where iOS looks for the other unasked.
+ */
+function iconVersions() {
+  const icons = ["favicon.svg", "apple-touch-icon.png"];
+  const stamp = (file) => createHash("sha1").update(readFileSync(new URL(`./public/${file}`, import.meta.url))).digest("hex").slice(0, 8);
+  return {
+    name: "icon-versions",
+    transformIndexHtml: (html) => icons.reduce((out, file) => out.replaceAll(`${file}"`, `${file}?v=${stamp(file)}"`), html),
+  };
+}
+
 export default defineConfig({
   base: BASE,
-  plugins: [siteUrlTokens(), staticCard()],
+  plugins: [siteUrlTokens(), staticCard(), iconVersions()],
   server: { port: 4000, open: true },
   build: {
     outDir: "dist",

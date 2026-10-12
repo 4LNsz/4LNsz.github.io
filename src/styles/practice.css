@@ -1,169 +1,37 @@
-/* Section 03 sits one step ABOVE the page field. It used to flip to the
-   opposite ramp, which meant dark mode served a full-height slab of
-   light paper mid-scroll — see the note at the top of tokens.css.
+/* ══ ATUAÇÃO ════════════════════════════════════════════════
+   Four functions of the movement, one per capability domain, listed in
+   a ruled table. They are not numbered: on this sheet a number in a
+   bubble is a reference to a part of a figure, and there is no figure
+   here for it to point into.
 
-   LAYOUT SAFETY: the stacked column is the DEFAULT. Both other layouts
-   are opt-in classes that choreography.js adds — .is-horizontal only
-   once it has also built the pin that makes the clipped track
-   navigable, .is-grid above the width where the track stops overflowing
-   at all (see the block at the foot of this file, and core/env.js).
+   This section used to be a pinned horizontal track, with a progress
+   rail, a counter and three layouts to keep it from pinning a track
+   that did not overflow. All four panels fit on a page; there was
+   nothing to scroll sideways to. It is a list now, readable with no
+   JavaScript at all, and the pin went with it. */
 
-   The reverse — horizontal by default, .is-stacked to opt out — makes
-   the unreachable layout the fallback: .practice-pin clips with
-   overflow:hidden, so any path where the pin fails to build (a JS
-   error, the intro timeline never completing) leaves panels 02-04
-   clipped with no way to reach them. Defaulting to the layout that
-   needs no JS means a failure costs the animation, not the content. */
-/* Vertical padding comes from the shared --section-y rule in base.css.
-   This section used to push its own spacing onto .practice-head and
-   .practice-pin instead, which is why its gaps did not match the rest. */
-#practice {
-  background: var(--surface);
-  color: var(--fg);
-  border-block: var(--rule);
+.funcs {
+  list-style: none;
+  border-top: 1.5px solid var(--signal);
 }
-
-.practice-pin { position: relative; }
-.practice-track { display: flex; flex-direction: column; align-items: stretch; }
-
-.panel {
-  flex: 0 0 auto;
-  border-bottom: var(--rule);
-  padding: clamp(26px, 4vw, 48px) var(--pad);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 24px;
-  transition: background-color 0.35s ease;
+.func {
+  display: grid;
+  grid-template-columns: minmax(0, 23rem) minmax(0, 1fr);
+  column-gap: clamp(20px, 3.2vw, 56px);
+  align-items: start;
+  padding: 26px 0 24px;
+  border-bottom: 1px solid var(--line);
 }
-
-.panel__top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 14px;
-}
-.panel__n {
-  font-family: var(--f-display);
-  font-weight: 800;
-  font-size: clamp(40px, 9vw, 100px);
-  line-height: 0.8;
-  letter-spacing: -0.06em;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--fg-faint);
-  transition: color 0.35s, -webkit-text-stroke-color 0.35s;
-}
-.panel__label {
-  font-family: var(--f-mono);
-  font-size: 11px;
-  letter-spacing: 0.13em;
+.func h3 {
+  font: 800 clamp(1.75rem, 2.5vw, 2.375rem)/0.96 var(--f-display);
+  letter-spacing: 0.014em;
   text-transform: uppercase;
-  color: var(--fg-subtle);
-  text-align: right;
+  text-wrap: balance;
 }
-.panel__ttl {
-  font-family: var(--f-display);
-  font-weight: 600;
-  font-size: clamp(22px, 5.2vw, 42px);
-  line-height: 1.05;
-  letter-spacing: -0.035em;
-  text-transform: uppercase;
-  margin-bottom: 14px;
-  color: var(--fg);
-}
-.panel__desc {
-  font-family: var(--f-text);
-  font-weight: 400;
-  font-size: clamp(15px, 1.4vw, 19px);
-  line-height: 1.55;
-  color: var(--fg-muted);
-  max-width: 44ch;
-}
-.panel__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; }
-.panel__tags i {
-  font-style: normal;
-  font-family: var(--f-mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 6px 11px;
-  border: 1px solid var(--line);
-  background: var(--surface-2);
-  border-radius: var(--r-pill);
-  color: var(--fg-muted);
-}
+.func p { max-width: 40em; line-height: 1.52; text-wrap: pretty; }
+.func ul { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 12px; }
+.func ul li { font: 600 0.875rem/1.3 var(--f-label); letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); }
 
-@media (hover: hover) {
-  .panel:hover { background: var(--surface-2); }
-  .panel:hover .panel__n { color: var(--signal); -webkit-text-stroke-color: var(--signal); }
-}
-
-/* The progress rail and the counter describe the horizontal
-   interaction. Stacked, there is nothing for them to report. */
-.practice-progress,
-.practice-foot { display: none; }
-
-/* ── horizontal mode ─────────────────────────────────────── */
-#practice.is-horizontal .practice-pin { overflow: hidden; }
-#practice.is-horizontal .practice-track { flex-direction: row; will-change: transform; }
-#practice.is-horizontal .panel {
-  flex: 0 0 min(78vw, 620px);
-  border-bottom: none;
-  border-right: var(--rule);
-  padding: clamp(28px, 3.4vw, 52px);
-  gap: 36px;
-}
-#practice.is-horizontal .practice-progress {
-  display: block;
-  height: 2px;
-  background: var(--line);
-  margin: 0 var(--pad);
-  border-radius: var(--r-pill);
-  overflow: hidden;
-}
-#practice.is-horizontal .practice-progress i {
-  display: block;
-  height: 100%;
-  width: 0%;
-  background: var(--signal);
-}
-#practice.is-horizontal .practice-foot {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 14px var(--pad) 0;
-  color: var(--fg-subtle);
-}
-
-#practice:not(.is-horizontal) .panel:last-child { border-bottom: none; }
-
-/* ── ultrawide: static grid ──────────────────────────────
-   Above the width where the track stops overflowing the viewport there
-   is nothing left to scroll sideways, so the section stops claiming
-   there is: no pin, no clip, no progress rail, no "scroll horizontally"
-   caption. The breakpoint and the reasoning behind it live in
-   core/env.js as ULTRAWIDE — the two must stay in step.
-
-   The track also drops back into the page column here. Running
-   full-bleed made sense while it genuinely ran off both edges; at
-   2560px+ it just left section 03 as the one block on the page not
-   aligned with the others. */
-@media (min-width: 2200px) {
-  #practice.is-grid .practice-track {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    max-width: var(--wrap-max);
-    margin-inline: auto;
-    padding-inline: var(--pad);
-  }
-  /* Top rules rather than bottom ones, the same idiom section 02 uses:
-     the last row then closes on the section's own border-block instead
-     of stacking a second hairline inside the padding. */
-  #practice.is-grid .panel {
-    border-bottom: none;
-    border-top: var(--rule);
-    padding: clamp(30px, 2vw, 48px);
-    gap: 32px;
-  }
-  #practice.is-grid .panel:nth-child(odd) { border-right: var(--rule); }
+@media (max-width: 860px) {
+  .func { grid-template-columns: minmax(0, 1fr); row-gap: 10px; }
 }

@@ -1,83 +1,47 @@
-/* Vertical padding comes from the shared --section-y rule in base.css.
+/* ══ PERFIL ═════════════════════════════════════════════════
+   The head of the sheet: prose on the left, the general data on the
+   right as a ruled table. Every row of that table is a block from the
+   locale file, so it grows by growing the data. */
 
-   A row of live GitHub figures used to sit at the top of this section —
-   public repo count, dominant language, last push. It was removed rather
-   than fixed: those numbers only see public repositories, and Alan's
-   work lives in private repositories owned by the client. The block was
-   accurate about GitHub and wrong about him, which is worse than
-   absent. Do not reintroduce it. */
-
-/* ── the presentation ────────────────────────────────────
-   Two columns on a wide screen: the heading holds its own column so the
-   prose keeps a readable measure instead of running the full 1680px. */
-.pf-about {
+.pf {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 12px clamp(24px, 5vw, 70px);
-  margin-bottom: clamp(40px, 6vw, 76px);
-}
-@media (min-width: 860px) {
-  .pf-about { grid-template-columns: minmax(140px, 0.35fr) minmax(0, 1fr); }
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  column-gap: clamp(32px, 6vw, 104px);
+  align-items: start;
 }
 
-.pf-h { color: var(--fg-subtle); }
-
-.pf-prose { max-width: 68ch; }
-.pf-prose p {
-  font-family: var(--f-text);
-  font-size: clamp(15px, 1.35vw, 18px);
-  line-height: 1.62;
-  color: var(--fg-muted);
+.pf-about p {
+  max-width: 34em;
+  line-height: 1.52;
+  text-wrap: pretty;
 }
-.pf-prose p + p { margin-top: 1em; }
-/* The opening paragraph leads, so it carries the primary tone. */
-.pf-prose p:first-child { color: var(--fg); }
+.pf-about p + p { margin-top: 1em; }
 
-/* ── the lists ───────────────────────────────────────────
-   auto-fit, so a sixth block added to the locale file finds its own
-   column with no breakpoint to update.
-
-   The track minimum is 200px, not 240px. The blocks are short now — two
-   or three lines each, or a row of chips — and at 240px a 1440px screen
-   fits exactly four of the five, which strands the last one alone at the
-   start of a second row under three empty cells. 200px puts all five on
-   one line from about 1270px up; below that they break 3+2, which reads
-   as a grid rather than as an orphan. */
-.pf-blocks {
+.pf-blocks { border-top: 1.5px solid var(--signal); }
+.pf-block {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
-  gap: clamp(26px, 3vw, 44px);
+  grid-template-columns: minmax(104px, 9.5rem) minmax(0, 1fr);
+  column-gap: 20px;
+  align-items: baseline;
+  padding: 14px 0 13px;
+  border-bottom: 1px solid var(--line);
 }
-
-.pf-block { border-top: 2px solid var(--line); padding-top: 16px; }
-.pf-block .pf-h { margin-bottom: 14px; }
-
+.pf-block dt { font: 600 0.8125rem/1.3 var(--f-label); letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-subtle); }
 .pf-list { list-style: none; }
-.pf-list li {
-  position: relative;
-  padding-left: 16px;
-  font-family: var(--f-text);
-  font-size: clamp(14px, 1.15vw, 15px);
-  line-height: 1.5;
-  color: var(--fg);
-}
-.pf-list li + li { margin-top: 10px; }
-/* A signal tick rather than a bullet glyph — the page marks things with
-   rules and accents, not with typographic dots. */
-.pf-list li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.62em;
-  width: 7px;
-  height: 1px;
-  background: var(--signal);
+.pf-list li { line-height: 1.4; text-wrap: pretty; }
+.pf-list li + li { margin-top: 5px; }
+
+/* A fact that is two words long is set as a field, not as a line. */
+.pf-chips { display: flex; flex-wrap: wrap; gap: 7px 8px; }
+.chip {
+  display: inline-block;
+  padding: 5px 10px 4px;
+  border: 1px solid var(--line-strong);
+  font: 600 0.9375rem/1.3 var(--f-label);
+  font-style: normal;
+  letter-spacing: 0.04em;
 }
 
-/* Chip rows, for blocks whose facts are two words each. The pill itself
-   is .chip from stack.css — same object, one definition. */
-.pf-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+@media (max-width: 860px) {
+  .pf { grid-template-columns: minmax(0, 1fr); row-gap: 32px; }
 }

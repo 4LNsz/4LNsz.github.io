@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- The app icon: the small cut of the A-quatro in brass on a graphite
+       plate. Written twice by brand/src/build.mjs, as brand/icon.svg and
+       as public/favicon.svg. -->
+  <rect width="64" height="64" rx="13" fill="#1f1c17"/>
+  <g fill="#d6ae55">
+    <polygon points="45.08,11 14,53 22.82,53 37.1,31.58 37.1,53 45.08,53"/>
+    <polygon points="27.02,35.36 54.32,35.36 54.32,43.34 21.14,43.34"/>
+  </g>
+</svg>

@@ -1,4 +1,5 @@
 /* Import order matters: tokens must land before anything consumes them. */
+@import "./fonts.css";
 @import "./tokens.css";
 @import "./base.css";
 @import "./header.css";

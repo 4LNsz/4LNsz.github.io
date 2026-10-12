@@ -1,0 +1,770 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-12T04:01:26.360Z",
+  "title": "Design System: 4LNsz Portfolio",
+  "extensions": {
+    "colorMeta": {
+      "brass": {
+        "role": "primary",
+        "displayName": "Brass",
+        "canonical": "#d6ae55",
+        "tonalRamp": [
+          "#120900",
+          "#332400",
+          "#584105",
+          "#7d5e04",
+          "#a6801f",
+          "#c9a248",
+          "#edc56c",
+          "#ffedc7"
+        ]
+      },
+      "brass-deep": {
+        "role": "primary",
+        "displayName": "Deep Brass",
+        "canonical": "#73550f",
+        "tonalRamp": [
+          "#120900",
+          "#332400",
+          "#584105",
+          "#7d5e04",
+          "#a6801f",
+          "#c9a248",
+          "#edc56c",
+          "#ffedc7"
+        ]
+      },
+      "brass-hover": {
+        "role": "primary",
+        "displayName": "Brass, Lit",
+        "canonical": "#e3c178",
+        "tonalRamp": [
+          "#120900",
+          "#332400",
+          "#584105",
+          "#7d5e04",
+          "#a6801f",
+          "#c9a248",
+          "#edc56c",
+          "#ffedc7"
+        ]
+      },
+      "brass-deep-hover": {
+        "role": "primary",
+        "displayName": "Deep Brass, Pressed",
+        "canonical": "#5f460b",
+        "tonalRamp": [
+          "#120900",
+          "#332400",
+          "#584105",
+          "#7d5e04",
+          "#a6801f",
+          "#c9a248",
+          "#edc56c",
+          "#ffedc7"
+        ]
+      },
+      "on-brass-muted": {
+        "role": "primary",
+        "displayName": "Ink on Brass, Second Line",
+        "canonical": "#3a3216",
+        "tonalRamp": [
+          "#120900",
+          "#332400",
+          "#584105",
+          "#7d5e04",
+          "#a6801f",
+          "#c9a248",
+          "#edc56c",
+          "#ffedc7"
+        ]
+      },
+      "on-brass-deep": {
+        "role": "primary",
+        "displayName": "Ink on Deep Brass",
+        "canonical": "#f6f0df",
+        "tonalRamp": [
+          "#120900",
+          "#332400",
+          "#584105",
+          "#7d5e04",
+          "#a6801f",
+          "#c9a248",
+          "#edc56c",
+          "#ffedc7"
+        ]
+      },
+      "on-brass-deep-muted": {
+        "role": "primary",
+        "displayName": "Ink on Deep Brass, Second Line",
+        "canonical": "#e8dcb9",
+        "tonalRamp": [
+          "#120900",
+          "#332400",
+          "#584105",
+          "#7d5e04",
+          "#a6801f",
+          "#c9a248",
+          "#edc56c",
+          "#ffedc7"
+        ]
+      },
+      "ruby": {
+        "role": "secondary",
+        "displayName": "Ruby",
+        "canonical": "#f4577c",
+        "tonalRamp": [
+          "#1f0006",
+          "#4e001a",
+          "#830032",
+          "#b50f4a",
+          "#e0446c",
+          "#fe7490",
+          "#feb3be",
+          "#ffe8eb"
+        ]
+      },
+      "ruby-deep": {
+        "role": "secondary",
+        "displayName": "Deep Ruby",
+        "canonical": "#b5173f",
+        "tonalRamp": [
+          "#1f0006",
+          "#4e001a",
+          "#830032",
+          "#b50f4a",
+          "#e0446c",
+          "#fe7490",
+          "#feb3be",
+          "#ffe8eb"
+        ]
+      },
+      "steel": {
+        "role": "tertiary",
+        "displayName": "Steel",
+        "canonical": "#101b50",
+        "tonalRamp": [
+          "#030033",
+          "#142055",
+          "#304179",
+          "#4c609b",
+          "#6e83c2",
+          "#8ea5e6",
+          "#b6c9fe",
+          "#e8eefe"
+        ]
+      },
+      "graphite-950": {
+        "role": "neutral",
+        "displayName": "Graphite, Well",
+        "canonical": "#110e09",
+        "tonalRamp": [
+          "#110e09",
+          "#18150f",
+          "#1f1c17",
+          "#28251f",
+          "#433f39",
+          "#5e5a54",
+          "#9f9b92",
+          "#c2bdb4",
+          "#efebe2"
+        ]
+      },
+      "graphite-900": {
+        "role": "neutral",
+        "displayName": "Graphite, Sheet",
+        "canonical": "#18150f",
+        "tonalRamp": [
+          "#110e09",
+          "#18150f",
+          "#1f1c17",
+          "#28251f",
+          "#433f39",
+          "#5e5a54",
+          "#9f9b92",
+          "#c2bdb4",
+          "#efebe2"
+        ]
+      },
+      "graphite-800": {
+        "role": "neutral",
+        "displayName": "Graphite, Raised",
+        "canonical": "#1f1c17",
+        "tonalRamp": [
+          "#110e09",
+          "#18150f",
+          "#1f1c17",
+          "#28251f",
+          "#433f39",
+          "#5e5a54",
+          "#9f9b92",
+          "#c2bdb4",
+          "#efebe2"
+        ]
+      },
+      "graphite-700": {
+        "role": "neutral",
+        "displayName": "Graphite, Raised Twice",
+        "canonical": "#28251f",
+        "tonalRamp": [
+          "#110e09",
+          "#18150f",
+          "#1f1c17",
+          "#28251f",
+          "#433f39",
+          "#5e5a54",
+          "#9f9b92",
+          "#c2bdb4",
+          "#efebe2"
+        ]
+      },
+      "graphite-600": {
+        "role": "neutral",
+        "displayName": "Graphite, Hairline",
+        "canonical": "#433f39",
+        "tonalRamp": [
+          "#110e09",
+          "#18150f",
+          "#1f1c17",
+          "#28251f",
+          "#433f39",
+          "#5e5a54",
+          "#9f9b92",
+          "#c2bdb4",
+          "#efebe2"
+        ]
+      },
+      "graphite-500": {
+        "role": "neutral",
+        "displayName": "Graphite, Strong Hairline",
+        "canonical": "#5e5a54",
+        "tonalRamp": [
+          "#110e09",
+          "#18150f",
+          "#1f1c17",
+          "#28251f",
+          "#433f39",
+          "#5e5a54",
+          "#9f9b92",
+          "#c2bdb4",
+          "#efebe2"
+        ]
+      },
+      "graphite-300": {
+        "role": "neutral",
+        "displayName": "Graphite Ink, Label",
+        "canonical": "#9f9b92",
+        "tonalRamp": [
+          "#110e09",
+          "#18150f",
+          "#1f1c17",
+          "#28251f",
+          "#433f39",
+          "#5e5a54",
+          "#9f9b92",
+          "#c2bdb4",
+          "#efebe2"
+        ]
+      },
+      "graphite-200": {
+        "role": "neutral",
+        "displayName": "Graphite Ink, Second Voice",
+        "canonical": "#c2bdb4",
+        "tonalRamp": [
+          "#110e09",
+          "#18150f",
+          "#1f1c17",
+          "#28251f",
+          "#433f39",
+          "#5e5a54",
+          "#9f9b92",
+          "#c2bdb4",
+          "#efebe2"
+        ]
+      },
+      "graphite-100": {
+        "role": "neutral",
+        "displayName": "Graphite Ink, Full",
+        "canonical": "#efebe2",
+        "tonalRamp": [
+          "#110e09",
+          "#18150f",
+          "#1f1c17",
+          "#28251f",
+          "#433f39",
+          "#5e5a54",
+          "#9f9b92",
+          "#c2bdb4",
+          "#efebe2"
+        ]
+      },
+      "rhodium-100": {
+        "role": "neutral",
+        "displayName": "Rhodium, Sheet",
+        "canonical": "#e6e9ef",
+        "tonalRamp": [
+          "#3a4885",
+          "#4b5890",
+          "#8491bb",
+          "#a6b1cf",
+          "#c7cfe0",
+          "#d5dbe8",
+          "#dde2ec",
+          "#e6e9ef"
+        ]
+      },
+      "rhodium-150": {
+        "role": "neutral",
+        "displayName": "Rhodium, Raised",
+        "canonical": "#dde2ec",
+        "tonalRamp": [
+          "#3a4885",
+          "#4b5890",
+          "#8491bb",
+          "#a6b1cf",
+          "#c7cfe0",
+          "#d5dbe8",
+          "#dde2ec",
+          "#e6e9ef"
+        ]
+      },
+      "rhodium-200": {
+        "role": "neutral",
+        "displayName": "Rhodium, Well",
+        "canonical": "#d5dbe8",
+        "tonalRamp": [
+          "#3a4885",
+          "#4b5890",
+          "#8491bb",
+          "#a6b1cf",
+          "#c7cfe0",
+          "#d5dbe8",
+          "#dde2ec",
+          "#e6e9ef"
+        ]
+      },
+      "rhodium-300": {
+        "role": "neutral",
+        "displayName": "Rhodium, Raised Twice",
+        "canonical": "#c7cfe0",
+        "tonalRamp": [
+          "#3a4885",
+          "#4b5890",
+          "#8491bb",
+          "#a6b1cf",
+          "#c7cfe0",
+          "#d5dbe8",
+          "#dde2ec",
+          "#e6e9ef"
+        ]
+      },
+      "rhodium-400": {
+        "role": "neutral",
+        "displayName": "Rhodium, Hairline",
+        "canonical": "#a6b1cf",
+        "tonalRamp": [
+          "#3a4885",
+          "#4b5890",
+          "#8491bb",
+          "#a6b1cf",
+          "#c7cfe0",
+          "#d5dbe8",
+          "#dde2ec",
+          "#e6e9ef"
+        ]
+      },
+      "rhodium-500": {
+        "role": "neutral",
+        "displayName": "Rhodium, Strong Hairline",
+        "canonical": "#8491bb",
+        "tonalRamp": [
+          "#3a4885",
+          "#4b5890",
+          "#8491bb",
+          "#a6b1cf",
+          "#c7cfe0",
+          "#d5dbe8",
+          "#dde2ec",
+          "#e6e9ef"
+        ]
+      },
+      "rhodium-700": {
+        "role": "neutral",
+        "displayName": "Rhodium Ink, Label",
+        "canonical": "#4b5890",
+        "tonalRamp": [
+          "#3a4885",
+          "#4b5890",
+          "#8491bb",
+          "#a6b1cf",
+          "#c7cfe0",
+          "#d5dbe8",
+          "#dde2ec",
+          "#e6e9ef"
+        ]
+      },
+      "rhodium-800": {
+        "role": "neutral",
+        "displayName": "Rhodium Ink, Second Voice",
+        "canonical": "#3a4885",
+        "tonalRamp": [
+          "#3a4885",
+          "#4b5890",
+          "#8491bb",
+          "#a6b1cf",
+          "#c7cfe0",
+          "#d5dbe8",
+          "#dde2ec",
+          "#e6e9ef"
+        ]
+      },
+      "scrim-graphite": {
+        "role": "neutral",
+        "displayName": "Header Scrim, Graphite",
+        "canonical": "rgba(24, 21, 15, 0.92)",
+        "tonalRamp": [
+          "#110e09",
+          "#18150f",
+          "#1f1c17",
+          "#28251f",
+          "#433f39",
+          "#5e5a54",
+          "#9f9b92",
+          "#c2bdb4",
+          "#efebe2"
+        ]
+      },
+      "scrim-rhodium": {
+        "role": "neutral",
+        "displayName": "Header Scrim, Rhodium",
+        "canonical": "rgba(230, 233, 239, 0.94)",
+        "tonalRamp": [
+          "#3a4885",
+          "#4b5890",
+          "#8491bb",
+          "#a6b1cf",
+          "#c7cfe0",
+          "#d5dbe8",
+          "#dde2ec",
+          "#e6e9ef"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The name on the first screen and the headline of the closing section. Uppercase."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "A section's name, alone, opening the section. Uppercase."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "The name of a row that carries a paragraph: the capability domains, the featured channel. Uppercase."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "The one statement on the first screen, capped at 21em."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Prose, captions and table values. Paragraphs are capped between 34em and 44em."
+      },
+      "term": {
+        "displayName": "Term",
+        "purpose": "The name of a thing a caption explains: a callout, a stack group, the record's title. Uppercase."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "The label column of every ruled table and every table head. Uppercase, never a sentence."
+      },
+      "control": {
+        "displayName": "Control",
+        "purpose": "Navigation, buttons, the language switch. Uppercase. The two load buttons track 0.14em."
+      },
+      "field": {
+        "displayName": "Field",
+        "purpose": "A two-word fact set in a bordered field."
+      },
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "A measured figure in a readout, tabular so a changing number never moves its neighbours."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The header leaving and returning, the burger, the skip link."
+      },
+      {
+        "name": "t-ui",
+        "value": "0.18s",
+        "purpose": "Every state change: background, border and colour only."
+      },
+      {
+        "name": "theme-crossfade",
+        "value": "0.45s ease",
+        "purpose": "Ground, ink and border cross-fade on themed surfaces when the theme changes."
+      },
+      {
+        "name": "header-hide",
+        "value": "transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The header leaves while the page scrolls down and returns on scroll up."
+      },
+      {
+        "name": "row-reveal",
+        "value": "opacity 0 to 1, y 22px to 0, 0.8s expo.out, 0.06s stagger, once",
+        "purpose": "Rows settle as they enter the viewport at 90% of its height."
+      },
+      {
+        "name": "intro",
+        "value": "opacity and up to 20px of y, 0.7s to 1.1s expo.out, staggered over about 0.55s",
+        "purpose": "The first screen settling, once. There is no preloader."
+      },
+      {
+        "name": "record",
+        "value": "2px per frame, right to left",
+        "purpose": "The tick record: the only loop on the page. Stops off-screen and when the tab is hidden."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "callouts",
+        "value": "1100px"
+      },
+      {
+        "name": "nav-drawer",
+        "value": "900px"
+      },
+      {
+        "name": "single-column",
+        "value": "860px"
+      },
+      {
+        "name": "phone-hero",
+        "value": "760px"
+      },
+      {
+        "name": "stack-drawing",
+        "value": "700px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Project Door",
+      "kind": "button",
+      "refersTo": "door-project",
+      "description": "The brass-filled exit on the first screen. A brass fill means Discord and nothing else.",
+      "html": "<a class=\"ds-door ds-door-pri\" href=\"#\"><div><b>Para um projeto</b><span>Discord, o canal principal</span></div><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M6 18 18 6M8.5 6H18v9.5\"/></svg></a>",
+      "css": ".ds-door { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 14px; min-height: 64px; min-width: 300px; padding: 11px 14px 11px 16px; background: var(--surface); border: 1px solid var(--line); color: var(--fg); text-decoration: none; transition: background-color 0.18s, border-color 0.18s; } .ds-door b { display: block; font: 700 1.1875rem/1.1 var(--f-label); letter-spacing: 0.06em; text-transform: uppercase; } .ds-door span { display: block; margin-top: 3px; font: 400 1.0625rem/1.25 var(--f-text); color: var(--fg-muted); } .ds-door svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; } .ds-door:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; } .ds-door-pri { background: var(--signal); border-color: var(--signal); color: var(--on-signal); } .ds-door-pri span { color: var(--on-signal-muted); } @media (hover: hover) { .ds-door-pri:hover { background: var(--signal-hover); border-color: var(--signal-hover); } }"
+    },
+    {
+      "name": "Role Door",
+      "kind": "button",
+      "refersTo": "door-role",
+      "description": "The second exit, equal in size: the CV. Raised one step, two on hover.",
+      "html": "<a class=\"ds-door\" href=\"#\"><div><b>Para uma vaga</b><span>Currículo em PDF</span></div><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M12 4v13M6.5 11.5 12 17l5.5-5.5M5 20.5h14\"/></svg></a>",
+      "css": ".ds-door { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 14px; min-height: 64px; min-width: 300px; padding: 11px 14px 11px 16px; background: var(--surface); border: 1px solid var(--line); color: var(--fg); text-decoration: none; transition: background-color 0.18s, border-color 0.18s; } .ds-door b { display: block; font: 700 1.1875rem/1.1 var(--f-label); letter-spacing: 0.06em; text-transform: uppercase; } .ds-door span { display: block; margin-top: 3px; font: 400 1.0625rem/1.25 var(--f-text); color: var(--fg-muted); } .ds-door svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; } .ds-door:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; } @media (hover: hover) { .ds-door:hover { background: var(--surface-2); border-color: var(--line-strong); } }"
+    },
+    {
+      "name": "Ink Button",
+      "kind": "button",
+      "refersTo": "button-ink",
+      "description": "The first of a pair, filled with ink. Brass is not available for it.",
+      "html": "<button class=\"ds-btn ds-btn-ink\" type=\"button\">Visualizar</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--fg-muted); background: transparent; color: var(--fg); font: 700 0.9375rem/1 var(--f-label); letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background-color 0.18s, color 0.18s, border-color 0.18s; } .ds-btn:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; } .ds-btn-ink { background: var(--fg); border-color: var(--fg); color: var(--bg); } @media (hover: hover) { .ds-btn-ink:hover { background: var(--fg-muted); border-color: var(--fg-muted); } }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "The partner of an ink button. Shown with its disabled form: dashed, not faded.",
+      "html": "<button class=\"ds-btn\" type=\"button\">Reiniciar</button> <button class=\"ds-btn\" type=\"button\" disabled>Reiniciar</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--fg-muted); background: transparent; color: var(--fg); font: 700 0.9375rem/1 var(--f-label); letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: background-color 0.18s, color 0.18s, border-color 0.18s; } .ds-btn:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; } .ds-btn:disabled { border-style: dashed; color: var(--fg-subtle); border-color: var(--fg-subtle); cursor: default; } @media (hover: hover) { .ds-btn:not(:disabled):hover { background: var(--surface-2); border-color: var(--fg); } }"
+    },
+    {
+      "name": "Field Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "A two-word fact set as a bordered field. Not a control.",
+      "html": "<span class=\"ds-chip\">Remoto</span> <span class=\"ds-chip\">Presencial</span> <span class=\"ds-chip\">Híbrido</span>",
+      "css": ".ds-chip { display: inline-block; padding: 5px 10px 4px; border: 1px solid var(--line-strong); color: var(--fg); font: 600 0.9375rem/1.3 var(--f-label); letter-spacing: 0.04em; }"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Desktop navigation. The current section takes full ink and a 2px brass underline.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\" aria-current=\"true\">Perfil</a><a href=\"#\">Stack</a><a href=\"#\">Atuação</a><a href=\"#\">Trajetória</a><a href=\"#\">Contato</a></nav>",
+      "css": ".ds-nav { display: flex; gap: 28px; align-items: center; } .ds-nav a { font: 600 0.9375rem/1 var(--f-label); letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; text-decoration: none; color: var(--fg-muted); padding: 10px 0 8px; border-bottom: 2px solid transparent; transition: color 0.18s, border-color 0.18s; } .ds-nav a:hover, .ds-nav a:focus-visible { color: var(--fg); } .ds-nav a[aria-current=\"true\"] { color: var(--fg); border-bottom-color: var(--signal); } .ds-nav a:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }"
+    },
+    {
+      "name": "Ruled Table",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "The system's container: a brass head rule, hairline rows, a label column and a value column.",
+      "html": "<dl class=\"ds-table\"><div><dt>Base</dt><dd>Caruaru, PE</dd></div><div><dt>Horário local</dt><dd>22:14:03</dd></div></dl>",
+      "css": ".ds-table { min-width: 320px; margin: 0; border-top: 1.5px solid var(--signal); color: var(--fg); } .ds-table div { display: grid; grid-template-columns: minmax(96px, 7.5rem) minmax(0, 1fr); align-items: baseline; padding: 9px 0 8px; border-bottom: 1px solid var(--line); } .ds-table dt { font: 600 0.8125rem/1.3 var(--f-label); letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-subtle); } .ds-table dd { margin: 0; font: 400 1.0625rem/1.25 var(--f-text); font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Readout",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "A ruled table of measured figures. Only the value being measured is ruby. The figures here are placeholders for the panel; on the page they are measured at runtime.",
+      "html": "<dl class=\"ds-readout\"><div><dt>Sessões</dt><dd>380</dd></div><div><dt>Tick</dt><dd class=\"ds-readout-live\">0,26<small>ms</small></dd></div><div><dt>Do orçamento</dt><dd>1,6<small>%</small></dd></div></dl>",
+      "css": ".ds-readout { min-width: 260px; margin: 0; border-top: 1.5px solid var(--signal); color: var(--fg); } .ds-readout div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 5px 0 4px; border-bottom: 1px solid var(--line); } .ds-readout dt { font: 600 0.8125rem/1.3 var(--f-label); letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-subtle); } .ds-readout dd { margin: 0; font: 700 1.375rem/1 var(--f-label); letter-spacing: 0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; } .ds-readout dd small { font: 500 0.875rem/1 var(--f-label); letter-spacing: 0.06em; color: var(--fg-muted); padding-left: 4px; } .ds-readout .ds-readout-live { color: var(--measure); }"
+    },
+    {
+      "name": "Numbered Callout",
+      "kind": "custom",
+      "refersTo": "callout-bubble",
+      "description": "A reference into a figure: a brass bubble, a term and its caption. Used only where a leader line can be drawn.",
+      "html": "<div class=\"ds-callout\"><i>1</i><div><b>Sessão</b><span>cada ponto é uma, e todas andam a cada tick</span></div></div>",
+      "css": ".ds-callout { display: grid; grid-template-columns: auto minmax(0, 15.5rem); column-gap: 14px; align-items: start; color: var(--fg); } .ds-callout i { width: 28px; height: 28px; display: grid; place-items: center; border: 1.5px solid var(--signal); border-radius: 50%; background: var(--bg-sunken); color: var(--signal); font: 700 1rem/1 var(--f-label); font-style: normal; } .ds-callout b { display: block; font: 700 1.0625rem/1.15 var(--f-label); letter-spacing: 0.1em; text-transform: uppercase; } .ds-callout span { display: block; margin-top: 4px; font: 400 1.0625rem/1.36 var(--f-text); color: var(--fg-muted); }"
+    },
+    {
+      "name": "Channel Cell",
+      "kind": "card",
+      "refersTo": "channel-cell",
+      "description": "One cell of the contact table: a label over a value, with the arrow that turns brass on hover.",
+      "html": "<a class=\"ds-chan\" href=\"#\"><span><span class=\"ds-chan-k\">GitHub</span><span class=\"ds-chan-v\">@4LNsz</span></span><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M6 18 18 6M8.5 6H18v9.5\"/></svg></a>",
+      "css": ".ds-chan { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 14px; min-height: 84px; min-width: 14rem; padding: 14px 18px 13px; border: 1px solid var(--line); border-top: 1.5px solid var(--signal); background: var(--bg-sunken); color: var(--fg); text-decoration: none; transition: background-color 0.18s; } .ds-chan-k { display: block; font: 600 0.8125rem/1.3 var(--f-label); letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-subtle); } .ds-chan-v { display: block; margin-top: 4px; font: 700 1.375rem/1.15 var(--f-label); letter-spacing: 0.03em; } .ds-chan svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; color: var(--fg-muted); transition: color 0.18s; } @media (hover: hover) { .ds-chan:hover { background: var(--surface); } .ds-chan:hover svg { color: var(--signal); } } .ds-chan:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Folha de Calibre (The Calibre Sheet)",
+    "overview": "The page is laid out as the technical sheet of a watch movement: what runs under the case-back, regulated and measured. It is a printed document, so it is built from the things such a sheet prints: ruled tables, numbered callouts on leader lines, a graduated ring, a dotted record, an exploded view, a train graph. Nothing on it is a picture of a movement. There are no gears and no cards.\n\nEach theme is one material from top to bottom. Dark is graphite, a warm near-black drawn from the brass's own hue; light is a rhodium sheet with steel ink. Neither contains a neutral grey, a pure black or a pure white. Brass draws the rules, the numerals and the mark. Ruby is reserved for one meaning, a value being measured right now. Because meaning is carried by form before hue (solid, dashed, hollow), the sheet and the mark both survive in a single ink.\n\nThe density is that of a data sheet: tall condensed capitals for names, small tracked capitals for labels, a scientific serif for sentences, hairlines one pixel wide. It refuses the dark developer portfolio with one neon accent and a fake terminal, and it refuses that page's editorial-serif opposite. It is also quiet: the record of the tick is the only thing that loops, and nothing moves under the pointer.",
+    "keyCharacteristics": [
+      "One ramp per theme: graphite in dark, rhodium in light, never mixed.",
+      "Brass is the signal; ruby is a live measurement and nothing else.",
+      "Every table opens on a brass rule and closes each row on a hairline.",
+      "Square corners on every box; circles only where the sheet draws an instrument or a reference.",
+      "Flat. Depth is four tones of one ramp, with no shadow and no blur.",
+      "Three faces with three jobs, and no mono face.",
+      "State by form: solid, dashed, hollow.",
+      "A number in a bubble always points into a figure."
+    ],
+    "rules": [
+      {
+        "name": "The One Ramp Rule",
+        "body": "A theme is one ramp all the way down. Dark has no pale surface and light has no dark one; sections separate by elevation within the ramp, never by inversion.",
+        "section": "colors"
+      },
+      {
+        "name": "The Steel Ink Rule",
+        "body": "Steel is the ink of the light theme and nothing in the dark one. It is never a dark ground and never a dark hairline: thin saturated blue lines on warm black read as neon on black, which is the look this sheet refuses.",
+        "section": "colors"
+      },
+      {
+        "name": "The Measurement Rule",
+        "body": "Ruby is only ever a value being measured now: the arc on the dial, the tick in the readout, the head of the record. It is never a hover, a status, a rule or an ornament, and it never touches the mark.",
+        "section": "colors"
+      },
+      {
+        "name": "The Discord Fill Rule",
+        "body": "A door or a cell filled with brass means Discord and nothing else: the project door on the first screen and the featured cell of the contact table. Every other primary action is filled with ink.",
+        "section": "colors"
+      },
+      {
+        "name": "The Token Rule",
+        "body": "No colour is written outside the token file, and text is never dimmed with opacity. A quieter voice is a quieter token; opacity is for animation state only.",
+        "section": "colors"
+      },
+      {
+        "name": "The Three Jobs Rule",
+        "body": "Extra Condensed sets titles, Condensed sets labels, numerals and controls, the serif sets sentences. None does another's job, and there is no fourth face.",
+        "section": "typography"
+      },
+      {
+        "name": "The Name Alone Rule",
+        "body": "A section opens on its name alone. No kicker above a heading and no number beside one.",
+        "section": "typography"
+      },
+      {
+        "name": "The Capitals Rule",
+        "body": "Capitals belong to the condensed faces and to names, labels and controls. A sentence is never set in capitals and the serif is never tracked.",
+        "section": "typography"
+      },
+      {
+        "name": "The Brass Head Rule",
+        "body": "Every table and list opens on a brass rule 1.5px thick and closes each row on a 1px hairline. The label sits in a narrow left column, the value beside it.",
+        "section": "layout"
+      },
+      {
+        "name": "The Reference Rule",
+        "body": "A number in a bubble is a reference into a figure. Where the figure or its leader lines are not drawn, the numbers go with them.",
+        "section": "layout"
+      },
+      {
+        "name": "The Empty Cell Rule",
+        "body": "A field with no data stays empty. Nothing is written to balance a row.",
+        "section": "layout"
+      },
+      {
+        "name": "The Printed Sheet Rule",
+        "body": "No shadows, no blur, no gradients. The fixed header takes a flat scrim of its own ground when it floats; a frosted bar would be the one piece of glass on a printed page.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Well Rule",
+        "body": "An instrument sits in a well, one step below the sheet: the dial, the tick record, the career diagram, the foot of the page. Raising is reserved for something to press.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Square Box Rule",
+        "body": "Every box has square corners. A circle means an instrument or a reference: the dial, a callout bubble, a node, a leader's terminal.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Form First Rule",
+        "body": "State is carried by form, never by hue alone. A control that cannot act goes dashed; work is a solid run and study a hollow one; the stretch with no employer on the record is dashed rather than left off.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Still Pointer Rule",
+        "body": "Hover is background, border and colour. Nothing translates, scales or tilts under the pointer, and hover styling applies only where the device can hover.",
+        "section": "components"
+      },
+      {
+        "name": "The Measured Figure Rule",
+        "body": "Every figure in a readout is measured at runtime. A decorative number is not a component of this system.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do build each theme from one ramp: the graphite ramp for dark, the rhodium ramp for light, mapped onto the same roles.",
+      "Do open every table and list on a 1.5px brass rule and close each row on a 1px hairline.",
+      "Do fill a primary action with ink (`--fg`) and outline its partner in `--fg-muted` at 1px; both are at least 44px tall.",
+      "Do keep the brass fill for Discord: one door on the first screen, one cell at the foot.",
+      "Do set labels in Sofia Sans Condensed 600 at 0.8125rem, uppercase, tracked 0.16em, in `--fg-subtle`.",
+      "Do set any number that changes in tabular figures.",
+      "Do put an instrument in a well (`--bg-sunken`) with a 1px hairline around it.",
+      "Do tell two states apart by form first: solid, dashed, hollow.",
+      "Do recompute the contrast table in the token file when a tone moves; every text tone clears 4.5:1 on both the sheet and the well in both themes.",
+      "Do draw a figure from data and at the width it is given, so its lettering stays the size it was set at.",
+      "Do use the A-quatro with the handle and the AS with the name, the drawing in one colour, from the files in `brand/`; off the page, use the lockup files there instead of setting the lettering again."
+    ],
+    "donts": [
+      "Don't put a pale surface in the dark theme or a dark one in the light theme.",
+      "Don't bring blue into the dark theme, as a ground or as a hairline; steel is the light theme's ink only.",
+      "Don't swap the graphite for a neutral grey or a pure black; it carries the brass's hue.",
+      "Don't use ruby for a hover, a status, a rule or an ornament.",
+      "Don't fill a control or a cell with brass unless it is the Discord door or the Discord cell.",
+      "Don't write a colour outside the token file, and don't dim text with opacity.",
+      "Don't add a shadow, a blur, a gradient or a rounded corner to a box.",
+      "Don't put a kicker above a heading or a number beside one.",
+      "Don't number a list that has no figure to point into.",
+      "Don't draw a gear, a cog or a tourbillon; nothing on the sheet is a picture of a movement.",
+      "Don't add a mono face; nothing on the page is code.",
+      "Don't move, scale or tilt an interactive element on hover.",
+      "Don't add a preloader, a smooth-scroll library, a marquee or a second looping animation.",
+      "Don't use pixel lettering, pixel marks or any retro-game register.",
+      "Don't redraw, outline, slant, round or recolour the mark, don't set its lettering in another face, and don't set the two drawings side by side.",
+      "Don't show a number that is not measured or sourced."
+    ]
+  }
+}

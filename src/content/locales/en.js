@@ -3,6 +3,10 @@
  *   [CV]  LinkedIn CV export (PT-BR and ENG)
  *   [GH]  github.com/4LNsz
  *   [AL]  Confirmed directly by Alan in conversation
+ *   [SIM] Describes what motion/field.js does, not Alan; it changes
+ *         when that code does
+ *   [?]   No source yet: inherited, and waiting for Alan to confirm it
+ *         or have it removed. Not a marker for writing new lines under
  *
  * Nothing is inferred, rounded, or "filled in to balance the layout".
  * If a fact is in neither source it does not belong here, however
@@ -12,16 +16,22 @@ export default {
   __meta: { order: 2, code: "EN", name: "English", locale: "en-US", htmlLang: "en" },
 
   nav: { profile: "Profile", stack: "Stack", practice: "Practice", path: "Path", contact: "Contact" },
-  meta: { status: "Status", role: "Role", based: "Based in", time: "Local time", focus: "Focus" },
+  meta: { based: "Based in", time: "Local time" },
   ui: {
     toDark: "Switch to dark theme",
     toLight: "Switch to light theme",
     menu: "Open menu",
     menuClose: "Close menu",
     skip: "Skip to content",
+    source: "Source",
   },
 
   hero: {
+    // [?] UNSOURCED. The line came from the site that predates this
+    // redesign and never carried a marker: it is in neither the CV nor
+    // GitHub, and it speaks to one of the page's two audiences only. It
+    // stays as it was until Alan says where it comes from or has it
+    // removed. Do not reword it for him.
     status: "Available for projects",
     // [CV] Opening sentence of the LinkedIn summary, verbatim from the
     // English export — not translated from the Portuguese one. It ran
@@ -31,19 +41,43 @@ export default {
     role: "Software Engineer",                   // [CV] profile title
     based: "Caruaru, PE — Brazil",               // [CV] location
     focus: "Back-end / Real-time",               // [CV] summary
-    // Labels for the hero panel. The values are measured at runtime by
+    // Labels for the hero panel. The VALUES are measured at runtime by
     // motion/field.js — none of them is written here.
     hud: {
       sessions: "Sessions",
-      tick: "Tick (ms)",
+      tick: "Tick",
+      jitter: "Jitter",
+      budget: "Of the budget",
       load: "+ Load",
       reset: "Reset",
     },
+    // [SIM] The four captions describe what motion/field.js does and
+    // nothing else. Change the code, change the caption.
+    figLabel: "Live simulation: each dot is a session.",
+    fig: [
+      { t: "Session", d: "each dot is one, and all of them move every tick" },
+      { t: "Neighbourhood", d: "found on a spatial grid, never all against all" },
+      { t: "Measured tick", d: "step and draw, timed in this browser" },
+      { t: "Frame budget", d: "one full lap is 16.7 ms, a frame at 60 Hz" },
+    ],
+    // [SIM] The record's scale is fixed at 2 ms; the 16.7 ms frame sits
+    // 8.35 times above it. Change TRACE_MAX_MS, change the sentence.
+    strip: {
+      title: "Tick record",
+      // One sentence, kept as its two clauses so each wraps by itself.
+      note: ["one dot per frame;", "the line only climbs when load comes in"],
+      total: "tick",
+      step: "step",
+      scale: "The frame budget, 16.7 ms, sits eight times above this scale",
+      mark: "load",
+    },
+    // [AL] Two audiences at equal weight: whoever is hiring for a
+    // project, and whoever is hiring for a role.
+    doors: {
+      project: { t: "For a project", d: "Discord, the primary channel" },
+      role: { t: "For a role", d: "CV as a PDF" },
+    },
   },
-
-  // [CV] + [GH]. "Distributed systems" was dropped: it appears in
-  // neither source.
-  marquee: ["Lua", "TypeScript", "JavaScript", "Node.js", "React", "Vue.js", "MySQL", "High concurrency", "Real-time"],
 
   /**
    * Section 01 is data-driven. `about` is an array of paragraphs and
@@ -55,8 +89,6 @@ export default {
    * on — the first is already the hero statement.
    */
   profile: {
-    kicker: "Who I am",
-    aboutTitle: "About",
     about: [
       "My expertise lies in Lua and high-concurrency simulation systems — environments where the challenge isn’t just making the code work, but ensuring it runs flawlessly for hundreds of simultaneous users.",
       "I thrive on solving performance headaches. My routine involves architecting complex logic and, more importantly, hunting down bottlenecks. I have a proven track record of analyzing systems under stress to find ways to slash hardware consumption (CPU/RAM), turning resource-heavy infrastructures into lean, scalable solutions.",
@@ -95,10 +127,14 @@ export default {
         //
         // A start year, never a running count: "6 years of experience"
         // goes stale on its own every birthday.
+        //
+        // "Building since 2018 · professionally since 2022" used to sit
+        // here. It did not leave the page: it is `path.since` now and
+        // labels the dashed run of the Path diagram, which is where
+        // that stretch is actually drawn. One fact, one place.
         title: "Details",
         items: [
           "Brazilian national",
-          "Building since 2018 · professionally since 2022",
         ],
       },
       {
@@ -170,13 +206,14 @@ export default {
   // Removed from here: REST, Redis, Linux, Docker, CI/CD, Turborepo,
   // pnpm and Vite — none appears in either source.
   stack: {
-    kicker: "What I use",
+    // `src` says where the fact comes from — the same [CV] / [GH] as the
+    // comment, in a form the page can read and show as a link per row.
     rows: [
-      { name: "Back-end",  items: ["Lua", "Node.js", "TypeScript", "JavaScript"] }, // [CV] WinsVue + [GH]
-      { name: "Front-end", items: ["React", "Vue.js"] },                            // [CV] summary + [GH]
-      { name: "Data",      items: ["MySQL", "MariaDB"] },                            // [CV] summary + [GH]
-      { name: "Platform",  items: ["FiveM", "CFX.RE"] },                             // [GH]
-      { name: "Tooling",   items: ["Git", "VS Code", "Figma"] },                     // [GH] + [CV] top skills
+      { name: "Back-end",  items: ["Lua", "Node.js", "TypeScript", "JavaScript"], src: ["cv", "gh"] }, // [CV] WinsVue + [GH]
+      { name: "Front-end", items: ["React", "Vue.js"], src: ["cv", "gh"] },                            // [CV] summary + [GH]
+      { name: "Data",      items: ["MySQL", "MariaDB"], src: ["cv", "gh"] },                            // [CV] summary + [GH]
+      { name: "Platform",  items: ["FiveM", "CFX.RE"], src: ["gh"] },                             // [GH]
+      { name: "Tooling",   items: ["Git", "VS Code", "Figma"], src: ["gh", "cv"] },                     // [GH] + [CV] top skills
     ],
   },
 
@@ -184,29 +221,23 @@ export default {
   // Still capabilities rather than named systems — see the Privacy
   // section of CLAUDE.md.
   practice: {
-    kicker: "What I do",
-    hint: "Scroll horizontally",
     items: [
       {
-        label: "Domain",
         title: "Real-time simulation",
         desc: "High-complexity ecosystems serving hundreds of simultaneous users. Real-time data processing and complex state persistence, keeping dynamic environments stable under load.",
         tags: ["Lua", "High concurrency", "State persistence"],
       },
       {
-        label: "Domain",
         title: "Performance optimisation",
         desc: "Analysing systems under stress to find ways to slash hardware consumption. Refactoring critical systems for reduced CPU and memory use and lower infrastructure running costs.",
         tags: ["CPU / RAM", "Refactoring", "Running costs"],
       },
       {
-        label: "Domain",
         title: "Architecture and technical decisions",
         desc: "Planning new systems and end-to-end software architecture, anticipating bottlenecks before they become problems, and integrating the server core with reactive interfaces.",
         tags: ["Architecture", "React", "Vue.js"],
       },
       {
-        label: "Domain",
         title: "Monitoring and diagnostics",
         desc: "Server monitoring and diagnostic routines, with agile resolution of complex issues to keep the environment highly available.",
         tags: ["Monitoring", "Availability", "MySQL"],
@@ -218,31 +249,45 @@ export default {
   // Months are kept because Garty Group ran three months inside 2022,
   // the same year the Energy role started.
   path: {
-    kicker: "Where I've been",
     cv: "Full CV",
     cvView: "View",
     cvGet: "Download",
+    cols: { when: "Period", who: "Role and house", what: "Work carried out" },
+    // [AL] The sentence is his, whole. It used to sit in the "Details"
+    // block of Profile; it labels the dashed run of the diagram now.
+    since: "Building since 2018 · professionally since 2022",
+    sinceYear: 2018,
+    // [CV] Not a new claim: it is what the dates below already say,
+    // read off the diagram.
+    together: "The two lines run together",
+    fig: "Career diagram: work and study across the years.",
+    // `from` and `to` are [year, month] and repeat `when` in a form the
+    // diagram can read. Change one, change the other.
     rows: [
       {
         when: "Aug 2025 — Apr 2026",
+        from: [2025, 8], to: [2026, 4],
         role: "Back-end Developer",
         org: "WinsVue",
         note: "Real-time simulation ecosystems under high user concurrency. Refactoring work that cut CPU and memory consumption across critical systems, plus server monitoring and diagnostic routines.",
       },
       {
         when: "Aug 2022 — Jun 2025",
+        from: [2022, 8], to: [2025, 6],
         role: "Software Developer",
         org: "Energy",
         note: "Managed the back-end team — assigning roles, setting objectives and owning product quality — alongside building new features and restructuring the operational side of the systems.",
       },
       {
         when: "Jan — Mar 2022",
+        from: [2022, 1], to: [2022, 3],
         role: "Software Developer",
         org: "Garty Group",
         note: "Back-end work at a company focused on FiveM, supporting four distinct servers with tailored features, optimisations and operational troubleshooting.",
       },
       {
         when: "2020 — 2024",
+        from: [2020, 1], to: [2024, 12], kind: "study",
         role: "Computer Science",
         org: "UniFavip Wyden — BSc",
         // Deliberately no note. The syllabus blurb that sat here was
@@ -254,7 +299,6 @@ export default {
   },
 
   contact: {
-    kicker: "Reach me",
     big: "LET'S TALK",
     primary: "Primary channel",
   },

@@ -1,338 +1,290 @@
-#hero {
-  min-height: 100svh;
+/* ══ THE SHEET ══════════════════════════════════════════════
+   The first screen is laid out like the plate of a calibre sheet: the
+   title in the top-left corner, the figure in the middle with numbered
+   callouts on leader lines to either side, the data and the two exits
+   bottom-right, and the tick record along the foot.
+
+   The figure is not an illustration. motion/field.js steps every dot,
+   and the ring, the arc and the record report what that costs. */
+
+#hero { padding-top: var(--header-h); }
+
+.sheet {
+  /* The field's diameter, and the band around it that the graduations
+     and numerals need. Everything the dial touches derives from these
+     two, so the figure scales as one object. */
+  --dial: clamp(300px, min(50vh, 33vw), 540px);
+  --ring: 46px;
+  --dial-box: calc(var(--dial) + var(--ring) * 2);
+
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--dial-box) minmax(0, 1fr);
+  column-gap: clamp(20px, 2.6vw, 48px);
+  padding-block: clamp(26px, 4.2vh, 46px) clamp(22px, 3.6vh, 40px);
+}
+.sheet__l, .sheet__r {
   display: flex;
   flex-direction: column;
-  /* flex-start, not flex-end. The hero is taller than its content, and
-     flex-end handed every spare pixel to the space ABOVE the first
-     child — which is what made the top of the screen read as empty. The
-     slack now goes to .hero-body, which centres itself in whatever is
-     left between the strip and the fold. */
-  justify-content: flex-start;
-  /* Clears the fixed header rather than guessing at it. */
-  padding-top: calc(var(--header-h) + clamp(20px, 6vh, 80px));
-  padding-bottom: clamp(18px, 3vh, 48px);
-}
-
-/* ── ambient bloom ───────────────────────────────────────
-   Dark theme only, driven by --ambient. It hangs off #main and NOT off
-   #hero, and that is the whole point of this block.
-
-   It used to be `#hero::before` at `inset: -25% -12% 10% -12%`. #hero
-   is a .wrap: it stops growing at --wrap-max and then centres itself,
-   so the bloom's box stopped growing with it, at 1680 * 1.24 = 2083px,
-   while the screen kept going. Past roughly 2080px of viewport both of
-   its vertical edges landed inside the picture.
-
-   That would be harmless if the gradients had finished by then. They
-   have not — measured at the box's own left edge the wash still carries
-   alpha 0.069, and 0.037 at the right. Over --bg that is rgb(14,34,32)
-   meeting rgb(10,20,19) along a dead-straight line several hundred
-   pixels tall. On an ultrawide the glow stopped reading as atmosphere
-   and started reading as a tinted rectangle laid over the page.
-
-   THE RULE: a gradient may be cut off by the edge of the screen, never
-   by a box inside it. #main is the full client width at every viewport,
-   so `inset-inline: 0` puts both cuts exactly where the screen ends and
-   what a 3440px display shows is what a 1440px one already showed — a
-   wash running off both sides.
-
-   Not `calc(50% - 50vw)` on the old box: vw counts the scrollbar, so
-   that overhangs the visible area by half a scrollbar. body's
-   overflow-x is `hidden`, which clips but stays programmatically
-   scrollable — measured, the page could be nudged 8px sideways. #main
-   has no scrollbar in its width, so there is nothing to overhang.
-
-   The height is svh rather than a percentage because there is no longer
-   a hero-shaped containing block to take a percentage of. #hero is
-   `min-height: 100svh` and its content fits inside that, so the two
-   agree; if a narrow screen ever makes the hero taller, the bloom
-   simply covers less of it, which is what a bloom should do. */
-#main { position: relative; }
-
-#main::before {
-  content: "";
-  position: absolute;
-  inset-inline: 0;
-  top: -25svh;
-  height: 115svh;
-  z-index: -1;
-  pointer-events: none;
-  background: var(--ambient);
-  transition: background 0.6s ease;
-}
-
-/* ── the strip ───────────────────────────────────────────
-   Five cells divided by hairlines, sitting between rules. It replaced
-   two separate bands: a top row holding status, clock and a scroll cue
-   with 60% of its width as air, and a three-cell strip under the name.
-   Neither was full, and both said "here is a row of data".
-
-   Cells, not a flex row with space-between: inside a cell, empty space
-   reads as the field having room. Between two loose items it reads as
-   something missing. */
-.hero-strip {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  border-top: var(--rule);
-  border-bottom: var(--rule);
-  background: var(--bg-sunken);
-}
-.hero-strip > div {
-  padding: 13px 16px 15px;
-  border-right: var(--rule);
+  justify-content: space-between;
+  gap: clamp(18px, 3vh, 32px);
   min-width: 0;
 }
-.hero-strip > div:last-child { border-right: none; }
-.hero-strip .k { color: var(--fg-subtle); display: block; margin-bottom: 6px; }
-.hero-strip .v {
-  font-family: var(--f-mono);
-  font-size: 12px;
-  letter-spacing: 0.02em;
-  font-variant-numeric: tabular-nums;
-  color: var(--fg);
-  overflow-wrap: anywhere;
-}
 
-/* Five cells stop holding their labels here; three, then two. The
-   trailing cell spans the full row so a lone orphan never sits in a
-   half-width box. */
-@media (max-width: 1100px) {
-  .hero-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .hero-strip > div:nth-child(3n) { border-right: none; }
-  .hero-strip > div:nth-child(-n + 3) { border-bottom: var(--rule); }
-}
-@media (max-width: 700px) {
-  .hero-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .hero-strip > div { padding: 11px 12px 13px; }
-  .hero-strip > div:nth-child(n) { border-right: var(--rule); border-bottom: var(--rule); }
-  .hero-strip > div:nth-child(2n) { border-right: none; }
-  .hero-strip > div:last-child { grid-column: 1 / -1; border-right: none; border-bottom: none; }
-}
-
-/* ── body ────────────────────────────────────────────────
-   Two attempts at this screen failed the same way. First "ALAN" at up
-   to 330px; then, with the name gone, the statement at up to 76px. Both
-   were one element blown up until it filled the fold, and scale alone
-   is not composition — the second read no better than the first.
-
-   So: nothing is oversized. The name is the largest thing on the screen
-   at a size a person would actually set it, the statement reads as the
-   sentence it is, and the running system sits beside them as an equal
-   rather than as wallpaper behind them. */
-.hero-body {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(20px, 4vw, 56px);
-  align-items: center;
-  /* auto on both sides: takes the leftover height and splits it evenly,
-     so the block sits centred under the strip instead of piling the
-     slack above everything. */
-  margin-block: auto;
-  padding-block: clamp(18px, 4vh, 56px);
-}
-@media (min-width: 940px) {
-  .hero-body { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }
-}
-
-/* Stacked, the rig sat between the statement and the meta strip and
-   pushed the strip 32px below the fold — so the first screen ended on a
-   half-cut row of data. `display: contents` dissolves .hero-body into
-   the hero's own column so the two can be reordered independently:
-   identity and facts complete above the fold, the running system
-   directly beneath, which is a better invitation to scroll than a
-   clipped table. */
-@media (max-width: 939px) {
-  .hero-body { display: contents; }
-  .hero-main { order: 1; margin-block: auto 0; }
-  .hero-rig { order: 2; margin-top: clamp(18px, 3vh, 32px); margin-bottom: auto; }
-}
-
-.hero-eyebrow { color: var(--signal); margin-bottom: 14px; }
-
+/* ── title block ─────────────────────────────────────────
+   The name is the largest thing on the page, at a size a person would
+   actually set it. Two earlier versions of this screen scaled one
+   element up until it filled the fold, and both failed. */
 .hero-name {
-  font-family: var(--f-display);
-  font-weight: 700;
-  font-stretch: var(--display-wdth);
-  font-size: clamp(34px, 4.6vw, 62px);
-  line-height: 1.02;
-  letter-spacing: -0.035em;
-  color: var(--fg);
+  font: 800 clamp(3.5rem, 6.2vw, 6rem)/0.86 var(--f-display);
+  letter-spacing: 0.012em;
+  text-transform: uppercase;
 }
-
-.hero-statement {
-  margin-top: clamp(16px, 2.4vh, 24px);
-  max-width: 42ch;
-  font-family: var(--f-text);
-  font-size: clamp(16px, 1.45vw, 19px);
-  font-weight: 400;
-  line-height: 1.55;
-  letter-spacing: -0.005em;
+.hero-role {
+  margin-top: 14px;
+  font: 500 clamp(1.125rem, 1.55vw, 1.5625rem)/1.2 var(--f-label);
+  letter-spacing: 0.02em;
+}
+.hero-role span { display: block; }
+.hero-role span + span { color: var(--fg-muted); }
+.hero-status {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 600 0.875rem/1.3 var(--f-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--fg-muted);
 }
+.hero-status::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--signal); flex: none; }
 
-/* ── the rig ─────────────────────────────────────────────
-   The simulation is bounded and framed on purpose: as a full-bleed
-   background it read as decoration, which is the one thing it is not.
-   Inside a box with its readout attached, it reads as an instrument —
-   a system running, with its cost on the dial. */
-.hero-rig {
-  border: 1px solid var(--line);
-  border-radius: var(--r-md);
-  background: var(--surface);
-  overflow: hidden;
-}
-.hero-rig__field {
-  display: block;
-  width: 100%;
-  height: clamp(150px, 30vh, 300px);
-}
-/* Stacked, the rig sits under the type instead of beside it, so its
-   height comes straight off the fold. */
-@media (max-width: 939px) {
-  .hero-rig__field { height: clamp(140px, 20vh, 200px); }
+.hero-statement {
+  max-width: 21em;
+  font: 400 clamp(1.1875rem, 1.6vw, 1.5625rem)/1.36 var(--f-text);
+  text-wrap: pretty;
 }
 
-.hero-status { display: flex; align-items: center; gap: 9px; }
-.hero-status::before {
-  content: "";
-  width: 7px;
-  height: 7px;
+/* ── callouts ────────────────────────────────────────────
+   Numbered the way an exploded view numbers its parts: the bubble is
+   the reference, the leader in .leaders finds the thing it names. */
+.callouts { list-style: none; display: grid; gap: clamp(16px, 3.2vh, 34px); }
+.callouts li { display: grid; column-gap: 14px; align-items: start; }
+.callouts--l li { grid-template-columns: minmax(0, 1fr) auto; text-align: right; }
+.callouts--r li { grid-template-columns: auto minmax(0, 1fr); }
+.callouts--l li > div { justify-self: end; max-width: 15.5rem; }
+.callouts--r li > div { max-width: 15.5rem; }
+.callouts--l .n { order: 2; }
+.callouts .n {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--signal);
   border-radius: 50%;
-  flex: 0 0 auto;
-  background: var(--signal);
-  box-shadow: var(--dot-glow);
-  animation: blip 2.4s ease-in-out infinite;
-}
-@keyframes blip {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.35; transform: scale(0.72); }
-}
-
-/* ── instrument readout ──────────────────────────────────
-   Attached to the bottom of the rig, sharing its frame — a dial on the
-   machine rather than a card floating near it. */
-.instr {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px clamp(14px, 2.2vw, 26px);
-  padding: 12px clamp(12px, 1.6vw, 16px);
-  border-top: 1px solid var(--line);
   background: var(--bg-sunken);
+  color: var(--signal);
+  font: 700 1rem/1 var(--f-label);
+  font-style: normal;
 }
-
-.instr__stat { display: flex; align-items: baseline; gap: 10px; }
-.instr__k { color: var(--fg-subtle); white-space: nowrap; }
-.instr__v {
-  font-family: var(--f-mono);
-  font-size: clamp(15px, 1.6vw, 19px);
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  color: var(--fg);
-  /* Fixed width so the digits changing every frame cannot shuffle the
-     row beside them. */
-  min-width: 5ch;
-}
-
-.instr__budget-label {
-  font-family: var(--f-mono);
-  font-size: 11px;
-  color: var(--fg-subtle);
-  font-variant-numeric: tabular-nums;
-  margin-left: -4px;
-}
-
-.instr__budget {
-  flex: 1 1 120px;
-  min-width: 90px;
-  height: 6px;
-  border-radius: var(--r-pill);
-  background: var(--surface-2);
-  overflow: hidden;
-}
-.instr__budget i {
+.callouts b {
   display: block;
-  height: 100%;
-  width: 100%;
-  transform: scaleX(0);
-  transform-origin: left;
-  background: var(--signal);
-  transition: transform 0.18s linear, background-color 0.3s;
-}
-/* Over one frame's budget. --signal is the page's positive accent, so
-   the warning state is signalled by the bar going flat and pale rather
-   than by introducing a red that exists in no token. */
-.hero-instr.is-over .instr__budget i { background: var(--fg-muted); }
-
-.instr__load {
-  margin-left: auto;
-  min-height: var(--tap);
-  padding: 0 16px;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--r-sm);
-  background: none;
-  cursor: pointer;
-  font-family: var(--f-mono);
-  font-size: 11px;
+  font: 700 1.0625rem/1.15 var(--f-label);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--fg);
-  white-space: nowrap;
-  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
 }
-.instr__load:hover,
-.instr__load:focus-visible,
-.instr__load:active {
-  border-color: var(--signal);
-  background: var(--signal-wash);
-  color: var(--signal);
-}
+.callouts span { display: block; margin-top: 4px; font-size: 1.0625rem; line-height: 1.36; color: var(--fg-muted); text-wrap: pretty; }
 
-/* On a phone the readout wraps to two rows, and its own padding is what
-   pushes the hero past the fold — so it tightens rather than the type. */
-@media (max-width: 560px) {
-  .instr { gap: 10px 14px; padding: 10px 12px; }
-  .instr__stat { gap: 8px; }
-  .instr__v { font-size: 15px; min-width: 4.5ch; }
-  /* The bar stays inline with the figures rather than claiming a row of
-     its own — three stacked rows of readout cost more of the fold than
-     the readout is worth. */
-  .instr__load { margin-left: 0; width: 100%; min-height: 40px; }
-  .instr__budget { flex: 1 1 60px; min-width: 60px; }
-}
+.leaders { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.leaders path { fill: none; stroke: var(--fg-muted); stroke-width: 1; }
+/* Two terminals. `.at` rings something inside the field, a session or a
+   link, and stays hollow so the thing itself shows through; `.on` sits
+   on the ring. Both are moved by motion/field.js to where the thing
+   they name is now. */
+.leaders .at { fill: none; stroke: var(--fg); stroke-width: 1.4; }
+.leaders .on { fill: var(--bg-sunken); stroke: var(--fg); stroke-width: 1.4; }
 
-/* ── marquee ─────────────────────────────────────────────
-   A raised band. Between the hero and section 01 the page would
-   otherwise be one uninterrupted field of --bg. */
-.marquee {
-  overflow: hidden;
-  border-top: var(--rule);
-  border-bottom: var(--rule);
-  padding: 12px 0;
-  display: flex;
-  white-space: nowrap;
-  user-select: none;
-  background: var(--surface);
+/* ── the dial ────────────────────────────────────────────── */
+.dial {
+  position: relative;
+  width: var(--dial-box);
+  height: var(--dial-box);
+  align-self: center;
+  justify-self: center;
 }
-.marquee__row { display: flex; flex: 0 0 auto; will-change: transform; }
-.marquee span {
-  font-family: var(--f-display);
-  font-weight: 600;
-  font-size: clamp(14px, 2vw, 24px);
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  padding: 0 18px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  color: var(--fg);
-}
-.marquee span::after {
-  content: "";
-  width: 5px;
-  height: 5px;
-  background: var(--signal);
+.dial__field {
+  position: absolute;
+  left: var(--ring);
+  top: var(--ring);
+  width: var(--dial);
+  height: var(--dial);
   border-radius: 50%;
-  flex: 0 0 auto;
-  box-shadow: var(--dot-glow);
+  background: var(--bg-sunken);
+  box-shadow: 0 0 0 1px var(--line);
+  /* Pressing the field adds load where it is pressed. */
+  cursor: crosshair;
+  touch-action: manipulation;
+}
+.dial__ring { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.dial__ring text { font-family: var(--f-label); font-weight: 600; font-size: 17px; letter-spacing: 0.04em; fill: var(--signal); }
+.dial__ring .tk { stroke: var(--signal); }
+.dial__ring .arc { fill: none; stroke: var(--measure); }
+.dial__ring .hand { fill: var(--bg-sunken); stroke: var(--measure); stroke-width: 1.6; }
+
+/* The short readout. Only the phone layout shows it; see below. */
+.mini { display: none; }
+
+/* ── the data, and the two ways out ──────────────────────── */
+.ficha { border-top: 1.5px solid var(--signal); }
+.ficha div {
+  display: grid;
+  grid-template-columns: minmax(96px, 7.5rem) minmax(0, 1fr);
+  align-items: baseline;
+  padding: 9px 0 8px;
+  border-bottom: 1px solid var(--line);
+}
+.ficha dt { font: 600 0.8125rem/1.3 var(--f-label); letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-subtle); }
+.ficha dd { font-size: 1.0625rem; line-height: 1.25; font-variant-numeric: tabular-nums; }
+
+/* Two audiences at equal weight get two doors, each with its own line.
+   The project door is filled because Discord is the channel that gets
+   answered first, not because one visitor matters more. */
+.doors { display: grid; gap: 10px; }
+.door {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 14px;
+  min-height: 64px;
+  padding: 11px 14px 11px 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--fg);
+  transition: background-color var(--t-ui), border-color var(--t-ui);
+}
+.door b { display: block; font: 700 1.1875rem/1.1 var(--f-label); letter-spacing: 0.06em; text-transform: uppercase; }
+.door span { display: block; margin-top: 3px; font-size: 1.0625rem; line-height: 1.25; color: var(--fg-muted); }
+.door svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; }
+.door--pri { background: var(--signal); border-color: var(--signal); color: var(--on-signal); }
+.door--pri span { color: var(--on-signal-muted); }
+
+@media (hover: hover) {
+  .door:hover { background: var(--surface-2); border-color: var(--line-strong); }
+  .door--pri:hover { background: var(--signal-hover); border-color: var(--signal-hover); }
+}
+
+/* ── the tick record ─────────────────────────────────────── */
+.strip { background: var(--bg-sunken); border-block: 1px solid var(--line); }
+.strip__in {
+  display: grid;
+  grid-template-columns: minmax(150px, 12rem) minmax(0, 1fr) minmax(240px, 17rem);
+  column-gap: clamp(16px, 2vw, 32px);
+  padding-block: 18px 14px;
+}
+.strip__lab h2 { font: 700 1.0625rem/1.15 var(--f-label); letter-spacing: 0.1em; text-transform: uppercase; }
+.strip__lab p { margin-top: 6px; font-size: 1.0625rem; line-height: 1.36; color: var(--fg-muted); text-wrap: pretty; }
+/* The note is two clauses. Beside the plot each takes its own lines. */
+.strip__lab p span { display: block; }
+.strip__plot canvas { display: block; width: 100%; height: 150px; }
+.strip__scale { margin-top: 6px; font: 600 0.8125rem/1.3 var(--f-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-subtle); }
+
+.instr dl { border-top: 1.5px solid var(--signal); }
+.instr dl div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 5px 0 4px; border-bottom: 1px solid var(--line); }
+.instr dt { font: 600 0.8125rem/1.3 var(--f-label); letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-subtle); }
+.instr dd { font: 700 1.375rem/1 var(--f-label); letter-spacing: 0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.instr dd small { font: 500 0.875rem/1 var(--f-label); letter-spacing: 0.06em; color: var(--fg-muted); padding-left: 4px; }
+.instr [data-role="tick"] { color: var(--measure); }
+.instr__btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.instr button {
+  min-height: var(--tap);
+  border: 1px solid var(--fg-muted);
+  background: transparent;
+  color: var(--fg);
+  font: 700 0.9375rem/1 var(--f-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color var(--t-ui), color var(--t-ui), border-color var(--t-ui);
+}
+/* The first of a pair is filled with ink. Brass is not available for
+   this: a brass field means Discord, here and at the foot of the page. */
+.instr button.go { background: var(--fg); border-color: var(--fg); color: var(--bg-sunken); }
+/* State by form, not hue: a control that cannot act goes dashed. */
+.instr button:disabled { border-style: dashed; background: transparent; color: var(--fg-subtle); border-color: var(--fg-subtle); cursor: default; }
+
+@media (hover: hover) {
+  .instr button:not(:disabled):hover { background: var(--surface-2); border-color: var(--fg); color: var(--fg); }
+  .instr button.go:not(:disabled):hover { background: var(--fg-muted); border-color: var(--fg-muted); color: var(--bg-sunken); }
+}
+
+/* ── narrower ────────────────────────────────────────────
+   Below 1100px there is no room for a callout column on each side, so
+   the leaders go, and the numbers go with them: a bubble is a reference
+   into the figure, and with no line to follow it refers to nothing. The
+   callouts become a plain list of four terms. The two column wrappers
+   dissolve and their children are placed by name. */
+@media (max-width: 1100px) {
+  .sheet {
+    --dial: clamp(260px, 40vw, 420px);
+    --ring: 40px;
+    grid-template-columns: minmax(0, 1fr) var(--dial-box);
+    grid-template-areas:
+      "id   dial"
+      "say  dial"
+      "fi   dial"
+      "do   dial"
+      "ca   cb";
+    row-gap: 22px;
+  }
+  .sheet__l, .sheet__r { display: contents; }
+  .hero-id { grid-area: id; }
+  .hero-statement { grid-area: say; }
+  .ficha { grid-area: fi; }
+  .doors { grid-area: do; }
+  .dial { grid-area: dial; }
+  .callouts--l { grid-area: ca; }
+  .callouts--r { grid-area: cb; }
+  .callouts .n { display: none; }
+  .callouts--l li, .callouts--r li { grid-template-columns: minmax(0, 1fr); text-align: left; }
+  .callouts--l li > div, .callouts--r li > div { justify-self: start; }
+  .callouts { align-content: start; padding-top: 6px; }
+  .leaders { display: none; }
+
+  .strip__in { grid-template-columns: minmax(0, 1fr) minmax(240px, 17rem); row-gap: 14px; }
+  .strip__lab { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  .strip__lab p { margin-top: 0; }
+  .strip__lab p span { display: inline; }
+}
+
+/* On a phone the figure is the whole first screen, so what it is
+   measuring has to be on that screen too, and so do the two ways out:
+   the readout sits straight under the dial, the doors under that, and
+   the four captions follow. They used to come first, which put both
+   doors and every number two screens down. */
+@media (max-width: 760px) {
+  .sheet {
+    --dial: min(100vw - var(--pad) * 2 - 68px, 340px);
+    --ring: 34px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "id" "dial" "mini" "do" "ca" "cb" "say" "fi";
+    row-gap: 20px;
+  }
+  .mini {
+    grid-area: mini;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: -6px;
+    border-top: 1.5px solid var(--signal);
+    border-bottom: 1px solid var(--line);
+  }
+  .mini div { padding: 8px 0 7px; }
+  .mini div + div { padding-left: 12px; border-left: 1px solid var(--line); }
+  .mini dt { font: 600 0.8125rem/1.3 var(--f-label); letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-subtle); }
+  .mini dd { margin-top: 2px; font: 700 1.375rem/1.1 var(--f-label); letter-spacing: 0.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .mini dd small { font: 500 0.875rem/1 var(--f-label); letter-spacing: 0.06em; color: var(--fg-muted); padding-left: 4px; }
+  .mini [data-mini="tick"] { color: var(--measure); }
+  .callouts--r { padding-top: 0; }
+  .dial__ring text { font-size: 15px; }
+  .strip__in { grid-template-columns: minmax(0, 1fr); }
+  .strip__plot canvas { height: 120px; }
 }

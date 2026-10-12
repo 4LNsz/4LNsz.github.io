@@ -3,6 +3,10 @@
  *   [CV]  Currículo do LinkedIn (PT-BR e ENG)
  *   [GH]  github.com/4LNsz
  *   [AL]  Confirmado diretamente por Alan nesta conversa
+ *   [SIM] Descreve o que motion/field.js faz, não o Alan; muda junto
+ *         com aquele código
+ *   [?]   Sem fonte ainda: herdado, e aguardando o Alan confirmar ou
+ *         mandar tirar. Não é um marcador para criar linhas novas
  *
  * Nada é inferido, arredondado ou "preenchido para compor". Se um fato
  * não estiver em nenhuma das duas, ele não entra aqui — mesmo que soe
@@ -12,16 +16,21 @@ export default {
   __meta: { order: 1, code: "PT", name: "Português", locale: "pt-BR", htmlLang: "pt-BR" },
 
   nav: { profile: "Perfil", stack: "Stack", practice: "Atuação", path: "Trajetória", contact: "Contato" },
-  meta: { status: "Status", role: "Função", based: "Base", time: "Horário local", focus: "Foco" },
+  meta: { based: "Base", time: "Horário local" },
   ui: {
     toDark: "Mudar para o tema escuro",
     toLight: "Mudar para o tema claro",
     menu: "Abrir o menu",
     menuClose: "Fechar o menu",
     skip: "Ir para o conteúdo",
+    source: "Fonte",
   },
 
   hero: {
+    // [?] SEM FONTE. A linha veio do site anterior a este redesenho e
+    // nunca recebeu marcador: não está no currículo nem no GitHub, e
+    // fala com um só dos dois públicos da página. Fica como estava até
+    // o Alan dizer de onde vem ou mandar tirar. Não reescrever por ele.
     status: "Disponível para projetos",
     // [CV] Primeira frase do resumo do LinkedIn, na íntegra. Estava com
     // duas frases e ocupava seis linhas antes do ALAN, o que deixava a
@@ -30,19 +39,44 @@ export default {
     role: "Engenheiro de Software",              // [CV] título do perfil
     based: "Caruaru, PE — Brasil",               // [CV] localidade
     focus: "Back-end / Tempo real",              // [CV] resumo
-    // Rótulos do painel do hero. Os valores são medidos em tempo de
+    // Rótulos do painel do hero. Os VALORES são medidos em tempo de
     // execução por motion/field.js — nenhum é escrito aqui.
     hud: {
       sessions: "Sessões",
-      tick: "Tick (ms)",
+      tick: "Tick",
+      jitter: "Desvio",
+      budget: "Do orçamento",
       load: "+ Carga",
       reset: "Reiniciar",
     },
+    // [SIM] As quatro legendas descrevem o que motion/field.js faz, e
+    // só isso. Mudou o código, muda a legenda.
+    figLabel: "Simulação ao vivo: cada ponto é uma sessão.",
+    fig: [
+      { t: "Sessão", d: "cada ponto é uma, e todas andam a cada tick" },
+      { t: "Vizinhança", d: "busca em grade espacial, nunca todos contra todos" },
+      { t: "Tick medido", d: "passo e desenho, cronometrados neste navegador" },
+      { t: "Orçamento do quadro", d: "a volta inteira são 16,7 ms, um quadro a 60 Hz" },
+    ],
+    // [SIM] A escala do registro é fixa em 2 ms; o quadro de 16,7 ms
+    // fica 8,35 vezes acima dela. Mudou TRACE_MAX_MS, muda a frase.
+    strip: {
+      title: "Registro do tick",
+      // Uma frase só, guardada em duas orações para que cada uma quebre
+      // de linha por conta própria.
+      note: ["um ponto por quadro;", "a linha só sobe quando entra carga"],
+      total: "tick",
+      step: "passo",
+      scale: "O orçamento do quadro, 16,7 ms, fica oito vezes acima desta escala",
+      mark: "carga",
+    },
+    // [AL] Os dois públicos, em peso igual: quem contrata para um
+    // projeto e quem contrata para uma vaga.
+    doors: {
+      project: { t: "Para um projeto", d: "Discord, o canal principal" },
+      role: { t: "Para uma vaga", d: "Currículo em PDF" },
+    },
   },
-
-  // [CV] + [GH]. "Sistemas distribuídos" saiu: não aparece em nenhuma
-  // das duas fontes.
-  marquee: ["Lua", "TypeScript", "JavaScript", "Node.js", "React", "Vue.js", "MySQL", "Alta concorrência", "Tempo real"],
 
   /**
    * A seção 01 é dirigida por dados. `about` é um array de parágrafos e
@@ -54,8 +88,6 @@ export default {
    * frase — a primeira já é o statement do hero.
    */
   profile: {
-    kicker: "Quem eu sou",
-    aboutTitle: "Apresentação",
     about: [
       "Sou um Engenheiro de Software focado em Back-end e sistemas de simulação em tempo real, onde o maior desafio é manter ambientes estáveis e performáticos para centenas de usuários simultâneos.",
       "Gosto de lidar com o que está “debaixo do capô”. Minha rotina envolve arquitetar lógicas complexas e, principalmente, resolver gargalos de performance. Tenho o hábito de analisar sistemas sob estresse para encontrar formas de reduzir o consumo de hardware (CPU/RAM), transformando infraestruturas pesadas em soluções leves e escaláveis.",
@@ -93,10 +125,14 @@ export default {
         //
         // Ano de início, nunca contagem de anos: "6 anos de experiência"
         // fica errado sozinho a cada aniversário.
+        //
+        // A frase "desenvolvendo desde 2018 · profissionalmente desde
+        // 2022" morava aqui. Ela não sumiu: virou `path.since` e
+        // rotula o trecho tracejado do diagrama da Trajetória, que é
+        // onde esse período aparece desenhado. Um fato, um lugar.
         title: "Dados",
         items: [
           "Nacionalidade brasileira",
-          "Desenvolvendo desde 2018 · profissionalmente desde 2022",
         ],
       },
       {
@@ -167,13 +203,14 @@ export default {
   // Saíram daqui: REST, Redis, Linux, Docker, CI/CD, Turborepo, pnpm e
   // Vite — nenhuma aparece em qualquer das duas fontes.
   stack: {
-    kicker: "O que eu uso",
+    // `src` diz de onde o fato vem — é o mesmo [CV] / [GH] do comentário,
+    // só que legível pela página, que o mostra como link em cada linha.
     rows: [
-      { name: "Back-end",    items: ["Lua", "Node.js", "TypeScript", "JavaScript"] }, // [CV] WinsVue + [GH]
-      { name: "Front-end",   items: ["React", "Vue.js"] },                            // [CV] resumo + [GH]
-      { name: "Dados",       items: ["MySQL", "MariaDB"] },                            // [CV] resumo + [GH]
-      { name: "Plataforma",  items: ["FiveM", "CFX.RE"] },                             // [GH]
-      { name: "Ferramentas", items: ["Git", "VS Code", "Figma"] },                     // [GH] + [CV] competências
+      { name: "Back-end",    items: ["Lua", "Node.js", "TypeScript", "JavaScript"], src: ["cv", "gh"] }, // [CV] WinsVue + [GH]
+      { name: "Front-end",   items: ["React", "Vue.js"], src: ["cv", "gh"] },                            // [CV] resumo + [GH]
+      { name: "Dados",       items: ["MySQL", "MariaDB"], src: ["cv", "gh"] },                            // [CV] resumo + [GH]
+      { name: "Plataforma",  items: ["FiveM", "CFX.RE"], src: ["gh"] },                             // [GH]
+      { name: "Ferramentas", items: ["Git", "VS Code", "Figma"], src: ["gh", "cv"] },                     // [GH] + [CV] competências
     ],
   },
 
@@ -181,29 +218,23 @@ export default {
   // cada cargo. Continuam sendo capacidades, não sistemas nomeados —
   // ver a seção Privacy do CLAUDE.md.
   practice: {
-    kicker: "O que eu faço",
-    hint: "Role na horizontal",
     items: [
       {
-        label: "Domínio",
         title: "Simulação em tempo real",
         desc: "Ecossistemas de alta complexidade com centenas de usuários simultâneos. Processamento de dados em tempo real e persistência de estados complexos, mantendo ambientes dinâmicos estáveis sob carga.",
         tags: ["Lua", "Alta concorrência", "Estado persistente"],
       },
       {
-        label: "Domínio",
         title: "Otimização de performance",
         desc: "Análise de sistemas sob estresse para encontrar formas de reduzir o consumo de hardware. Refatoração de sistemas críticos com redução de CPU e memória e queda de custo operacional de infraestrutura.",
         tags: ["CPU / RAM", "Refatoração", "Custo operacional"],
       },
       {
-        label: "Domínio",
         title: "Arquitetura e decisão técnica",
         desc: "Planejamento de novos sistemas e arquitetura de software de ponta a ponta, antecipando gargalos antes que virem problema, e integração entre o núcleo do servidor e interfaces reativas.",
         tags: ["Arquitetura", "React", "Vue.js"],
       },
       {
-        label: "Domínio",
         title: "Monitoramento e diagnóstico",
         desc: "Rotinas de monitoramento e diagnóstico de servidor, com resolução ágil de problemas complexos para garantir a alta disponibilidade do ambiente.",
         tags: ["Monitoramento", "Disponibilidade", "MySQL"],
@@ -215,31 +246,45 @@ export default {
   // meses ficam porque a Garty Group durou três meses dentro de 2022, o
   // mesmo ano em que a Energy começou.
   path: {
-    kicker: "Onde eu estive",
     cv: "Currículo completo",
     cvView: "Visualizar",
     cvGet: "Baixar",
+    cols: { when: "Período", who: "Função e casa", what: "Serviço executado" },
+    // [AL] A frase é a dele, inteira. Ela morava no bloco "Dados" da
+    // seção Perfil; agora rotula o trecho tracejado do diagrama.
+    since: "Desenvolvendo desde 2018 · profissionalmente desde 2022",
+    sinceYear: 2018,
+    // [CV] Não é afirmação nova: é o que as datas abaixo já dizem,
+    // lido no diagrama.
+    together: "As duas linhas correm juntas",
+    fig: "Diagrama da trajetória: trabalho e curso ao longo dos anos.",
+    // `from` e `to` são [ano, mês] e repetem `when` em forma que o
+    // diagrama consegue ler. Mudou um, muda o outro.
     rows: [
       {
         when: "ago 2025 — abr 2026",
+        from: [2025, 8], to: [2026, 4],
         role: "Desenvolvedor Back-end",
         org: "WinsVue",
         note: "Ecossistemas de simulação em tempo real com alta concorrência de usuários. Refatorações que reduziram consumo de CPU e memória em sistemas críticos, além de rotinas de monitoramento e diagnóstico de servidor.",
       },
       {
         when: "ago 2022 — jun 2025",
+        from: [2022, 8], to: [2025, 6],
         role: "Desenvolvedor de Software",
         org: "Energy",
         note: "Gestão da equipe de back-end — distribuição de funções, definição de objetivos e qualidade do produto — somada ao desenvolvimento de novas funcionalidades e à reestruturação operacional dos sistemas.",
       },
       {
         when: "jan — mar 2022",
+        from: [2022, 1], to: [2022, 3],
         role: "Desenvolvedor de Software",
         org: "Garty Group",
         note: "Back-end em empresa focada em FiveM, atendendo quatro servidores distintos com funcionalidades sob medida, otimizações e resolução de problemas operacionais.",
       },
       {
         when: "2020 — 2024",
+        from: [2020, 1], to: [2024, 12], kind: "study",
         role: "Ciência da Computação",
         org: "UniFavip Wyden — Bacharelado",
         // Sem nota de propósito. A ementa que estava aqui era invenção,
@@ -251,7 +296,6 @@ export default {
   },
 
   contact: {
-    kicker: "Fale comigo",
     big: "VAMOS CONVERSAR",
     primary: "Canal principal",
   },

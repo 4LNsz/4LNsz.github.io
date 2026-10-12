@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Alan — Software Engineer</title>
+<title>Alan Sena — Software Engineer</title>
 <meta name="description" content="Engenheiro de software back-end. Sistemas de alta concorrência e simulação em tempo real.">
-<meta name="author" content="Alan — 4LNsz">
+<meta name="author" content="Alan Sena — 4LNsz">
 
 <!-- Kept in sync with --bg by core/theme.js. This is the pre-JS answer,
      so the browser chrome is right on first paint. -->
-<meta name="theme-color" content="#0a1413" id="meta-theme">
+<meta name="theme-color" content="#18150f" id="meta-theme">
 
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="mask-icon" href="/favicon.svg" color="#45dfd0">
+<link rel="mask-icon" href="/favicon.svg" color="#d6ae55">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 <!-- The absolute URLs below are filled in at build time from the
@@ -24,23 +24,62 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="4LNsz">
 <meta property="og:url" content="__SITE_URL__">
-<meta property="og:title" content="Alan — Software Engineer">
+<meta property="og:title" content="Alan Sena — Software Engineer">
 <meta property="og:description" content="Back-end. High-concurrency systems and real-time simulation.">
-<meta property="og:image" content="__SITE_URL__og.jpg">
+<meta property="og:image" content="__SITE_URL__og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="ALAN — 4LNsz. Software engineer, back-end and real-time.">
+<meta property="og:image:alt" content="Alan Sena, 4LNsz. Software engineer, back-end and real-time.">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62.5..125,300..800&family=Chivo+Mono:wght@300..600&display=swap" rel="stylesheet">
+<!-- No font links: the three faces are served from this site. See
+     src/styles/fonts.css. -->
+<!-- The stylesheet is linked here, not imported by src/main.js. A link
+     in the head holds the first paint until the CSS has arrived; an
+     import is injected by the script, after the browser has already
+     drawn the bare markup. In the built site Vite hoists an imported
+     stylesheet into a link by itself, but the dev server does not, and
+     every reload there opened on an unstyled page with the A-quatro
+     filling the window. -->
+<link rel="stylesheet" href="/src/styles/main.css">
 <!-- Set before the first paint, not from the deferred module in
      src/main.js: base.css hides the hero and every .rv element behind
      `html.js`, and a module that runs after the browser has already
      painted would show them settled for one frame and then yank them
-     back down to animate. -->
-<script>document.documentElement.classList.add("js");</script>
+     back down to animate.
+
+     Hiding things on the promise of a script is only safe if the promise
+     can be taken back, so this also watches for the bundle not keeping
+     it. If the bundle fails to load, throws while starting, or has said
+     nothing after four seconds, `js` comes off again and nothing stays
+     hidden: before the page has been rendered that leaves the static
+     card (see vite.config.js); after it, the whole page, at rest.
+     src/main.js calls window.__boot() as its last line to say it made
+     it. A bundle that turns up late simply starts as usual. -->
+<script>
+(function (root) {
+  var alive = false;
+  function giveUp() {
+    if (alive) return;
+    root.classList.remove("js");
+    if (root.classList.contains("ready")) root.classList.add("settled");
+  }
+  function onError(e) {
+    // A script that could not be fetched reports on its own element; one
+    // that threw reports on the window. Images and stylesheets do not count.
+    var t = e.target;
+    if (t === window || (t && t.tagName === "SCRIPT")) giveUp();
+  }
+  var timer = setTimeout(giveUp, 4000);
+  window.addEventListener("error", onError, true);
+  window.__boot = function () {
+    alive = true;
+    clearTimeout(timer);
+    window.removeEventListener("error", onError, true);
+  };
+  root.classList.add("js");
+})(document.documentElement);
+</script>
 </head>
 
 <body>
@@ -49,24 +88,31 @@
 
 <!-- ══ HEADER ══ -->
 <header>
-  <a href="#hero" class="brand">4<em>LN</em>sz</a>
+  <!-- The A-quatro stands where the 4 of the handle would be, so the
+       link needs its real name spelled out for anyone not looking. The
+       drawing is the polygons of brand/a-quatro.svg, printed by
+       brand/src/build.mjs; the letters beside it are type. A brand
+       glyph, not prose: it stays out of the locale files. -->
+  <a href="#hero" class="brand" aria-label="4LNsz">
+    <svg viewBox="0 0 92 100" width="25" height="27" fill="currentColor" aria-hidden="true"><polygon points="72,0 0,100 16,100 58,41.7 58,100 72,100"/><polygon points="27.4,62 92,62 92,75 18,75"/></svg><span aria-hidden="true">LN<small>sz</small></span>
+  </a>
 
   <nav class="nav" aria-label="Primary">
-    <a href="#profile"><i>01</i><span data-i18n="nav.profile"></span></a>
-    <a href="#stack"><i>02</i><span data-i18n="nav.stack"></span></a>
-    <a href="#practice"><i>03</i><span data-i18n="nav.practice"></span></a>
-    <a href="#path"><i>04</i><span data-i18n="nav.path"></span></a>
-    <a href="#contact"><i>05</i><span data-i18n="nav.contact"></span></a>
+    <a href="#profile" data-i18n="nav.profile"></a>
+    <a href="#stack" data-i18n="nav.stack"></a>
+    <a href="#practice" data-i18n="nav.practice"></a>
+    <a href="#path" data-i18n="nav.path"></a>
+    <a href="#contact" data-i18n="nav.contact"></a>
   </nav>
 
   <div class="hud">
+    <div class="lang" id="lang" role="group" aria-label="Language"></div>
     <button class="icon-btn" id="theme" type="button">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="12" r="9.4" fill="none" stroke="currentColor" stroke-width="1.7"/>
-        <path d="M12 2.6a9.4 9.4 0 0 0 0 18.8z" fill="currentColor"/>
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+        <circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.7"/>
+        <path d="M12 2.8a9.2 9.2 0 0 0 0 18.4z" fill="currentColor"/>
       </svg>
     </button>
-    <div class="lang" id="lang" role="group" aria-label="Language"></div>
     <button class="icon-btn nav-toggle" id="nav-toggle" type="button"
             aria-expanded="false" aria-controls="nav-drawer"
             data-i18n-attr="aria-label:ui.menu">
@@ -82,132 +128,119 @@
 
 <main id="main">
 
-<!-- ══ 00 · HERO ══ -->
-<section id="hero" class="wrap">
-  <!-- ONE strip, not two. This row held status, the clock and a scroll
-       cue spread across the full width — 40% ink, 60% air — and a second
-       three-cell strip sat below the name carrying role, base and focus.
-       Two half-empty bands. Merged, the five fields fill one band and
-       the hero loses a whole row of height. -->
-  <div class="hero-strip">
-    <div>
-      <span class="k mono-xs" data-i18n="meta.status"></span>
-      <span class="v hero-status" data-i18n="hero.status"></span>
-    </div>
-    <div>
-      <span class="k mono-xs" data-i18n="meta.role"></span>
-      <span class="v" data-i18n="hero.role"></span>
-    </div>
-    <div>
-      <span class="k mono-xs" data-i18n="meta.based"></span>
-      <span class="v" data-i18n="hero.based"></span>
-    </div>
-    <div>
-      <span class="k mono-xs" data-i18n="meta.focus"></span>
-      <span class="v" data-i18n="hero.focus"></span>
-    </div>
-    <div>
-      <span class="k mono-xs" data-i18n="meta.time"></span>
-      <span class="v" id="clock">--:--:--</span>
-    </div>
-  </div>
+<!-- The static card: name, channels and CVs, for a visitor whose script
+     never runs. vite.config.js writes it here from src/config.js. -->
+<!-- __STATIC_CARD__ -->
 
-  <div class="hero-body">
-    <!-- "Alan Sena" and "4LNsz" are proper nouns, not translated prose —
-         same treatment as the header brand. -->
-    <div class="hero-main">
-      <p class="hero-eyebrow mono-xs">4LNsz</p>
-      <h1 class="hero-name">Alan Sena</h1>
+<!-- ══ HERO · the sheet ══ -->
+<section id="hero">
+  <div class="wrap sheet" id="sheet">
+
+    <div class="sheet__l">
+      <!-- "Alan Sena" is a proper noun, not translated prose. -->
+      <div class="hero-id">
+        <h1 class="hero-name">Alan Sena</h1>
+        <p class="hero-role"><span data-i18n="hero.role"></span><span data-i18n="hero.focus"></span></p>
+        <p class="hero-status" data-i18n="hero.status"></p>
+      </div>
+      <ol class="callouts callouts--l" id="callouts-a"></ol>
       <p class="hero-statement" data-i18n="hero.statement"></p>
     </div>
 
     <!-- A real simulation, not a backdrop: motion/field.js steps every
-         dot and the readout below reports what stepping them costs. -->
-    <div class="hero-rig">
-      <canvas id="field" class="hero-rig__field" aria-hidden="true"></canvas>
+         dot, and the ring and the record below report what that costs. -->
+    <figure class="dial" id="dial">
+      <canvas id="field" class="dial__field" role="img" data-i18n-attr="aria-label:hero.figLabel"></canvas>
+      <svg class="dial__ring" id="ring" aria-hidden="true"></svg>
+    </figure>
+
+    <!-- The three figures that matter, straight under the dial. Shown on
+         a phone only, where the full readout is a screen and a half
+         further down. Hidden from assistive tech because that readout
+         says the same thing, with its controls. -->
+    <dl class="mini" id="hero-mini" aria-hidden="true">
+      <div><dt data-i18n="hero.hud.sessions"></dt><dd data-mini="sessions">0</dd></div>
+      <div><dt data-i18n="hero.hud.tick"></dt><dd><span data-mini="tick">0</span><small>ms</small></dd></div>
+      <div><dt data-i18n="hero.hud.budget"></dt><dd><span data-mini="budget">0</span><small>%</small></dd></div>
+    </dl>
+
+    <div class="sheet__r">
+      <ol class="callouts callouts--r" id="callouts-b" start="3"></ol>
+      <dl class="ficha">
+        <div><dt data-i18n="meta.based"></dt><dd data-i18n="hero.based"></dd></div>
+        <div><dt data-i18n="meta.time"></dt><dd id="clock">--:--:--</dd></div>
+      </dl>
+      <div class="doors" id="doors"></div>
+    </div>
+
+    <svg class="leaders" id="leaders" aria-hidden="true"></svg>
+  </div>
+
+  <div class="strip">
+    <div class="wrap strip__in">
+      <div class="strip__lab">
+        <h2 data-i18n="hero.strip.title"></h2>
+        <!-- Two clauses, two spans: each wraps by itself, so the line
+             never breaks one word past the semicolon. -->
+        <p><span data-i18n="hero.strip.note.0"></span> <span data-i18n="hero.strip.note.1"></span></p>
+      </div>
+      <div class="strip__plot">
+        <canvas id="trace" aria-hidden="true"></canvas>
+        <p class="strip__scale" data-i18n="hero.strip.scale"></p>
+      </div>
       <div class="hero-instr" id="hero-instr"></div>
     </div>
   </div>
-
 </section>
 
-<div class="marquee" id="marquee" aria-hidden="true"></div>
-
-<!-- ══ 01 · PROFILE ══ -->
-<section id="profile" class="wrap" aria-labelledby="profile-h">
-  <div class="sec-head mono-xs">
-    <span class="idx">01</span>
-    <span id="profile-h" data-i18n="nav.profile"></span>
-    <span class="ttl" data-i18n="profile.kicker"></span>
-  </div>
-  <div class="pf-about rv" id="profile-about"></div>
-  <div class="pf-blocks" id="profile-blocks"></div>
-</section>
-
-<!-- ══ 02 · STACK ══ -->
-<section id="stack" class="wrap" aria-labelledby="stack-h">
-  <div class="sec-head mono-xs">
-    <span class="idx">02</span>
-    <span id="stack-h" data-i18n="nav.stack"></span>
-    <span class="ttl" data-i18n="stack.kicker"></span>
-  </div>
-  <div id="stack-rows"></div>
-</section>
-
-<!-- ══ 03 · PRACTICE ══ -->
-<section id="practice" aria-labelledby="practice-h">
-  <div class="wrap practice-head">
-    <div class="sec-head mono-xs">
-      <span class="idx">03</span>
-      <span id="practice-h" data-i18n="nav.practice"></span>
-      <span class="ttl" data-i18n="practice.kicker"></span>
-    </div>
-  </div>
-  <div class="practice-pin" id="practice-pin">
-    <div class="practice-track" id="practice-track"></div>
-  </div>
-  <div class="practice-progress" aria-hidden="true"><i id="practice-fill"></i></div>
-  <div class="practice-foot mono-xs">
-    <span data-i18n="practice.hint"></span>
-    <span id="practice-counter">01 / 04</span>
+<!-- ══ PERFIL ══ -->
+<section id="profile" class="wrap sec" aria-labelledby="profile-h">
+  <h2 class="sec-h" id="profile-h" data-i18n="nav.profile"></h2>
+  <div class="pf">
+    <div class="pf-about rv" id="profile-about"></div>
+    <dl class="pf-blocks" id="profile-blocks"></dl>
   </div>
 </section>
 
-<!-- ══ 04 · PATH ══ -->
-<section id="path" class="wrap" aria-labelledby="path-h">
-  <div class="sec-head mono-xs">
-    <span class="idx">04</span>
-    <span id="path-h" data-i18n="nav.path"></span>
-    <span class="ttl" data-i18n="path.kicker"></span>
-  </div>
-  <div id="path-rows"></div>
+<!-- ══ STACK ══ -->
+<section id="stack" class="wrap sec" aria-labelledby="stack-h">
+  <h2 class="sec-h" id="stack-h" data-i18n="nav.stack"></h2>
+  <div class="parts" id="stack-rows"></div>
+</section>
+
+<!-- ══ ATUAÇÃO ══ -->
+<section id="practice" class="wrap sec" aria-labelledby="practice-h">
+  <h2 class="sec-h" id="practice-h" data-i18n="nav.practice"></h2>
+  <ul class="funcs" id="practice-rows" role="list"></ul>
+</section>
+
+<!-- ══ TRAJETÓRIA ══ -->
+<section id="path" class="wrap sec" aria-labelledby="path-h">
+  <h2 class="sec-h" id="path-h" data-i18n="nav.path"></h2>
+  <figure class="graph rv" id="path-graph"></figure>
+  <div class="rec" id="path-rows"></div>
   <div class="cv-row" id="cv-row"></div>
 </section>
 
-<!-- ══ 05 · CONTACT ══ -->
+<!-- ══ CONTATO ══ -->
 <section id="contact" aria-labelledby="contact-h">
-  <div class="wrap">
-    <div class="sec-head mono-xs">
-      <span class="idx">05</span>
-      <span id="contact-h" data-i18n="nav.contact"></span>
-      <span class="ttl" data-i18n="contact.kicker"></span>
-    </div>
-
-    <h2 class="contact-big" data-chars data-i18n="contact.big"></h2>
-
+  <div class="wrap sec">
+    <h2 class="sec-h contact-big" id="contact-h" data-i18n="contact.big"></h2>
     <div class="channels" id="channels"></div>
   </div>
 
-  <footer class="mono-xs">
-    <span>&copy; <span id="year"></span> Alan &middot; 4LNsz</span>
+  <footer class="wrap">
+    <!-- The rubric: the polygons of brand/as.svg. -->
+    <svg viewBox="0 0 138 100" width="44" height="32" fill="currentColor" aria-hidden="true"><polygon points="72,0 0,100 16,100 58,41.7 58,100 72,100"/><polygon points="25.2,65 112,65 112,78 15.8,78"/><polygon points="138,0 94.31,0 84,10.31 84,46.19 94.31,56.5 120.31,56.5 123,59.19 123,84.31 120.31,87 84,87 84,100 125.69,100 136,89.69 136,53.81 125.69,43.5 99.69,43.5 97,40.81 97,15.69 99.69,13 138,13"/></svg>
+    <span>&copy; <span id="year"></span> Alan Sena &middot; 4LNsz</span>
   </footer>
 </section>
 
 </main>
 
-<!-- No <noscript> fallback needed: the pre-animation states are scoped
-     to html.js in base.css, so a bundle that never runs leaves the page
-     fully readable. -->
+<!-- No <noscript> block: with scripting off the inline script in the
+     head never sets `js`, which is the same state a failed bundle is
+     put back into, and the static card above covers both. -->
 
 <script type="module" src="/src/main.js"></script>
 </body>

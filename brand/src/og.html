@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>og.png — source</title>
+<!-- The social card, 1200×630. Render this page at that size with a
+     headless browser and save the capture as public/og.png; there is no
+     build step for it. Every word on it is from the CV. -->
+<style>
+  /* The site's own font files, read from node_modules: run npm ci first. */
+  @font-face { font-family: "Sofia Sans Condensed"; font-weight: 500; src: url("../../node_modules/@fontsource/sofia-sans-condensed/files/sofia-sans-condensed-latin-500-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Sofia Sans Condensed"; font-weight: 600; src: url("../../node_modules/@fontsource/sofia-sans-condensed/files/sofia-sans-condensed-latin-600-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Sofia Sans Condensed"; font-weight: 700; src: url("../../node_modules/@fontsource/sofia-sans-condensed/files/sofia-sans-condensed-latin-700-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Sofia Sans Extra Condensed"; font-weight: 800; src: url("../../node_modules/@fontsource/sofia-sans-extra-condensed/files/sofia-sans-extra-condensed-latin-800-normal.woff2") format("woff2"); }
+  :root { --f-display: "Sofia Sans Extra Condensed", "Arial Narrow", sans-serif; --f-label: "Sofia Sans Condensed", "Arial Narrow", sans-serif; }
+  :root { --graphite-950: #110e09; --graphite-900: #18150f; --graphite-600: #433f39; --fg: #efebe2; --fg-muted: #c2bdb4; --brass: #d6ae55; --ruby: #f4577c; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body { background: var(--graphite-900); color: var(--fg); position: relative; -webkit-font-smoothing: antialiased; }
+  .brand { position: absolute; left: 72px; top: 64px; display: flex; align-items: flex-end; }
+  .brand svg { width: 44px; height: 48px; margin-right: 3px; color: var(--brass); }
+  .brand span { font: 700 42px/0.86 var(--f-label); letter-spacing: 0.05em; }
+  .brand small { font: inherit; font-weight: 500; color: var(--fg-muted); }
+  h1 { position: absolute; left: 68px; top: 256px; font: 800 148px/0.86 var(--f-display); letter-spacing: 0.012em; text-transform: uppercase; }
+  p { position: absolute; left: 72px; top: 420px; font: 500 40px/1.2 var(--f-label); letter-spacing: 0.02em; }
+  p span { display: block; color: var(--fg-muted); }
+  svg.dial { position: absolute; right: 44px; top: 55px; }
+  svg.dial text { font: 600 22px var(--f-label); fill: var(--brass); }
+</style>
+</head>
+<body>
+<!-- The same lockup as the page header: the A-quatro, then type. -->
+<div class="brand">
+  <svg viewBox="0 0 92 100" fill="currentColor"><polygon points="72,0 0,100 16,100 58,41.7 58,100 72,100"/><polygon points="27.4,62 92,62 92,75 18,75"/></svg>
+  <span>LN<small>sz</small></span>
+</div>
+<h1>Alan Sena</h1>
+<p>Software Engineer<span>Back-end / Real-time</span></p>
+<svg class="dial" id="dial" width="520" height="520" viewBox="0 0 520 520" aria-hidden="true"></svg>
+
+<script>
+/* The same figure as the hero, drawn once from the same seed. It is a
+   picture of the simulation, not a measurement: the arc is set to the
+   resting tick the page reports, and the card carries no number. */
+function prng(seed) { return function () { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let x = Math.imul(seed ^ (seed >>> 15), 1 | seed); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x; return ((x ^ (x >>> 14)) >>> 0) / 4294967296; }; }
+const NS = "http://www.w3.org/2000/svg";
+const el = (p, n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+const svg = document.getElementById("dial"), c = 260, R = 196, rand = prng(40426), TAU = Math.PI * 2;
+el(svg, "circle", { cx: c, cy: c, r: R, fill: "#110e09", stroke: "#433f39", "stroke-width": 1 });
+const pts = [];
+while (pts.length < 280) { const a = rand() * TAU, d = Math.sqrt(rand()) * (R - 4); pts.push([c + Math.cos(a) * d, c + Math.sin(a) * d]); }
+const gl = el(svg, "g", { stroke: "#9f9b92", "stroke-width": 0.9 });
+for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) if (Math.hypot(pts[i][0] - pts[j][0], pts[i][1] - pts[j][1]) < 27) el(gl, "line", { x1: pts[i][0], y1: pts[i][1], x2: pts[j][0], y2: pts[j][1] });
+const gp = el(svg, "g", { fill: "#efebe2" });
+for (const p of pts) el(gp, "circle", { cx: p[0], cy: p[1], r: 2 });
+const B = 1000 / 60, ri = R + 12, ang = (ms) => (ms / B) * TAU - Math.PI / 2;
+const gt = el(svg, "g", { stroke: "#d6ae55" });
+for (let ms = 0; ms < B; ms += 0.5) { const major = Math.abs(ms - Math.round(ms)) < 1e-6, a = ang(ms), r1 = ri + (major ? 17 : 9); el(gt, "line", { x1: c + Math.cos(a) * ri, y1: c + Math.sin(a) * ri, x2: c + Math.cos(a) * r1, y2: c + Math.sin(a) * r1, "stroke-width": major ? 1.8 : 1 }); }
+el(gt, "circle", { cx: c, cy: c, r: ri, fill: "none", "stroke-width": 1 });
+for (let ms = 0; ms <= 16; ms += 2) { const a = ang(ms), rr = ri + 32; const t = el(svg, "text", { x: c + Math.cos(a) * rr, y: c + Math.sin(a) * rr + 8, "text-anchor": "middle" }); t.textContent = ms; }
+const a0 = ang(0), a1 = ang(0.22), rt = R + 6;
+el(svg, "path", { d: `M${c + Math.cos(a0) * rt} ${c + Math.sin(a0) * rt}A${rt} ${rt} 0 0 1 ${c + Math.cos(a1) * rt} ${c + Math.sin(a1) * rt}`, fill: "none", stroke: "#f4577c", "stroke-width": 8 });
+</script>
+</body>
+</html>

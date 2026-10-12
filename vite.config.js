@@ -1,4 +1,6 @@
 import { defineConfig } from "vite";
+import { SITE } from "./src/config.js";
+import { channelCell } from "./src/sections/contact.js";
 
 /**
  * BASE_PATH is injected by the GitHub Actions workflow.
@@ -31,9 +33,46 @@ function siteUrlTokens() {
   };
 }
 
+/**
+ * The card the page shows when its script never runs.
+ *
+ * Every word on the page is put there by the bundle, so a visitor whose
+ * bundle fails to arrive, or who has scripting off, would get a header
+ * and nothing else. This writes a small static stand-in into index.html
+ * at build time: the name, the channels, and the CV in each language.
+ * It holds no prose, only what src/config.js already publishes, so it
+ * needs no locale and cannot say anything the page does not. The CSS
+ * that decides when it shows is at the foot of styles/base.css.
+ *
+ * It is generated rather than typed into index.html so the channels
+ * have one source: add one to config.js and it is on the card.
+ */
+function staticCard() {
+  const cells = [
+    ...SITE.channels.filter((c) => c.featured),
+    // The CV sits straight after the featured channel: the page serves
+    // two audiences at equal weight, and these are their two doors.
+    ...SITE.cv.map((c) => ({ label: "CV", value: c.label, url: `${BASE}${c.file}` })),
+    ...SITE.channels.filter((c) => !c.featured),
+  ].map((c) => channelCell(c, { note: false }));
+
+  const card = `<section class="fallback" aria-labelledby="fallback-h">
+  <div class="wrap sec">
+    <h1 class="hero-name" id="fallback-h">${SITE.name}</h1>
+    <div class="channels">${cells.join("")}
+    </div>
+  </div>
+</section>`;
+
+  return {
+    name: "static-card",
+    transformIndexHtml: (html) => html.replace("<!-- __STATIC_CARD__ -->", card),
+  };
+}
+
 export default defineConfig({
   base: BASE,
-  plugins: [siteUrlTokens()],
+  plugins: [siteUrlTokens(), staticCard()],
   server: { port: 4000, open: true },
   build: {
     outDir: "dist",

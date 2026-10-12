@@ -1,0 +1,21 @@
+The A-quatro for a console, in plain ASCII. Six lines, no colour codes,
+safe in any terminal and in the FiveM server console.
+
+     /|
+    / |
+   /  |
+  /---+--        4LNsz
+ /    |
+/     |
+
+As a Lua boot print (the backslash-free art needs no escaping):
+
+    local MARK = {
+      "     /|",
+      "    / |",
+      "   /  |",
+      "  /---+--        4LNsz",
+      " /    |",
+      "/     |",
+    }
+    for i = 1, #MARK do print(MARK[i]) end

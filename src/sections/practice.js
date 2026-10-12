@@ -1,26 +1,22 @@
 import { t } from "../core/i18n.js";
 
 /**
- * Capability domains. Panels are laid out in a flex row; the horizontal
- * scroll is driven by ScrollTrigger in motion/choreography.js.
+ * Atuação — capability domains, one row each.
+ *
+ * These are domains, not projects: the work behind them is under NDA,
+ * and CLAUDE.md says what may and may not be named here.
  */
 export function renderPractice() {
-  document.getElementById("practice-track").innerHTML = t("practice.items")
+  document.getElementById("practice-rows").innerHTML = (t("practice.items") ?? [])
     .map(
       (item, i) => `
-    <article class="panel">
-      <div class="panel__top">
-        <span class="panel__n">${String(i + 1).padStart(2, "0")}</span>
-        <span class="panel__label" data-i18n="practice.items.${i}.label"></span>
-      </div>
+    <li class="func rv">
+      <h3 data-i18n="practice.items.${i}.title"></h3>
       <div>
-        <h3 class="panel__ttl" data-i18n="practice.items.${i}.title"></h3>
-        <p class="panel__desc" data-i18n="practice.items.${i}.desc"></p>
-        <div class="panel__tags">${item.tags
-          .map((_, j) => `<i data-i18n="practice.items.${i}.tags.${j}"></i>`)
-          .join("")}</div>
+        <p data-i18n="practice.items.${i}.desc"></p>
+        <ul>${item.tags.map((_, j) => `<li data-i18n="practice.items.${i}.tags.${j}"></li>`).join("")}</ul>
       </div>
-    </article>`
+    </li>`
     )
     .join("");
 }

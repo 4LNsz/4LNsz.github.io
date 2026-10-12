@@ -1,0 +1,50 @@
+import { SITE } from "../config.js";
+import { t } from "../core/i18n.js";
+import { cvHref } from "./source.js";
+
+/**
+ * The parts of the first screen that come from data.
+ *
+ * Callouts: one per entry in `hero.fig`, split across the two lists that
+ * flank the dial. They are two <ol>s rather than one because each column
+ * has to flow with the rest of its own content; the second continues the
+ * count with `start`, so a screen reader still hears one numbered list.
+ * The numbers in the bubbles are hidden from it for the same reason.
+ *
+ * Doors: the two audiences this page serves at equal weight each get
+ * their own exit. The project door is the featured channel from
+ * config.js, so it inherits the desktop-app handoff in core/applink.js;
+ * the role door is the CV for the language the page is in.
+ */
+
+const OUT = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M8.5 6H18v9.5"/></svg>`;
+const DOWN = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v13M6.5 11.5 12 17l5.5-5.5M5 20.5h14"/></svg>`;
+
+export function renderHero() {
+  const fig = t("hero.fig") ?? [];
+  const half = Math.ceil(fig.length / 2);
+  const item = (i) => `
+    <li>
+      <i class="n" aria-hidden="true">${i + 1}</i>
+      <div><b data-i18n="hero.fig.${i}.t"></b><span data-i18n="hero.fig.${i}.d"></span></div>
+    </li>`;
+
+  const a = document.getElementById("callouts-a");
+  const b = document.getElementById("callouts-b");
+  a.innerHTML = fig.slice(0, half).map((_, i) => item(i)).join("");
+  b.innerHTML = fig.slice(half).map((_, i) => item(half + i)).join("");
+  b.start = half + 1;
+
+  const ch = SITE.channels.find((c) => c.featured) ?? SITE.channels[0];
+  const appAttr = ch.app ? ` data-app="${ch.app}"` : "";
+
+  document.getElementById("doors").innerHTML = `
+    <a class="door door--pri" href="${ch.url}" target="_blank" rel="noopener noreferrer"${appAttr}>
+      <div><b data-i18n="hero.doors.project.t"></b><span data-i18n="hero.doors.project.d"></span></div>
+      ${OUT}
+    </a>
+    <a class="door" href="${cvHref()}" target="_blank" rel="noopener">
+      <div><b data-i18n="hero.doors.role.t"></b><span data-i18n="hero.doors.role.d"></span></div>
+      ${DOWN}
+    </a>`;
+}

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 100" fill="currentColor">
+  <!-- A-quatro, cut for small sizes: heavier strokes and no counter, so it
+       survives at 16px. Use it under 24px and nowhere else. -->
+  <polygon points="74,0 0,100 21,100 55,49 55,100 74,100"/>
+  <polygon points="31,58 96,58 96,77 17,77"/>
+</svg>

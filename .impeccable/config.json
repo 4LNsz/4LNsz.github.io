@@ -1,0 +1,89 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "em-dash-overuse",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/src/calibre-sec.html"
+        ],
+        "createdAt": "2026-10-11T23:31:41.215Z",
+        "reason": "Claude: the dashes are Alan's own CV copy and date ranges, verbatim from src/content/locales/pt.js; CLAUDE.md bars rewriting his sentences"
+      },
+      {
+        "rule": "em-dash-overuse",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/src/horario-sec.html"
+        ],
+        "createdAt": "2026-10-11T23:31:41.806Z",
+        "reason": "Claude: the dashes are Alan's own CV copy and date ranges, verbatim from src/content/locales/pt.js; CLAUDE.md bars rewriting his sentences"
+      },
+      {
+        "rule": "em-dash-overuse",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/src/marco-sec.html"
+        ],
+        "createdAt": "2026-10-11T23:31:42.413Z",
+        "reason": "Claude: the dashes are Alan's own CV copy and date ranges, verbatim from src/content/locales/pt.js; CLAUDE.md bars rewriting his sentences"
+      },
+      {
+        "rule": "em-dash-overuse",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/src/prancha-sec.html"
+        ],
+        "createdAt": "2026-10-11T23:31:42.998Z",
+        "reason": "Claude: the dashes are Alan's own CV copy and date ranges, verbatim from src/content/locales/pt.js; CLAUDE.md bars rewriting his sentences"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgb(0, 0, 0)",
+        "files": [
+          "index.html"
+        ],
+        "createdAt": "2026-10-12T01:28:27.089Z",
+        "reason": "Claude: static-scan artefact. index.html carries no colour; its stylesheet is imported by src/main.js, so the scanner sees the browser default on the h1. Rendered, the h1 is var(--fg). Scoped to this file so real black anywhere else still fires."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/**"
+        ],
+        "createdAt": "2026-10-12T01:32:44.572Z",
+        "reason": "Claude: decision comps, not the site. They draw the directions that were NOT chosen (and the withdrawn lettering) in those directions' own colours, faces and shapes, so they cannot match the DESIGN.md of the one that was. Git-ignored; kept as the record of what Alan chose from."
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/**"
+        ],
+        "createdAt": "2026-10-12T01:32:45.159Z",
+        "reason": "Claude: decision comps, not the site. They draw the directions that were NOT chosen (and the withdrawn lettering) in those directions' own colours, faces and shapes, so they cannot match the DESIGN.md of the one that was. Git-ignored; kept as the record of what Alan chose from."
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/**"
+        ],
+        "createdAt": "2026-10-12T01:32:45.726Z",
+        "reason": "Claude: decision comps, not the site. They draw the directions that were NOT chosen (and the withdrawn lettering) in those directions' own colours, faces and shapes, so they cannot match the DESIGN.md of the one that was. Git-ignored; kept as the record of what Alan chose from."
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/**"
+        ],
+        "createdAt": "2026-10-12T01:32:46.422Z",
+        "reason": "Claude: decision comps, not the site. They draw the directions that were NOT chosen (and the withdrawn lettering) in those directions' own colours, faces and shapes, so they cannot match the DESIGN.md of the one that was. Git-ignored; kept as the record of what Alan chose from."
+      }
+    ]
+  }
+}

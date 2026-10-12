@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- The avatar. A full square, because GitHub, Discord, LinkedIn and X
+       each crop their own circle; the mark stays inside it. Platforms
+       that refuse an SVG take avatar.png, rendered from this file. -->
+  <rect width="128" height="128" fill="#1f1c17"/>
+  <g fill="#d6ae55">
+    <polygon points="81.28,27 28,101 39.84,101 70.92,57.86 70.92,101 81.28,101"/>
+    <polygon points="48.28,72.88 96.08,72.88 96.08,82.5 41.32,82.5"/>
+  </g>
+</svg>

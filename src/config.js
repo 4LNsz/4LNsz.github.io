@@ -5,10 +5,19 @@
 
 const DISCORD_ID = "151555791608872961";
 const EMAIL = "alansoaressobral@gmail.com";
+const GITHUB = "https://github.com/4LNsz";
 
 export const SITE = {
-  name: "Alan",
+  name: "Alan Sena",
   handle: "4LNsz",
+
+  /**
+   * Where a fact on the page can be checked. Rows in the locale files
+   * carry `src: ["cv", "gh"]`; sections/source.js turns each key into a
+   * link. "cv" resolves to the PDF for the active language, so it has
+   * no URL here.
+   */
+  github: GITHUB,
 
   /** IANA timezone driving the live clock in the hero. */
   timezone: "America/Recife",
@@ -21,8 +30,9 @@ export const SITE = {
    * shown — it is an opaque 18-digit number that means nothing to a
    * reader; the link carries it instead.
    *
-   * `mono` renders the value in the mono face at a smaller size, for
-   * values that are long or machine-ish (an address rather than a name).
+   * `mono` sets the value a size down, for values that are long or
+   * machine-ish (an address rather than a name). The name is a leftover:
+   * the page has no mono face.
    */
   channels: [
     {
@@ -59,7 +69,7 @@ export const SITE = {
       mono: true,
       external: false,
     },
-    { label: "GitHub", value: "@4LNsz", url: "https://github.com/4LNsz" },
+    { label: "GitHub", value: "@4LNsz", url: GITHUB },
     { label: "LinkedIn", value: "in/4lnsz", url: "https://www.linkedin.com/in/4lnsz/" },
     { label: "Instagram", value: "@4LNsz", url: "https://instagram.com/4LNsz" },
     { label: "X", value: "@4LNsz", url: "https://x.com/4LNsz" },
@@ -83,13 +93,9 @@ export const THEME = {
   default: "dark",
   /**
    * Paints the browser chrome (Android address bar, iOS PWA status bar).
-   * Must match --bg for each theme: --ink-900 and --paper-100 in
+   * Must match --bg for each theme: --graphite-900 and --rhodium-100 in
    * src/styles/tokens.css. The <meta name="theme-color"> in index.html
    * carries the dark value for first paint, before this runs.
    */
-  browserColor: { dark: "#0a1413", light: "#f3f0e8" },
-};
-
-export const MOTION = {
-  marqueeSecs: 26,
+  browserColor: { dark: "#18150f", light: "#e6e9ef" },
 };

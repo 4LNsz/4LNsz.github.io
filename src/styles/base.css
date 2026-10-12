@@ -2,82 +2,59 @@
 *::before,
 *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scrollbar-color: var(--line-strong) var(--bg); }
 
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: var(--f-mono);
-  font-size: 13px;
-  line-height: 1.6;
+  font-family: var(--f-text);
+  font-size: 1.0625rem;
+  line-height: 1.5;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  caret-color: var(--signal);
 }
 
 /* The header is fixed, so any anchor jump would land with the target
    tucked underneath it. */
 section[id], main[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 
-/* One rhythm for the whole page. #hero sizes itself to the viewport and
-   #contact is closed by its footer, so neither takes the bottom half. */
-#profile, #stack, #practice, #path, #contact { padding-block: var(--section-y); }
-#contact { padding-bottom: 0; }
+/* One rhythm for the whole page: every section opens with the same
+   space above it, and its heading sits closer to its own content than
+   to whatever came before. */
+.sec { padding-block: var(--section-y); }
+#profile { padding-top: calc(var(--section-y) * 0.8); }
 
 /* Theme cross-fade. Scoped to the elements that actually carry a themed
-   surface — a blanket `* { transition }` would also animate every GSAP
-   colour tween and the hover states below. */
-body, #practice, #contact, .panel, .card, .row, .path-row,
-.sec-head, .marquee, .hero-strip > div, footer, .nav-drawer, .panel__tags i,
-.chip {
+   surface: a blanket `* { transition }` would also animate every GSAP
+   tween and the hover states below. */
+body, .strip, .dial, .door, .field, .chan, footer, .nav-drawer {
   transition:
     background-color 0.45s ease,
     color 0.45s ease,
     border-color 0.45s ease;
 }
 
-/* paper vignette — light theme only */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 899;
-  pointer-events: none;
-  background: var(--vignette);
-  transition: background 0.45s ease;
-}
+/* The parts a browser draws for itself still belong to the sheet. */
+::selection { background: var(--signal); color: var(--on-signal); }
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border: 3px solid var(--bg); }
 
-/* film grain */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 900;
-  pointer-events: none;
-  opacity: var(--grain);
-  transition: opacity 0.45s ease;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-::selection { background: var(--signal); color: var(--signal-ink); }
 a { color: inherit; text-decoration: none; }
-button { font: inherit; }
+button { font: inherit; color: inherit; }
 svg { display: block; }
 img, svg { max-width: 100%; }
 
-/* Long unbroken strings — an email address, a handle — must not be able
-   to push the layout wider than the viewport on a narrow screen. */
-.brand, .row__name, .card__val, .path-row .role { overflow-wrap: anywhere; }
+/* Long unbroken strings, an email address or a handle, must not be
+   able to push the layout wider than the viewport on a narrow screen. */
+.brand, .chan__v, .rec__who { overflow-wrap: anywhere; }
 
 /* ── focus ───────────────────────────────────────────────
    Keyboard users get a ring everywhere. Mouse users never see it. */
 :focus { outline: none; }
-:focus-visible {
-  outline: 2px solid var(--signal);
-  outline-offset: 3px;
-  border-radius: var(--r-sm);
-  box-shadow: 0 0 0 5px var(--signal-wash);
-}
+:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
 
 .skip {
   position: fixed;
@@ -85,92 +62,85 @@ img, svg { max-width: 100%; }
   left: 10px;
   z-index: 1100;
   padding: 12px 18px;
-  background: var(--signal);
-  color: var(--signal-ink);
-  font-family: var(--f-mono);
-  font-size: 11px;
+  /* Ink, not brass: a brass field on this page means Discord. */
+  background: var(--fg);
+  color: var(--bg);
+  font: 700 0.9375rem/1 var(--f-label);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  border-radius: var(--r-sm);
   transform: translateY(-160%);
-  transition: transform 0.25s ease;
+  transition: transform 0.25s var(--ease-out);
 }
 .skip:focus-visible { transform: translateY(0); }
-
-/* ── shared type ─────────────────────────────────────────
-   11px, not 10px: at 0.13em tracking on a phone, 10px uppercase mono
-   is the first thing that becomes unreadable. */
-.mono-xs {
-  font-family: var(--f-mono);
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  line-height: 1.45;
-}
 
 .wrap {
   padding-left: var(--pad);
   padding-right: var(--pad);
   max-width: var(--wrap-max);
-  margin: 0 auto;
+  margin-inline: auto;
 }
 
-.sec-head {
-  display: flex;
-  align-items: baseline;
-  gap: 14px;
-  padding-bottom: 20px;
-  border-bottom: var(--rule);
-  margin-bottom: clamp(32px, 7vw, 90px);
+/* ── shared type ─────────────────────────────────────────
+   A section opens on its name alone. There is no kicker above it and
+   no number beside it: the heading carries its own weight, and the
+   order of the sections tells the reader nothing they need. */
+.sec-h {
+  font: 800 clamp(2.75rem, 5.2vw, 4.5rem)/0.9 var(--f-display);
+  letter-spacing: 0.012em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  margin-bottom: var(--head-gap);
+}
+
+/* The label voice: short, set in capitals, never a sentence. */
+.lab {
+  font: 600 0.8125rem/1.3 var(--f-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: var(--fg-subtle);
 }
-.sec-head .idx { color: var(--signal); }
-.sec-head .ttl { margin-left: auto; text-align: right; }
 
-/* The kicker is a full sentence in some locales. Below this width it
-   collides with the section name instead of sitting opposite it. */
-@media (max-width: 700px) {
-  .sec-head { flex-wrap: wrap; gap: 4px 12px; }
-  .sec-head .ttl { margin-left: 0; flex: 1 0 100%; text-align: left; }
-}
+/* A number that changes must not push its neighbours around. */
+.num { font-variant-numeric: tabular-nums; }
 
-/* Pre-animation states. Applied only once JS is confirmed alive, so the
-   page degrades to fully visible content if the bundle fails to load. */
-html.js .rv { opacity: 0; transform: translateY(26px); }
-html.js .rv-x { opacity: 0; }
-html.reduced .rv,
-html.reduced .rv-x { opacity: 1 !important; transform: none !important; }
+/* Pre-animation states. `html.js` is a promise that a script is coming
+   to bring these back; the inline script in index.html that makes it
+   also takes it back if the bundle does not arrive or dies starting up.
 
-/* The hero block and the marquee, same contract, different reason.
-   These used to need no pre-state: the preloader was a full-screen
-   curtain that sat on top until motion/intro.js had already applied the
-   from-state underneath it, so nothing was ever seen in place first.
-   With the curtain gone the pre-state has to be in the stylesheet, or
-   the first painted frame shows the hero settled and the timeline then
-   yanks it 26px down to animate it in.
+   Two classes put everything at rest whatever GSAP has written inline:
+   `reduced`, for a visitor who asked for no motion, and `settled`, for
+   a page whose script broke after it had rendered. */
+html.js .rv { opacity: 0; transform: translateY(22px); }
+html:is(.reduced, .settled) .rv { opacity: 1 !important; transform: none !important; }
 
-   `html.js` is set by an inline script in <head> for exactly this
-   reason — a deferred module can run after the first paint, which is
-   the frame being protected. */
-html.js .hero-main > *,
-html.js .hero-rig,
-html.js .hero-strip > div,
-html.js .marquee { opacity: 0; }
-html.reduced .hero-main > *,
-html.reduced .hero-rig,
-html.reduced .hero-strip > div,
-html.reduced .marquee { opacity: 1 !important; }
+/* The hero, same contract. `html.js` is set by an inline script in
+   <head>: a deferred module can run after the first paint, which is the
+   frame being protected. */
+html.js .hero-id > *,
+html.js .hero-statement,
+html.js .callouts,
+html.js .ficha,
+html.js .doors,
+html.js .dial,
+html.js .mini,
+html.js .leaders,
+html.js .strip { opacity: 0; }
+html:is(.reduced, .settled) :is(.hero-id > *, .hero-statement, .callouts, .ficha, .doors, .dial, .mini, .leaders, .strip) { opacity: 1 !important; }
 
 /* Belt-and-braces: if JS never runs at all, the OS preference still
-   wins over the .rv pre-states, which JS would otherwise have cleared. */
+   wins over the pre-states, which JS would otherwise have cleared. */
 @media (prefers-reduced-motion: reduce) {
   html.js .rv,
-  html.js .rv-x { opacity: 1 !important; transform: none !important; }
-  html.js .hero-main > *,
-  html.js .hero-rig,
-  html.js .hero-strip > div,
-  html.js .marquee { opacity: 1 !important; }
+  html.js .hero-id > *,
+  html.js .hero-statement,
+  html.js .callouts,
+  html.js .ficha,
+  html.js .doors,
+  html.js .dial,
+  html.js .mini,
+  html.js .leaders,
+  html.js .strip { opacity: 1 !important; transform: none !important; }
+
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -179,3 +149,20 @@ html.reduced .marquee { opacity: 1 !important; }
   }
 }
 
+/* ── with no script ──────────────────────────────────────────
+   Every word on the page is put there by the bundle. With scripting
+   off, or with a bundle that never arrived, the shell is a header and a
+   set of empty frames, so it stands down and the static card takes its
+   place: the name, the channels and the CVs, written into index.html at
+   build time by vite.config.js.
+
+   The condition is "no `js` and no `ready`". `js` is absent when the
+   inline script in the head never ran or has given up on the bundle;
+   `ready` is set by main.js once the page has been rendered. A page
+   that rendered and then broke keeps `ready`, so it shows itself whole
+   and never falls back to the card. */
+.fallback { display: none; padding-top: var(--header-h); }
+.fallback .hero-name { margin-bottom: var(--head-gap); }
+
+html:not(.js):not(.ready) .fallback { display: block; }
+html:not(.js):not(.ready) :is(#hero, #profile, #stack, #practice, #path, #contact > .sec, .nav, .hud, .skip, .nav-drawer) { display: none; }

@@ -1,0 +1,50 @@
+/* ══ THE THREE FACES ════════════════════════════════════════
+   Served from this site, not from a font host: no third-party request
+   stands between the first byte and the first word, and a visitor's
+   address is not handed to anyone to draw a heading.
+
+   The files come from the @fontsource packages in package.json, which
+   are the Google Fonts builds repackaged for npm (all three families are
+   OFL-1.1). Only the Latin subset and only the weights the page sets
+   are declared, and only as woff2: five files. Each family name is the
+   one tokens.css and the canvas lettering in motion/field.js ask for,
+   so nothing else has to know where a font comes from.
+
+   Add a weight here before using it in a stylesheet. An undeclared
+   weight does not fail: the browser fakes it from the nearest one. */
+
+@font-face {
+  font-family: "Sofia Sans Condensed";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("@fontsource/sofia-sans-condensed/files/sofia-sans-condensed-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Sofia Sans Condensed";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("@fontsource/sofia-sans-condensed/files/sofia-sans-condensed-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Sofia Sans Condensed";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("@fontsource/sofia-sans-condensed/files/sofia-sans-condensed-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Sofia Sans Extra Condensed";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("@fontsource/sofia-sans-extra-condensed/files/sofia-sans-extra-condensed-latin-800-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "STIX Two Text";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("@fontsource/stix-two-text/files/stix-two-text-latin-400-normal.woff2") format("woff2");
+}

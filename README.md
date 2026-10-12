@@ -1,7 +1,8 @@
 # 4LNsz — Portfolio
 
-Single-page portfolio. Vanilla JS, Vite, GSAP + ScrollTrigger, Lenis.
-Dark and light themes, PT/EN with automatic detection.
+Single-page portfolio. Vanilla JS, Vite, GSAP + ScrollTrigger.
+Dark and light themes, PT/EN with automatic detection. Fonts are served
+from the site itself; it calls no other host.
 
 ## Running it
 
@@ -31,7 +32,8 @@ The workflow figures out the base path on its own: a repo named
 | Any text | `src/content/locales/pt.js` · `en.js` |
 | Links, Discord ID, timezone | `src/config.js` |
 | Colours, themes | `src/styles/tokens.css` |
-| Animation timing | `src/motion/` and `MOTION` in `src/config.js` |
+| Animation timing | `src/motion/` |
+| The logo | `brand/src/build.mjs`; see `brand/README.md` |
 
 Adding a language: copy a file in `src/content/locales/`, translate it, set
 `__meta.order`. It shows up in the switcher by itself.

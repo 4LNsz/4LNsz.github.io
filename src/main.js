@@ -1,21 +1,21 @@
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
-import "./styles/main.css";
+// The stylesheet is not imported here: index.html links it, so it is in
+// place before the first paint. See the comment beside that link.
 
 import { applyI18n, mountLangSwitch, onLangChange } from "./core/i18n.js";
 import { mountThemeToggle } from "./core/theme.js";
-import { resplitAll } from "./core/split.js";
 import { initAnchors } from "./core/anchors.js";
 import { mountAppLinks } from "./core/applink.js";
 import { mountNav, mountHeaderChrome } from "./core/nav.js";
 import { reducedMotion } from "./core/env.js";
 
+import { renderHero } from "./sections/hero.js";
 import { renderProfile } from "./sections/profile.js";
 import { renderStack } from "./sections/stack.js";
 import { renderPractice } from "./sections/practice.js";
-import { renderPath } from "./sections/path.js";
-import { renderMarquee, startMarquee } from "./sections/marquee.js";
+import { renderPath, drawGraph } from "./sections/path.js";
 import { renderContact } from "./sections/contact.js";
 import { startClock } from "./sections/clock.js";
 
@@ -25,32 +25,38 @@ import { initField } from "./motion/field.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Normally a no-op: the inline script in index.html set this before the
+// first paint. It matters when that script gave up waiting and took the
+// class off again, and the bundle has turned up after all.
 document.documentElement.classList.add("js");
 if (reducedMotion) document.documentElement.classList.add("reduced");
 
 let booted = false;
+let field = null;
 
 /**
  * Rebuilds all localised markup. Runs once at boot and again on every
  * language switch. Order is load-bearing:
- *   render lists -> applyI18n (fills the text) -> resplit (needs final text)
+ *   render lists -> applyI18n (fills the text)
+ * and anything that MEASURES text comes after both: the leader lines in
+ * the hero are drawn from where the callouts ended up, which depends on
+ * how long their words are in the language just applied.
  */
 function render() {
+  renderHero();
   renderProfile();
   renderStack();
   renderPractice();
   renderPath();
-  renderMarquee();
   renderContact();
 
   applyI18n();
-  resplitAll();
-  startMarquee();
 
   if (booted) {
     // Already-revealed elements must not snap back to their pre-animation state.
     gsap.set(".rv", { opacity: 1, y: 0 });
-    gsap.set(".rv-x", { opacity: 1, x: 0 });
+    field?.repaint();
+    field?.layout();
     ScrollTrigger.refresh();
     buildScroll();
   }
@@ -59,6 +65,10 @@ function render() {
 /* ── boot ────────────────────────────────────────────────── */
 
 render();
+// The page now has its words. From here on, if anything below throws,
+// the inline script in index.html shows it at rest rather than falling
+// back to the static card, which is only for a page with nothing on it.
+document.documentElement.classList.add("ready");
 onLangChange(render);
 
 mountLangSwitch();
@@ -67,67 +77,48 @@ mountNav();
 mountHeaderChrome();
 initAnchors();
 // Delegated on document, so it survives the re-render a language
-// switch performs on the channel cards.
+// switch performs on the doors and the channel cells.
 mountAppLinks();
 startClock();
 
 /**
- * The hero simulation builds its own panel markup, which carries
- * data-i18n labels — render() already ran its applyI18n() pass before
- * that markup existed, so the panel needs one of its own.
+ * The hero simulation builds its own readout, which carries data-i18n
+ * labels. render() already ran its applyI18n() pass before that markup
+ * existed, so the readout needs one of its own.
  *
- * The button's label is set imperatively (it flips between "+ Load" and
- * "Reset" at the ceiling), so a language switch has to reach it too.
- * render() is registered on onLangChange first, so applyI18n has always
- * run by the time repaintPanel reads t().
- *
- * SCOPED TO THE PANEL, and that is not a micro-optimisation. applyI18n
- * writes textContent on every [data-i18n] node it finds, and
- * .contact-big is one of them — whose characters render() has just
- * wrapped in .ch spans two lines earlier. A document-wide pass here
- * flattened them straight back into a text node, so by the time
- * buildScroll() looked for ".contact-big .ch" there was nothing there:
- * the headline's character reveal never played and GSAP logged
- * "target .contact-big .ch not found" on every single load.
- *
- * The pipeline in CLAUDE.md — render -> applyI18n -> resplitAll — holds
- * inside render(). Any applyI18n() outside it either takes a root, as
- * this one does, or has to resplit after itself.
+ * SCOPED TO THE READOUT. applyI18n writes textContent on every
+ * [data-i18n] node it is handed, and a document-wide pass here would
+ * repaint the whole page a second time for the sake of six labels. Any
+ * applyI18n() outside render() takes a root, as this one does.
  */
-const field = initField();
+field = initField();
 applyI18n(document.getElementById("hero-instr"));
-onLangChange(() => field?.repaintPanel());
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
 /**
- * Curtain-up — except there is no curtain any more.
- *
- * This used to be a three-way guard (readyState, a `load` listener and a
- * 2.5s watchdog) whose only job was deciding when to lift the preloader.
- * `load` does not fire until every subresource has settled, including
- * the Google Fonts stylesheet, so a slow or blocked font CDN held a
- * full-screen curtain over a page that was already painted behind it.
- *
- * With the preloader gone the page has nothing to wait for: the markup
- * is rendered, so it plays now.
+ * Curtain-up, except there is no curtain. The page has nothing to wait
+ * for: the markup is rendered, so it plays now.
  */
 booted = true;
 playIntro();
 
 /**
  * Web fonts change text metrics, and text metrics change the height of
- * every section — which is to say every ScrollTrigger start, end and pin
- * distance measured before they arrive. The intro no longer waits for
- * them, so re-measure once when they land.
+ * every section and the position of every callout. Nothing waits for
+ * them, so re-measure once when they land: the scroll triggers, the
+ * leader lines and the lettering the record draws on its canvas.
  */
-document.fonts?.ready.then(() => ScrollTrigger.refresh());
+document.fonts?.ready.then(() => {
+  field?.layout();
+  drawGraph();
+  ScrollTrigger.refresh();
+});
 
 /**
- * ScrollTrigger.refresh() is expensive — it re-measures every trigger and
- * re-lays out the pinned track. Unthrottled it fired on every resize
- * event, and on mobile the address bar collapsing counts as a resize:
- * scrolling the page reflowed the pin mid-scroll, which reads as a jump.
+ * ScrollTrigger.refresh() is expensive: it re-measures every trigger.
+ * Unthrottled it fired on every resize event, and on mobile the address
+ * bar collapsing counts as a resize.
  *
  * So: debounce, and ignore height-only changes on touch, where they are
  * almost always browser chrome rather than a real layout change.
@@ -148,5 +139,18 @@ window.addEventListener("resize", () => {
   lastHeight = window.innerHeight;
 
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => ScrollTrigger.refresh(), 180);
+  resizeTimer = setTimeout(() => {
+    // The career diagram is laid out for the width it is given rather
+    // than scaled into it, so a new width means a new drawing.
+    if (widthChanged) drawGraph();
+    ScrollTrigger.refresh();
+  }, 180);
 });
+
+/**
+ * Last line on purpose. The inline script in index.html hid the hero on
+ * the promise that this file would bring it back, and it is waiting to
+ * hear that it did. Anything above that throws never reaches this, and
+ * the page is then shown at rest instead of staying hidden.
+ */
+window.__boot?.();

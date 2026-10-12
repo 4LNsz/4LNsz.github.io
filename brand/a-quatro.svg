@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 92 100" fill="currentColor">
+  <!-- A-quatro, the isotype. An A whose right leg stands upright, which is
+       what makes it a 4 as well. One colour, any colour: it draws in
+       currentColor. Under 24px use a-quatro-small.svg. -->
+  <polygon points="72,0 0,100 16,100 58,41.7 58,100 72,100"/>
+  <polygon points="27.4,62 92,62 92,75 18,75"/>
+</svg>

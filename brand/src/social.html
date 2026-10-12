@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>social covers and cards — source</title>
+<!-- The covers and cards in brand/social/. One page draws them all: open
+     it with ?f=<name> and capture it at the size the table at the foot
+     gives for that name; there is no build step. Every word on them is
+     from the CV, the same three lines og.html carries. -->
+<style>
+  /* The site's own font files, read from node_modules: run npm ci first. */
+  @font-face { font-family: "Sofia Sans Condensed"; font-weight: 500; src: url("../../node_modules/@fontsource/sofia-sans-condensed/files/sofia-sans-condensed-latin-500-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Sofia Sans Condensed"; font-weight: 600; src: url("../../node_modules/@fontsource/sofia-sans-condensed/files/sofia-sans-condensed-latin-600-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Sofia Sans Condensed"; font-weight: 700; src: url("../../node_modules/@fontsource/sofia-sans-condensed/files/sofia-sans-condensed-latin-700-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Sofia Sans Extra Condensed"; font-weight: 800; src: url("../../node_modules/@fontsource/sofia-sans-extra-condensed/files/sofia-sans-extra-condensed-latin-800-normal.woff2") format("woff2"); }
+  :root { --f-display: "Sofia Sans Extra Condensed", "Arial Narrow", sans-serif; --f-label: "Sofia Sans Condensed", "Arial Narrow", sans-serif; }
+  :root { --graphite-950: #110e09; --graphite-900: #18150f; --graphite-600: #433f39; --fg: #efebe2; --fg-muted: #c2bdb4; --brass: #d6ae55; --ruby: #f4577c; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* --w, --h, --s and the positions are set from the table below. --s is
+     the size of the type against og.html, where the name is 148px. */
+  html, body { width: calc(var(--w) * 1px); height: calc(var(--h) * 1px); overflow: hidden; }
+  body { background: var(--graphite-900); color: var(--fg); position: relative; -webkit-font-smoothing: antialiased; }
+  svg.fig { position: absolute; left: 0; top: 0; }
+  svg.fig text { font: 600 22px var(--f-label); fill: var(--brass); }
+  .brand { position: absolute; left: calc(var(--x) * 1px); top: calc(var(--brand) * 1px); display: flex; align-items: flex-end; }
+  .brand svg { width: calc(44px * var(--s)); height: calc(48px * var(--s)); margin-right: calc(3px * var(--s)); color: var(--brass); }
+  .brand span { font: 700 calc(42px * var(--s))/0.86 var(--f-label); letter-spacing: 0.05em; }
+  .brand small { font: inherit; font-weight: 500; color: var(--fg-muted); }
+  /* The name hangs four units left of the lines under it, as on og.html:
+     the A's diagonal starts inside its own box. */
+  h1 { position: absolute; left: calc((var(--x) - 4 * var(--s)) * 1px); top: calc(var(--name) * 1px); font: 800 calc(148px * var(--s))/0.86 var(--f-display); letter-spacing: 0.012em; text-transform: uppercase; white-space: nowrap; }
+  p { position: absolute; left: calc(var(--x) * 1px); top: calc((var(--name) + 164 * var(--s)) * 1px); font: 500 calc(40px * var(--s))/1.2 var(--f-label); letter-spacing: 0.02em; white-space: nowrap; }
+  p span { display: block; color: var(--fg-muted); }
+  /* ?guide=1 only: where each platform lays the profile picture. */
+  .guide { position: absolute; border-radius: 50%; border: 2px dashed var(--ruby); }
+</style>
+</head>
+<body>
+<svg class="fig" id="fig" aria-hidden="true"></svg>
+<!-- The same lockup as the page header: the A-quatro, then type. Cards
+     only; a cover sits over a profile picture that is already the mark. -->
+<div class="brand" id="brand">
+  <svg viewBox="0 0 92 100" fill="currentColor"><polygon points="72,0 0,100 16,100 58,41.7 58,100 72,100"/><polygon points="27.4,62 92,62 92,75 18,75"/></svg>
+  <span>LN<small>sz</small></span>
+</div>
+<h1>Alan Sena</h1>
+<p>Software Engineer<span>Back-end / Real-time</span></p>
+
+<script>
+/* Two kinds of image.
+
+   A COVER lies behind a profile: the platform lays the profile picture
+   over its lower left corner and prints the name under it. So a cover
+   carries no mark (the picture is the mark), keeps its words clear of
+   that corner, and lets the dial rise out of the opposite one.
+
+   A CARD stands alone, so it carries the lockup, as og.html does.
+
+   `dial` is [centre x, centre y, scale]: the figure is og.html's, in
+   og.html's own units (a field of radius 196), and only the crop and
+   the scale change. `pic` is the profile picture as [centre x, centre
+   y, radius] at its largest across that platform's layouts; nothing is
+   drawn from it unless the page is opened with &guide=1. */
+const F = {
+  linkedin: { w: 1584, h: 396, s: 0.84, x: 520, name: 89, dial: [1340, 500, 1.72], pic: [[208, 330, 164], [276, 396, 211]] },
+  x: { w: 1500, h: 500, s: 1, x: 424, name: 118, dial: [1330, 590, 2], pic: [[212, 500, 180]] },
+  discord: { w: 1360, h: 480, s: 0.84, x: 500, name: 128, dial: [1216, 570, 1.86], pic: [[254, 462, 208], [172, 430, 150]] },
+  github: { w: 1280, h: 640, s: 1.02, x: 76, brand: 66, name: 262, dial: [968, 322, 1.02] },
+  square: { w: 1080, h: 1080, s: 1.16, x: 80, brand: 80, name: 196, dial: [760, 900, 2.1] },
+};
+
+const q = new URLSearchParams(location.search);
+const f = F[q.get("f")] ?? F.x;
+const root = document.documentElement.style;
+for (const k of ["w", "h", "s", "x", "name", "brand"]) if (k in f) root.setProperty("--" + k, f[k]);
+if (!("brand" in f)) document.getElementById("brand").remove();
+
+/* The same figure as the hero, drawn once from the same seed. It is a
+   picture of the simulation, not a measurement: the arc is set to the
+   resting tick the page reports, and nothing here carries a number. */
+function prng(seed) { return function () { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let x = Math.imul(seed ^ (seed >>> 15), 1 | seed); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x; return ((x ^ (x >>> 14)) >>> 0) / 4294967296; }; }
+const NS = "http://www.w3.org/2000/svg";
+const el = (p, n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+const fig = document.getElementById("fig");
+fig.setAttribute("width", f.w); fig.setAttribute("height", f.h); fig.setAttribute("viewBox", `0 0 ${f.w} ${f.h}`);
+const svg = el(fig, "g", { transform: `translate(${f.dial[0]} ${f.dial[1]}) scale(${f.dial[2]})` });
+const R = 196, rand = prng(40426), TAU = Math.PI * 2;
+el(svg, "circle", { r: R, fill: "#110e09", stroke: "#433f39", "stroke-width": 1 });
+const pts = [];
+while (pts.length < 280) { const a = rand() * TAU, d = Math.sqrt(rand()) * (R - 4); pts.push([Math.cos(a) * d, Math.sin(a) * d]); }
+const gl = el(svg, "g", { stroke: "#9f9b92", "stroke-width": 0.9 });
+for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) if (Math.hypot(pts[i][0] - pts[j][0], pts[i][1] - pts[j][1]) < 27) el(gl, "line", { x1: pts[i][0], y1: pts[i][1], x2: pts[j][0], y2: pts[j][1] });
+const gp = el(svg, "g", { fill: "#efebe2" });
+for (const p of pts) el(gp, "circle", { cx: p[0], cy: p[1], r: 2 });
+const B = 1000 / 60, ri = R + 12, ang = (ms) => (ms / B) * TAU - Math.PI / 2;
+const gt = el(svg, "g", { stroke: "#d6ae55" });
+for (let ms = 0; ms < B; ms += 0.5) { const major = Math.abs(ms - Math.round(ms)) < 1e-6, a = ang(ms), r1 = ri + (major ? 17 : 9); el(gt, "line", { x1: Math.cos(a) * ri, y1: Math.sin(a) * ri, x2: Math.cos(a) * r1, y2: Math.sin(a) * r1, "stroke-width": major ? 1.8 : 1 }); }
+el(gt, "circle", { r: ri, fill: "none", "stroke-width": 1 });
+for (let ms = 0; ms <= 16; ms += 2) { const a = ang(ms), rr = ri + 32; const t = el(svg, "text", { x: Math.cos(a) * rr, y: Math.sin(a) * rr + 8, "text-anchor": "middle" }); t.textContent = ms; }
+const a0 = ang(0), a1 = ang(0.22), rt = R + 6;
+el(svg, "path", { d: `M${Math.cos(a0) * rt} ${Math.sin(a0) * rt}A${rt} ${rt} 0 0 1 ${Math.cos(a1) * rt} ${Math.sin(a1) * rt}`, fill: "none", stroke: "#f4577c", "stroke-width": 8 });
+
+if (q.has("guide")) for (const [x, y, r] of f.pic ?? []) { const g = document.createElement("div"); g.className = "guide"; g.style.cssText = `left:${x - r}px;top:${y - r}px;width:${r * 2}px;height:${r * 2}px`; document.body.appendChild(g); }
+</script>
+</body>
+</html>

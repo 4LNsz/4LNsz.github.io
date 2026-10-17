@@ -123,17 +123,23 @@
 }
 
 /* The invitation, set as the figure's caption, centred under the ring.
-   It sits in the sheet's bottom margin, so it moves nothing. */
+   It sits in the sheet's bottom margin, so it moves nothing.
+
+   Centred by its box spanning the figure, not by a transform, and it
+   takes the pointer like any text. It was centred with translateX and
+   let the pointer through, and a press on it then landed half its
+   width to the left: selecting from the start of the sentence meant
+   starting well to the right of it. */
 .dial__hint {
   position: absolute;
   top: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  text-align: center;
   white-space: nowrap;
   font: 600 0.8125rem/1.3 var(--f-label);
   letter-spacing: 0.06em;
   color: var(--fg-subtle);
-  pointer-events: none;
 }
 .dial__ring { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .dial__ring text { font-family: var(--f-label); font-weight: 600; font-size: 17px; letter-spacing: 0.04em; fill: var(--signal); }

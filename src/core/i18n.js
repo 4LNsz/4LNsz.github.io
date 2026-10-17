@@ -1,4 +1,5 @@
 import { CONTENT, LANGS, DEFAULT_LANG } from "../content/index.js";
+import { FLAGS } from "./flags.js";
 
 const STORAGE_KEY = "4lnsz:lang";
 const listeners = new Set();
@@ -66,6 +67,8 @@ export function applyI18n(root = document) {
     el.setAttribute(attr, t(key));
   });
   document.documentElement.lang = meta().htmlLang;
+  // The tab's title follows the page's language too.
+  if (meta().title) document.title = meta().title;
 }
 
 export function setLang(code) {
@@ -85,13 +88,16 @@ export function onLangChange(fn) {
 }
 
 const CHEVRON = `<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 3.5 5 7l3.5-3.5"/></svg>`;
-const CHECK = `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>`;
+const CHECK = `<svg class="lang__check" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>`;
 
 /**
  * The language switch: one button naming the language in use, opening
- * a list of every language the page has, each by its code and its own
- * name. It builds itself from CONTENT, so a new locale file appears in
- * the list with no other change.
+ * a list of every language the page has, each by its flag, its code
+ * and its own name. It builds itself from CONTENT, so a new locale file
+ * appears in the list; its flag comes from core/flags.js by the
+ * locale's `__meta.region`, and a region with no drawing shows none.
+ * The flags are only in the list: the button in the header stays in the
+ * page's one ink.
  *
  * It used to be a row of codes, "PT / EN". That reads well at two and
  * would not at five: the header has no room for a sentence of codes,
@@ -126,7 +132,10 @@ export function mountLangSwitch(host = document.getElementById("lang")) {
     list.innerHTML = LANGS.map((code) => {
       const x = CONTENT[code].__meta;
       const on = code === current;
-      return `<li><button type="button" data-code="${code}" lang="${x.htmlLang}" aria-current="${on}"><b>${x.code}</b><span>${x.name}</span>${on ? CHECK : ""}</button></li>`;
+      // The flag cell is always there, empty if need be, so the codes
+      // and names stay in their columns.
+      const flag = FLAGS[x.region] ?? `<span class="lang__flag" aria-hidden="true"></span>`;
+      return `<li><button type="button" data-code="${code}" lang="${x.htmlLang}" aria-current="${on}">${flag}<b>${x.code}</b><span>${x.name}</span>${on ? CHECK : ""}</button></li>`;
     }).join("");
   };
 

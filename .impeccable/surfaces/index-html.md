@@ -75,8 +75,8 @@ STORY: The visitor watches a system being stepped and timed in their
 own browser, reads who built it, believes the claim because the figure
 answers to load, and leaves by one of two doors.
 
-FIRST VIEWPORT: Name top-left at display size, role and status under
-it. The dial centred at about half the viewport height, four numbered
+FIRST VIEWPORT: Name top-left at display size, role, specialty and
+focus under it. The dial centred at about half the viewport height, four numbered
 callouts on leaders to either side. Statement lower-left. Base, local
 time and the two doors lower-right, the project door filled brass. The
 tick record runs full width along the bottom, readout and load control

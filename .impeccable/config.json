@@ -46,7 +46,7 @@
           "index.html"
         ],
         "createdAt": "2026-10-12T01:28:27.089Z",
-        "reason": "Claude: static-scan artefact. index.html carries no colour; its stylesheet is imported by src/main.js, so the scanner sees the browser default on the h1. Rendered, the h1 is var(--fg). Scoped to this file so real black anywhere else still fires."
+        "reason": "Claude: static-scan artefact. index.html carries no colour; its stylesheet is a manifest of @import lines the static scan does not follow, so the scanner sees the browser default on the h1. Rendered, the h1 is var(--fg). Scoped to this file so real black anywhere else still fires."
       },
       {
         "rule": "design-system-color",

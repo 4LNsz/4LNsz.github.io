@@ -28,7 +28,7 @@
   text-transform: uppercase;
   text-wrap: balance;
 }
-.func p { max-width: 40em; line-height: 1.52; text-wrap: pretty; }
+.func p { max-width: 34em; line-height: 1.52; text-wrap: pretty; }
 .func ul { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 12px; }
 .func ul li { font: 600 0.875rem/1.3 var(--f-label); letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-muted); }
 

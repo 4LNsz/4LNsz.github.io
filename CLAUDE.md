@@ -152,9 +152,10 @@ theme steel does not appear at all; it is the ink of the light one.
 **Never hardcode a colour outside `styles/tokens.css`.** Every component
 reads `var(--fg)`, `var(--signal)`, etc. Adding a colour means adding a
 token — a primitive if it is a new tone, a semantic if it is a new role.
-The exceptions are things that cannot read a stylesheet: the icon SVGs
-in `public/` and `brand/`, the pages in `brand/src/`, and the browser's
-own chrome colour, which `THEME.browserColor` in `config.js` and the
+The exceptions are things that cannot read a stylesheet, or whose
+colours are not the page's: the icon SVGs in `public/` and `brand/`,
+the pages in `brand/src/`, the flags in `src/core/flags.js`, and the
+browser's own chrome colour, which `THEME.browserColor` in `config.js` and the
 `theme-color` meta in `index.html` have to state as hex. Those two
 repeat `--bg` of each theme; change them with it.
 
@@ -362,13 +363,20 @@ it today, and the page presents a developer in general.
 ## Common tasks
 
 **Add a language.** Copy `src/content/locales/pt.js` to `es.js`, translate,
-set `__meta.order`. The registry globs the folder and the switcher builds
-itself from `Object.keys(CONTENT)`. No other file changes.
+set `__meta.order` and `__meta.region` (the country whose variant the
+text is written in: `BR`, `US`). The registry globs the folder and the
+switcher builds itself from `Object.keys(CONTENT)`. If the region has no
+flag in `src/core/flags.js` yet, draw one there, at 30×21 and simple
+enough for 20×14; without it the list shows that language with no flag.
 
 The switcher is one button with the code in use, opening a list of
 every language by code and own name (`mountLangSwitch()` in
 `core/i18n.js`). It was a row of codes, "PT / EN", which would not hold
-five in the header. A sentence that carries a value is one string with
+five in the header. The flags are in the list only, never in the
+header's button: they are the one place on the page a colour lives
+outside `tokens.css`, other countries' colours, and Alan chose them
+there and not in the bar (2026-10-17). They are drawn, not emoji, which
+Windows prints as two letters. A sentence that carries a value is one string with
 the value's place marked, `"Abrindo o {app}…"`, filled through `t(key,
 vars)` or a `data-i18n-args` attribute: never two fragments glued round
 the value, because word order and articles change between languages.
@@ -492,6 +500,18 @@ together:
 - The record is on a square-root scale, on purpose: at rest a tick is a
   fifth of a millisecond, and on a linear 0–2 it would sit in the bottom
   tenth. The unevenly spaced rules are what say so. Do not "fix" them.
+- A stretch above the top of that scale is drawn as one hollow bar on
+  the top rule, not as dots: it went off the sheet, and a flat run of
+  dots along the top read as a measurement of exactly 2 ms. On a slow
+  machine this happens at rest too, which is the truth.
+- The load marks give the newest the right of way. Walking back from
+  it, each older label has to end before the next mark's rule; it gives
+  way to its count alone, then to its rule alone. A few presses in a
+  row used to write the labels over each other.
+- `hero.press` is the caption under the dial ("Clique no círculo para
+  adicionar sessões"), with a `tap` variant that sections/hero.js picks
+  on a coarse pointer. Before it, the only sign the field took load was
+  a crosshair cursor, and almost nobody found the page's best moment.
 
 ## Gotchas
 
@@ -514,6 +534,22 @@ together:
 - The header is fixed and floats over content. It takes a scrim
   (`.is-stuck`) once scrolled and leaves entirely (`.is-hidden`) while
   scrolling down, both driven from `mountHeaderChrome()` in `nav.js`.
+  The scrim is the ground itself, opaque: at 92% the text scrolling
+  under it showed through the wordmark. On a screen wider than the
+  sheet the bar's ends line up with the sheet's edges, not the window's.
+- On a laptop screen 820px high or less (1366×768 is the common one) the
+  dial, the name and the gaps beside it shrink a little, so the record's
+  "+ Carga" stays on the first screen. The readout's column, not the
+  plot, sets the record's height; shrinking the plot did nothing.
+- The first screen's role is three lines, all `[CV]`: the title, the
+  specialty from the CV headline ("Especialista em Lua", which moved
+  there from Perfil's Especialidades and is not repeated), and the
+  focus. On a phone the hero's gaps are tight so both doors still fit a
+  390×844 first screen; add a line above them and check that again.
+- The tab title follows the language (`__meta.title` in each locale).
+  `vite.config.js` also writes a schema.org Person into the head, from
+  config.js, so a search for the name can be tied to the page and to his
+  profiles; it says nothing the page does not.
   `--header-h` feeds the hero's top padding and every section's
   `scroll-margin-top`; change it there, not per component.
 - `ScrollTrigger.refresh()` must follow any DOM change that alters height.

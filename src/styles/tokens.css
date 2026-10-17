@@ -126,7 +126,7 @@
   --on-signal: var(--graphite-950);
   --on-signal-muted: #3a3216;
   --measure: var(--ruby);
-  --scrim: rgba(24, 21, 15, 0.92);
+  --scrim: var(--bg);
 }
 
 /* ── light: the rhodium sheet, steel ink ────────────────── */
@@ -146,5 +146,5 @@
   --on-signal: #f6f0df;
   --on-signal-muted: #e8dcb9;
   --measure: var(--ruby-deep);
-  --scrim: rgba(230, 233, 239, 0.94);
+  --scrim: var(--bg);
 }

@@ -11,7 +11,7 @@
  * plausível. Ao adicionar algo, cite a fonte no comentário.
  */
 export default {
-  __meta: { order: 1, code: "PT", name: "Português", locale: "pt-BR", htmlLang: "pt-BR" },
+  __meta: { order: 1, code: "PT", name: "Português", locale: "pt-BR", htmlLang: "pt-BR", region: "BR", title: "Alan Sena — Engenheiro de Software" },
 
   nav: { profile: "Perfil", stack: "Stack", practice: "Atuação", path: "Trajetória", contact: "Contato" },
   meta: { based: "Base", time: "Horário local" },
@@ -35,6 +35,12 @@ export default {
     // primeira tela pesada — o resto do resumo está no PDF, a um clique.
     statement: "Mais do que apenas escrever código, meu foco é a saúde e a eficiência do software.",
     role: "Engenheiro de Software",              // [CV] título do perfil
+    // [CV] Da headline do perfil, palavra por palavra: "Engenheiro de
+    // Software | Especialista em Lua | Sistemas de Alta Performance &
+    // Escala | Otimização de CPU e RAM | TS · React · Vue". Mora aqui,
+    // na primeira tela, e saiu das Especialidades: é a palavra que um
+    // recrutador procura e que quem contrata um projeto contrata.
+    spec: "Especialista em Lua",
     based: "Caruaru, PE — Brasil",               // [CV] localidade
     focus: "Back-end / Tempo real",              // [CV] resumo
     // Rótulos do painel do hero. Os VALORES são medidos em tempo de
@@ -50,6 +56,12 @@ export default {
     // [SIM] As quatro legendas descrevem o que motion/field.js faz, e
     // só isso. Mudou o código, muda a legenda.
     figLabel: "Simulação ao vivo: cada ponto é uma sessão.",
+    // [SIM] Um clique (ou toque) no campo adiciona sessões onde foi dado
+    // (motion/field.js). Nada na página dizia isso.
+    press: {
+      click: "Clique no círculo para adicionar sessões",
+      tap: "Toque no círculo para adicionar sessões",
+    },
     fig: [
       { t: "Sessão", d: "cada ponto é uma, e todas andam a cada tick" },
       { t: "Vizinhança", d: "busca em grade espacial, nunca todos contra todos" },
@@ -134,10 +146,12 @@ export default {
         ],
       },
       {
-        // [CV] A headline do perfil, palavra por palavra: "Especialista
-        // em Lua | Sistemas de Alta Performance & Escala | Otimização de
-        // CPU e RAM". Três linhas — e são as três que ele mesmo escolheu
-        // para se apresentar.
+        // [CV] Os dois itens seguintes da headline do perfil, palavra por
+        // palavra e em caixa de frase ("Sistemas de Alta Performance &
+        // Escala | Otimização de CPU e RAM"), e um do resumo ("lógica para
+        // ambientes de alta concorrência", "simulação em tempo real").
+        // "Especialista em Lua", o primeiro da headline, subiu para a
+        // primeira tela (hero.spec) e não se repete aqui.
         //
         // Saíram daqui outras quatro, todas por repetição e nenhuma por
         // dúvida sobre o fato: React/Vue.js (linha Front-end da seção
@@ -147,8 +161,8 @@ export default {
         // redução de custo operacional (painel 02 da seção 03).
         title: "Especialidades",
         items: [
-          "Lua — alta performance e escala",
-          "Otimização de consumo de CPU e RAM",
+          "Sistemas de alta performance e escala",
+          "Otimização de CPU e RAM",
           "Alta concorrência e tempo real",
         ],
       },
@@ -247,7 +261,7 @@ export default {
     cv: "Currículo completo",
     cvView: "Visualizar",
     cvGet: "Baixar",
-    cols: { when: "Período", who: "Função e casa", what: "Serviço executado" },
+    cols: { when: "Período", who: "Função e empresa", what: "Serviço executado" },
     // [AL] A frase é a dele, inteira. Ela morava no bloco "Dados" da
     // seção Perfil; agora rotula o trecho tracejado do diagrama.
     since: "Desenvolvendo desde 2018 · profissionalmente desde 2022",

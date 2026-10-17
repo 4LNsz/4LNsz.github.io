@@ -11,9 +11,9 @@
  * plausible it sounds. Cite the source when adding anything.
  */
 export default {
-  __meta: { order: 2, code: "EN", name: "English", locale: "en-US", htmlLang: "en" },
+  __meta: { order: 2, code: "EN", name: "English", locale: "en-US", htmlLang: "en", region: "US", title: "Alan Sena — Software Engineer" },
 
-  nav: { profile: "Profile", stack: "Stack", practice: "Practice", path: "Path", contact: "Contact" },
+  nav: { profile: "Profile", stack: "Stack", practice: "Expertise", path: "Career", contact: "Contact" },
   meta: { based: "Based in", time: "Local time" },
   ui: {
     toDark: "Switch to dark theme",
@@ -36,6 +36,12 @@ export default {
     // first screen heavy; the rest of the summary is in the PDF.
     statement: "I’m a Back-end Software Engineer focused on what’s “under the hood.”",
     role: "Software Engineer",                   // [CV] profile title
+    // [CV] From the profile headline, word for word: "Software Engineer
+    // | Lua Specialist | High-Performance Systems & Scalability |
+    // Back-end Optimization | TS · React · Vue". It lives here, on the
+    // first screen, and left Specialisms: it is the word a recruiter
+    // screens for and the thing a project is hired for.
+    spec: "Lua Specialist",
     based: "Caruaru, PE — Brazil",               // [CV] location
     focus: "Back-end / Real-time",               // [CV] summary
     // Labels for the hero panel. The VALUES are measured at runtime by
@@ -50,6 +56,12 @@ export default {
     },
     // [SIM] The four captions describe what motion/field.js does and
     // nothing else. Change the code, change the caption.
+    // [SIM] A click (or tap) on the field adds sessions where it lands
+    // (motion/field.js). Nothing on the page said so.
+    press: {
+      click: "Click the circle to add sessions",
+      tap: "Tap the circle to add sessions",
+    },
     figLabel: "Live simulation: each dot is a session.",
     fig: [
       { t: "Session", d: "each dot is one, and all of them move every tick" },
@@ -135,10 +147,12 @@ export default {
         ],
       },
       {
-        // [CV] The profile headline, word for word: "Lua Specialist |
-        // High-Performance Systems & Scalability | Back-end
-        // Optimization". Three lines — and they are the three he chose
-        // to introduce himself with.
+        // [CV] The next two items of the profile headline, word for word
+        // in sentence case ("High-Performance Systems & Scalability |
+        // Back-end Optimization"), and one from the summary ("high-
+        // concurrency simulation", "real-time environments"). "Lua
+        // Specialist", the first, moved up to the first screen
+        // (hero.spec) and is not repeated here.
         //
         // Four others left, every one for repetition and none for doubt
         // about the fact: React/Vue.js (the Front-end row in section
@@ -148,8 +162,8 @@ export default {
         // running-cost reduction (panel 02 of section 03).
         title: "Specialisms",
         items: [
-          "Lua — high-performance, scalable systems",
-          "Cutting CPU and RAM consumption",
+          "High-performance systems and scalability",
+          "Back-end optimization",
           "High concurrency and real-time",
         ],
       },
@@ -249,7 +263,7 @@ export default {
     cv: "Full CV",
     cvView: "View",
     cvGet: "Download",
-    cols: { when: "Period", who: "Role and house", what: "Work carried out" },
+    cols: { when: "Period", who: "Role and company", what: "Work carried out" },
     // [AL] The sentence is his, whole. It used to sit in the "Details"
     // block of Profile; it labels the dashed run of the diagram now.
     since: "Building since 2018 · professionally since 2022",

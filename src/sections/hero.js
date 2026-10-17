@@ -18,9 +18,14 @@ import { cvHref } from "./source.js";
  */
 
 const OUT = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M8.5 6H18v9.5"/></svg>`;
-const DOWN = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v13M6.5 11.5 12 17l5.5-5.5M5 20.5h14"/></svg>`;
 
 export function renderHero() {
+  // The field takes load where it is pressed, and nothing on the page
+  // said so. The caption under the dial does, in the verb the device
+  // uses.
+  const hint = document.getElementById("dial-hint");
+  if (hint) hint.dataset.i18n = window.matchMedia("(pointer: coarse)").matches ? "hero.press.tap" : "hero.press.click";
+
   const fig = t("hero.fig") ?? [];
   const half = Math.ceil(fig.length / 2);
   const item = (i) => `
@@ -50,6 +55,6 @@ export function renderHero() {
     </a>
     <a class="door" href="${cvHref()}" target="_blank" rel="noopener">
       <div><b data-i18n="hero.doors.role.t"></b><span data-i18n="hero.doors.role.d"></span></div>
-      ${DOWN}
+      ${OUT}
     </a>`;
 }

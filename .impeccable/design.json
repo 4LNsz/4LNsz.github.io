@@ -421,7 +421,7 @@
       "scrim-graphite": {
         "role": "neutral",
         "displayName": "Header Scrim, Graphite",
-        "canonical": "rgba(24, 21, 15, 0.92)",
+        "canonical": "#18150f",
         "tonalRamp": [
           "#110e09",
           "#18150f",
@@ -437,7 +437,7 @@
       "scrim-rhodium": {
         "role": "neutral",
         "displayName": "Header Scrim, Rhodium",
-        "canonical": "rgba(230, 233, 239, 0.94)",
+        "canonical": "#e6e9ef",
         "tonalRamp": [
           "#3a4885",
           "#4b5890",

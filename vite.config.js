@@ -96,9 +96,32 @@ function iconVersions() {
   };
 }
 
+/**
+ * Who the page is about, for search engines: a schema.org Person in the
+ * head, read from config.js like the static card, so a search for the
+ * name can be tied to this page and to the profiles that are his. The
+ * title is the CV's, in English, the language these records are read
+ * in. Nothing here is shown on the page.
+ */
+function personData() {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: SITE.name,
+    alternateName: SITE.handle,
+    url: SITE_URL,
+    jobTitle: "Software Engineer", // [CV]
+    sameAs: SITE.channels.filter((c) => !c.featured && c.url.startsWith("https://")).map((c) => c.url),
+  };
+  return {
+    name: "person-data",
+    transformIndexHtml: (html) => html.replace("</head>", `<script type="application/ld+json">${JSON.stringify(data)}</script>\n</head>`),
+  };
+}
+
 export default defineConfig({
   base: BASE,
-  plugins: [siteUrlTokens(), staticCard(), iconVersions()],
+  plugins: [siteUrlTokens(), staticCard(), iconVersions(), personData()],
   server: { port: 4000, open: true },
   build: {
     outDir: "dist",

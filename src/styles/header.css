@@ -19,7 +19,10 @@ header {
   display: flex;
   align-items: center;
   gap: clamp(16px, 3vw, 40px);
-  padding: 0 max(var(--pad), env(safe-area-inset-right)) 0 max(var(--pad), env(safe-area-inset-left));
+  /* On a screen wider than the sheet, the bar's ends line up with the
+     sheet's edges instead of the window's: the wordmark sat 160px left
+     of the name at 1920. */
+  padding: 0 max(var(--pad), env(safe-area-inset-right), calc((100% - var(--wrap-max)) / 2 + var(--pad))) 0 max(var(--pad), env(safe-area-inset-left), calc((100% - var(--wrap-max)) / 2 + var(--pad)));
   height: var(--header-h);
   color: var(--fg);
   border-bottom: 1px solid var(--line);
@@ -153,7 +156,7 @@ header.is-hidden { transform: translateY(-100%); }
   width: 100%;
   min-height: var(--tap);
   display: grid;
-  grid-template-columns: 2.6em minmax(0, 1fr) 16px;
+  grid-template-columns: 20px 2.6em minmax(0, 1fr) 16px;
   align-items: center;
   column-gap: 10px;
   padding: 0 14px;
@@ -167,7 +170,11 @@ header.is-hidden { transform: translateY(-100%); }
 }
 .lang__list b { font: 700 0.875rem/1 var(--f-label); letter-spacing: 0.12em; color: var(--fg); }
 .lang__list button[aria-current="true"] { color: var(--fg); }
-.lang__list svg { width: 16px; height: 16px; fill: none; stroke: var(--signal); stroke-width: 1.8; }
+.lang__check { width: 16px; height: 16px; fill: none; stroke: var(--signal); stroke-width: 1.8; }
+/* A hairline round the flag, so the white of a flag does not dissolve
+   into the light theme's sheet. Its colours are the country's own
+   (core/flags.js), the one exception to the token rule. */
+.lang__flag { display: block; width: 20px; height: 14px; outline: 1px solid var(--line); }
 .lang__list button:focus-visible { outline-offset: -3px; }
 .lang__list button:active { background: var(--surface-2); color: var(--fg); transition-duration: 0s; }
 @media (hover: hover) {

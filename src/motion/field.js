@@ -473,25 +473,46 @@ export function initField() {
     tctx.stroke();
 
     // the step alone, then the whole tick
-    tctx.fillStyle = ink.signal;
-    for (let i = 0; i < hist.length; i++) {
-      const xx = x(i);
-      if (xx >= left) tctx.fillRect(xx - 1, y(hist[i].ps) - 1, 2, 2);
-    }
-    tctx.fillStyle = ink.fg;
-    for (let i = 0; i < hist.length; i++) {
-      const xx = x(i);
-      if (xx >= left) tctx.fillRect(xx - 1.2, y(hist[i].pt) - 1.2, 2.4, 2.4);
-    }
+    //
+    //
+    // A stretch above the top of the scale is drawn as one hollow bar on
+    // the top rule: the record cannot show how far above it went, so it
+    // says by form that it went off the sheet. Dot by dot, a flat run
+    // along the top read as a measurement of exactly 2 ms.
+    const trace = (key, r) => {
+      let from = -1;
+      const bar = (a, b) => tctx.strokeRect(Math.round(x(a)) - 2.5, Math.round(top) - 2.5, Math.round(x(b) - x(a)) + 5, 5);
+      for (let i = 0; i < hist.length; i++) {
+        const xx = x(i);
+        if (xx < left) continue;
+        const v = hist[i][key];
+        if (v > TRACE_MAX_MS) {
+          if (from < 0) from = i;
+          continue;
+        }
+        if (from >= 0) { bar(from, i - 1); from = -1; }
+        tctx.fillRect(xx - r, y(v) - r, r * 2, r * 2);
+      }
+      if (from >= 0) bar(from, hist.length - 1);
+    };
+    tctx.fillStyle = tctx.strokeStyle = ink.signal;
+    trace("ps", 1);
+    tctx.fillStyle = tctx.strokeStyle = ink.fg;
+    trace("pt", 1.2);
 
-    // where load came in
+    // Where load came in. The newest mark has the right of way: walking
+    // back from it, each older label has to end before the next mark's
+    // rule, and gives way first to its count alone, then to the rule
+    // alone. Unchecked, a few presses in a row wrote their labels over
+    // each other at the one place a technical reader looks hardest.
     tctx.textAlign = "left";
     tctx.font = `700 13px "Sofia Sans Condensed", sans-serif`;
-    for (let i = 0; i < hist.length; i++) {
+    let room = right;
+    for (let i = hist.length - 1; i >= 0; i--) {
       const m = hist[i].mark;
       if (!m) continue;
       const xx = Math.round(x(i)) + 0.5;
-      if (xx < left) continue;
+      if (xx < left) break;
       tctx.strokeStyle = ink.signal;
       tctx.setLineDash([3, 4]);
       tctx.beginPath();
@@ -500,8 +521,12 @@ export function initField() {
       tctx.stroke();
       tctx.setLineDash([]);
       tctx.fillStyle = ink.signal;
-      const label = `+ ${t("hero.strip.mark")} · ${nf0.format(m)}`.toUpperCase();
-      if (xx + 8 + tctx.measureText(label).width < right) tctx.fillText(label, xx + 8, top - 6);
+      const full = `+ ${t("hero.strip.mark")} · ${nf0.format(m)}`.toUpperCase();
+      const count = nf0.format(m);
+      const fits = (s) => xx + 8 + tctx.measureText(s).width < room - 6;
+      const label = fits(full) ? full : fits(count) ? count : "";
+      if (label) tctx.fillText(label, xx + 8, top - 6);
+      room = xx;
     }
 
     // the head: where the record is being written

@@ -29,8 +29,8 @@ colors:
   rhodium-500: "#8491bb"
   rhodium-700: "#4b5890"
   rhodium-800: "#3a4885"
-  scrim-graphite: "rgba(24, 21, 15, 0.92)"
-  scrim-rhodium: "rgba(230, 233, 239, 0.94)"
+  scrim-graphite: "#18150f"
+  scrim-rhodium: "#e6e9ef"
 typography:
   display:
     fontFamily: '"Sofia Sans Extra Condensed", "Arial Narrow", sans-serif'
@@ -308,7 +308,7 @@ Interactive targets are 44px or larger; a small glyph gets its hit area extended
 
 The system is flat and uses tonal layering only. There are four levels, all within the active ramp: the sheet, a well one step below it, and two raised steps above it. There is no shadow vocabulary. The one `box-shadow` in the build is a 1px hairline ring drawn around the circular field of the dial, which is a border, not a shadow.
 
-The header floats over the page. At the top it is transparent on a hairline; once the page has scrolled it takes a flat scrim of the theme's own ground at 92% to 94%, and while the page scrolls down it leaves entirely.
+The header floats over the page. At the top it is transparent on a hairline; once the page has scrolled it takes the theme's own ground, opaque, and while the page scrolls down it leaves entirely. At 92% the text passing under it showed through the wordmark.
 
 ### Named Rules
 **The Printed Sheet Rule.** No shadows, no blur, no gradients. The fixed header takes a flat scrim of its own ground when it floats; a frosted bar would be the one piece of glass on a printed page.

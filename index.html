@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Alan Sena — Software Engineer</title>
+<title>Alan Sena — Engenheiro de Software</title>
 <meta name="description" content="Engenheiro de software back-end. Sistemas de alta concorrência e simulação em tempo real.">
 <meta name="author" content="Alan Sena — 4LNsz">
 
@@ -148,7 +148,7 @@
       <!-- "Alan Sena" is a proper noun, not translated prose. -->
       <div class="hero-id">
         <h1 class="hero-name">Alan Sena</h1>
-        <p class="hero-role"><span data-i18n="hero.role"></span><span data-i18n="hero.focus"></span></p>
+        <p class="hero-role"><span data-i18n="hero.role"></span><span data-i18n="hero.spec"></span><span data-i18n="hero.focus"></span></p>
       </div>
       <ol class="callouts callouts--l" id="callouts-a"></ol>
       <p class="hero-statement" data-i18n="hero.statement"></p>
@@ -159,6 +159,10 @@
     <figure class="dial" id="dial">
       <canvas id="field" class="dial__field" role="img" data-i18n-attr="aria-label:hero.figLabel"></canvas>
       <svg class="dial__ring" id="ring" aria-hidden="true"></svg>
+      <!-- The one thing on the page nobody would guess: the field takes
+           load where it is pressed. sections/hero.js picks "click" or
+           "tap" for the device. -->
+      <figcaption class="dial__hint" id="dial-hint"></figcaption>
     </figure>
 
     <!-- The three figures that matter, straight under the dial. Shown on

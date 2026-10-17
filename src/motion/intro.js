@@ -1,4 +1,3 @@
-import gsap from "gsap";
 import { reducedMotion } from "../core/env.js";
 import { buildScroll } from "./choreography.js";
 
@@ -15,27 +14,21 @@ import { buildScroll } from "./choreography.js";
  * .rv uses: set in CSS so the first frame is already correct, and never
  * applied at all if the bundle fails to load.
  *
+ * The settle itself is CSS keyframes too, started by one class (see
+ * "The first screen arriving" in base.css). It was a GSAP timeline,
+ * which runs on the main thread, and the main thread is exactly what is
+ * busy in that second: the bundle booting, the fonts landing, the field
+ * being measured. On a slower machine the entrance stuttered through
+ * all of it. Keyframes of opacity and transform run on the compositor
+ * and keep their pace whatever the page is doing. Same values, same
+ * order, same curve.
+ *
  * buildScroll() runs first, not last: it is what arms every scroll
- * reveal on the page, and a visitor who scrolls during the hero
- * timeline must not out-run it.
+ * reveal on the page, and a visitor who scrolls during the entrance
+ * must not out-run it.
  */
-const BLOCKS = ".hero-id > *, .hero-statement, .callouts, .ficha, .doors, .mini";
-
 export function playIntro() {
   buildScroll();
-
-  if (reducedMotion) {
-    gsap.set(`${BLOCKS}, .dial, .leaders, .strip`, { opacity: 1, y: 0 });
-    return;
-  }
-
-  gsap
-    .timeline({ defaults: { ease: "expo.out" } })
-    .fromTo(".hero-id > *", { opacity: 0, y: 20 }, { opacity: 1, y: 0, stagger: 0.07, duration: 0.9 }, 0)
-    .fromTo(".dial", { opacity: 0, scale: 0.97 }, { opacity: 1, scale: 1, duration: 1.1 }, 0.08)
-    .fromTo(".mini", { opacity: 0 }, { opacity: 1, duration: 0.8 }, 0.2)
-    .fromTo(".hero-statement, .ficha, .doors", { opacity: 0, y: 16 }, { opacity: 1, y: 0, stagger: 0.07, duration: 0.9 }, 0.22)
-    .fromTo(".callouts", { opacity: 0 }, { opacity: 1, stagger: 0.08, duration: 0.7 }, 0.4)
-    .fromTo(".leaders", { opacity: 0 }, { opacity: 1, duration: 0.7 }, 0.55)
-    .fromTo(".strip", { opacity: 0 }, { opacity: 1, duration: 0.8 }, 0.3);
+  // Under reduced motion base.css puts everything at rest (`reduced`).
+  if (!reducedMotion) document.documentElement.classList.add("intro");
 }

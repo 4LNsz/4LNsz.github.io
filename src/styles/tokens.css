@@ -73,6 +73,9 @@
   --tap: 44px;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  /* For something that moves while staying on screen, the burger
+     turning into a cross: it eases in and out, not only out. */
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --t-ui: 0.18s;
 
   /* ── primitives ───────────────────────────────────────── */

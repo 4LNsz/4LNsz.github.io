@@ -83,6 +83,15 @@
         ],
         "createdAt": "2026-10-12T01:32:46.422Z",
         "reason": "Claude: decision comps, not the site. They draw the directions that were NOT chosen (and the withdrawn lettering) in those directions' own colours, faces and shapes, so they cannot match the DESIGN.md of the one that was. Git-ignored; kept as the record of what Alan chose from."
+      },
+      {
+        "rule": "design-system-color",
+        "value": "rgb(0, 0, 0)",
+        "files": [
+          "404.html"
+        ],
+        "createdAt": "2026-10-17T05:01:02.757Z",
+        "reason": "Claude: static-scan artefact, same as index.html. The page's stylesheet is a manifest of @import lines the static scan does not follow, so it sees the browser default on the link text. Rendered, the text is var(--bg) on the ink-filled button."
       }
     ]
   }

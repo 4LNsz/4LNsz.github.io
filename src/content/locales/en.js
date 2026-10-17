@@ -309,6 +309,13 @@ export default {
     ],
   },
 
+  // The 404 page (404.html): the address asked for does not exist here.
+  notFound: {
+    title: "Page not found",
+    body: "This address does not exist here. The portfolio is on the home page.",
+    home: "Go to the portfolio",
+  },
+
   contact: {
     big: "LET'S TALK",
     primary: "Primary channel",

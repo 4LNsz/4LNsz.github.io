@@ -213,19 +213,41 @@ export function initField() {
    * presses the field, dropped around the point they pressed.
    */
   function spawn(n, near) {
+    // A press drops its sessions around the point pressed, but never
+    // packs a patch of the field past twice the density the whole field
+    // has at its ceiling: past that, the overflow lands anywhere in it.
+    // The ceiling caps the count, and on its own that was not enough.
+    // Pressing one spot over and over piled the whole ceiling there,
+    // where every session had dozens of neighbours to link to, and the
+    // same 1,412 sessions cost two and a half times what the button's
+    // 1,412 did: a tick of 4.2 ms against 1.7, and past the whole frame
+    // on a slower machine. Alan found it by clicking the circle.
+    let at = null, packed = null, cap = Infinity;
+    if (near) {
+      const cell = linkDist, cols = Math.max(1, Math.ceil((R * 2) / cell));
+      const clamp = (v) => Math.min(cols - 1, Math.max(0, (v / cell) | 0));
+      at = (x, y) => clamp(y) * cols + clamp(x);
+      packed = new Uint16Array(cols * cols);
+      for (const a of agents) packed[at(a.x, a.y)]++;
+      cap = Math.max(4, Math.ceil((2 * ceiling * cell * cell) / (Math.PI * R * R)));
+    }
+    const anywhere = () => {
+      const a = rand() * TAU, d = Math.sqrt(rand()) * (R - 2);
+      return [R + Math.cos(a) * d, R + Math.sin(a) * d];
+    };
+
     for (let i = 0; i < n && agents.length < ceiling; i++) {
-      const a = rand() * TAU;
       let x, y;
       if (near) {
-        const d = Math.sqrt(rand()) * R * 0.3;
+        const a = rand() * TAU, d = Math.sqrt(rand()) * R * 0.3;
         x = near.x + Math.cos(a) * d;
         y = near.y + Math.sin(a) * d;
         const dx = x - R, dy = y - R, m = Math.hypot(dx, dy), lim = R - 2;
         if (m > lim) { x = R + (dx / m) * lim; y = R + (dy / m) * lim; }
+        if (packed[at(x, y)] >= cap) [x, y] = anywhere();
+        packed[at(x, y)]++;
       } else {
-        const d = Math.sqrt(rand()) * (R - 2);
-        x = R + Math.cos(a) * d;
-        y = R + Math.sin(a) * d;
+        [x, y] = anywhere();
       }
       agents.push({ x, y, vx: (rand() - 0.5) * 0.32, vy: (rand() - 0.5) * 0.32 });
     }
@@ -338,9 +360,13 @@ export function initField() {
     const h = { tick: t2 - t0, step: t1 - t0, n: frameNo++, mark };
     hist.push(h);
     if (hist.length > histMax) hist.splice(0, hist.length - histMax);
-    const tail = hist.slice(-TRACE_SMOOTH);
-    h.pt = tail.reduce((s, x) => s + x.tick, 0) / tail.length;
-    h.ps = tail.reduce((s, x) => s + x.step, 0) / tail.length;
+    // The running mean the record plots, summed in place: a slice and
+    // two reduces every frame were garbage for nothing.
+    let st = 0, ss = 0;
+    const k = Math.min(TRACE_SMOOTH, hist.length);
+    for (let i = hist.length - k; i < hist.length; i++) { st += hist[i].tick; ss += hist[i].step; }
+    h.pt = st / k;
+    h.ps = ss / k;
   }
 
   function frame(now) {
@@ -429,6 +455,7 @@ export function initField() {
   }
 
   /* ── the record ─────────────────────────────────────────── */
+  let traceNames = { code: "", list: [] };
   function drawTrace() {
     const top = 20, bot = th - 8, left = 46;
     const y = (ms) => bot - Math.sqrt(Math.min(ms, TRACE_MAX_MS) / TRACE_MAX_MS) * (bot - top);
@@ -440,7 +467,10 @@ export function initField() {
     // The two traces are named in a gutter to the right of the plot, at
     // the height each one ends. Inside the plot the names sat on the
     // very dots they were naming.
-    const names = [t("hero.strip.total").toUpperCase(), t("hero.strip.step").toUpperCase()];
+    // The two names change only with the language; made once per
+    // language rather than as two new strings every frame.
+    if (traceNames.code !== meta().code) traceNames = { code: meta().code, list: [t("hero.strip.total").toUpperCase(), t("hero.strip.step").toUpperCase()] };
+    const names = traceNames.list;
     tctx.font = `700 13px "Sofia Sans Condensed", sans-serif`;
     const gutter = Math.ceil(Math.max(...names.map((s) => tctx.measureText(s).width))) + 20;
     const right = tw - gutter;
@@ -671,18 +701,26 @@ export function initField() {
     const gap = (a, b) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2;
     if (!pinL || gap(pinL[0], pinL[1]) > max || dL(pinL[0]) > reach) {
       pinL = null;
-      let best = Infinity;
+      // The few sessions nearest the pin, in order, then the first of
+      // them with a neighbour in range. Searching the whole field for a
+      // neighbour of every session that came closer was, at worst, all
+      // against all: 2.5 million comparisons at the ceiling.
+      const near = [];
       for (const a of agents) {
         const d = dL(a);
-        if (d >= best) continue;
-        // its nearest neighbour, if one is in range
+        if (near.length < 8) near.push([d, a]);
+        else if (d < near[7][0]) near[7] = [d, a];
+        else continue;
+        near.sort((p, q) => p[0] - q[0]);
+      }
+      for (const [, a] of near) {
         let nb = null, nd = max;
         for (const b of agents) {
           if (b === a) continue;
           const q = gap(a, b);
           if (q <= nd) { nd = q; nb = b; }
         }
-        if (nb) { best = d; pinL = [a, nb]; }
+        if (nb) { pinL = [a, nb]; break; }
       }
     }
   }

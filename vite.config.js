@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import { SITE } from "./src/config.js";
 import { channelCell } from "./src/sections/contact.js";
@@ -115,7 +116,9 @@ function personData() {
   };
   return {
     name: "person-data",
-    transformIndexHtml: (html) => html.replace("</head>", `<script type="application/ld+json">${JSON.stringify(data)}</script>\n</head>`),
+    // The home page only: the 404 page is not about anyone.
+    transformIndexHtml: (html, ctx) =>
+      ctx.path.endsWith("index.html") || ctx.path === "/" ? html.replace("</head>", `<script type="application/ld+json">${JSON.stringify(data)}</script>\n</head>`) : html,
   };
 }
 
@@ -127,5 +130,13 @@ export default defineConfig({
     outDir: "dist",
     assetsDir: "assets",
     target: "es2020",
+    // Two pages: the portfolio, and the 404 GitHub Pages serves for an
+    // address that does not exist. They share the stylesheet.
+    rollupOptions: {
+      input: {
+        main: fileURLToPath(new URL("./index.html", import.meta.url)),
+        notFound: fileURLToPath(new URL("./404.html", import.meta.url)),
+      },
+    },
   },
 });

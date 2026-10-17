@@ -49,6 +49,8 @@ Two build-time environment variables, both set by the Pages workflow from
 ```
 index.html              static shell — semantic markup and the mark's two
                         drawings inline, no text content
+404.html                the page GitHub Pages serves for a missing address;
+                        its words come from the locales via src/notfound.js
 vite.config.js          base path, SITE_URL tokens, and the static card it
                         writes into index.html from config.js
 public/                 favicon.svg, og.png, apple-touch-icon.png, CVs
@@ -471,6 +473,12 @@ engineer's site argues against him:
 - The field takes load on `click`, not `pointerdown`. On a phone the
   dial is as wide as the screen, and every scroll that began on it used
   to add load on the way past.
+- A press never packs a patch of the field past twice the density the
+  whole field has at its ceiling; the overflow lands anywhere. The
+  ceiling caps the count, and cost follows density, not count: pressing
+  one spot over and over used to pile the whole ceiling there and cost
+  two and a half times what the same count cost from the button, past
+  the whole frame on a slower machine.
 
 The leader lines point at real things. Callout 1 ends on a session,
 callout 2 on a link between two of them, callout 3 on the live end of
@@ -526,6 +534,27 @@ together:
 - A rule that sets `grid-column` on a class used in two sections gives
   one of them an implicit column. `.src` did exactly that to the
   Trajetória rows on phones; it is scoped to `.part` now.
+- The first screen's entrance is CSS keyframes (`html.intro` in
+  base.css), not a GSAP timeline. A script timeline runs on the main
+  thread, which is the busiest thing on the page in that second; opacity
+  and transform keyframes run on the compositor and keep their pace.
+  Measured by main-thread frames the two look the same, because that
+  measure cannot see the compositor; the difference is that the CSS one
+  does not stall when the main thread does. The scroll reveals below
+  are still GSAP.
+- In the simulation, a grid of reused typed arrays was tried for the
+  neighbour search and measured in the browser against the array of
+  arrays it would have replaced: no faster, slightly slower if anything.
+  The search is a fraction of a millisecond; the drawing is the cost.
+  Do not try it again without measuring. What did go in: the record's
+  running mean is summed in place instead of sliced every frame, the
+  record's two names are made once per language, and the leader that
+  follows a link looks for its pair among the eight sessions nearest
+  its pin instead of the whole field.
+- There is a 404 page (404.html, built as Vite's second input). It
+  reuses the stylesheet and the locales, carries no Person data, is
+  `noindex`, and resolves its links to the base path in script so they
+  hold on a project page too.
 - The career diagram is laid out for the width it is given rather than
   scaled into it, so its lettering stays the size it was set at.
   `drawGraph()` runs again on a width change and when the fonts land:

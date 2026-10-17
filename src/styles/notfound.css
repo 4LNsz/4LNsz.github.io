@@ -1,0 +1,31 @@
+/* ══ 404 ════════════════════════════════════════════════════
+   The page for an address that does not exist here. The code in brass,
+   the way the sheet sets its numerals; the name of the problem, one
+   sentence, and the way home, filled with ink as the first of a pair is
+   everywhere else. Nothing else from the sheet: it is a note, not the
+   page. */
+
+.nf {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: calc(var(--header-h) + 24px);
+  padding-bottom: var(--section-y);
+}
+.nf-code {
+  font: 800 clamp(6rem, 18vw, 11rem)/0.82 var(--f-display);
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--signal);
+}
+.nf-title {
+  margin-top: 20px;
+  font: 800 clamp(2.25rem, 5vw, 3.5rem)/0.92 var(--f-display);
+  letter-spacing: 0.012em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.nf-body { margin-top: 14px; max-width: 34em; line-height: 1.5; color: var(--fg-muted); text-wrap: pretty; }
+.nf-home { margin-top: 28px; }

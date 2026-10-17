@@ -26,10 +26,13 @@ header {
   height: var(--header-h);
   color: var(--fg);
   border-bottom: 1px solid var(--line);
-  transition: transform 0.35s var(--ease-out), background-color 0.3s ease;
+  /* It comes back in 0.2s and leaves in 0.24s. It does both tens of
+     times a visit, every time the scroll changes direction; at 0.35s it
+     was a beat late each time. */
+  transition: transform 0.2s var(--ease-out), background-color 0.3s ease;
 }
 header.is-stuck { background: var(--scrim); }
-header.is-hidden { transform: translateY(-100%); }
+header.is-hidden { transform: translateY(-100%); transition-duration: 0.24s, 0.3s; }
 
 /* ── the wordmark ────────────────────────────────────────
    The A-quatro stands in for the 4 of the handle. It is aligned to the
@@ -188,7 +191,7 @@ header.is-hidden { transform: translateY(-100%); }
   width: 22px;
   height: 2px;
   background: currentColor;
-  transition: transform 0.3s var(--ease-out), opacity 0.2s ease;
+  transition: transform 0.24s var(--ease-in-out), opacity 0.12s ease;
 }
 .nav-toggle i + i { margin-top: 5px; }
 .nav-toggle[aria-expanded="true"] i:nth-child(1) { transform: translateY(7px) rotate(45deg); }
@@ -216,13 +219,14 @@ header.is-hidden { transform: translateY(-100%); }
      nav.js can move focus into the panel in the same tick: an element
      with visibility:hidden refuses .focus(), and interpolating
      visibility across the fade makes whether it lands a race.
-     Closing delays the flip until the fade has finished. */
-  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+     Closing delays the flip until the fade has finished, and closing is
+     quicker than opening: once a link is chosen the panel is in the way. */
+  transition: opacity 0.16s var(--ease-out), visibility 0s linear 0.16s;
 }
 .nav-drawer.open {
   visibility: visible;
   opacity: 1;
-  transition: opacity 0.3s ease, visibility 0s linear 0s;
+  transition: opacity 0.24s var(--ease-out), visibility 0s linear 0s;
 }
 .nav-drawer a {
   padding: clamp(12px, 2.4vh, 20px) 0;

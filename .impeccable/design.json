@@ -511,8 +511,8 @@
       },
       {
         "name": "header-hide",
-        "value": "transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "The header leaves while the page scrolls down and returns on scroll up."
+        "value": "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1); leaving 0.24s",
+        "purpose": "The header leaves while the page scrolls down and returns on scroll up; it does both tens of times a visit, so both are short."
       },
       {
         "name": "row-reveal",

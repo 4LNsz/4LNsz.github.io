@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- The page GitHub Pages serves for any address that does not exist
+     here, in place of its own. Its words come from the locale files
+     through src/notfound.js, like the home page's; without a script it
+     still carries the 404, the mark and a way back. -->
+<title>404 — Alan Sena</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#18150f" id="meta-theme">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/src/styles/main.css">
+<link rel="stylesheet" href="/src/styles/notfound.css">
+<!-- The saved theme before the first paint, as on the home page. -->
+<script>
+(function (root) {
+  try {
+    var saved = localStorage.getItem("4lnsz:theme");
+    if (saved === "light" || saved === "dark") root.setAttribute("data-theme", saved);
+  } catch (e) {}
+})(document.documentElement);
+</script>
+</head>
+
+<body>
+
+<header>
+  <a href="/" class="brand" aria-label="4LNsz">
+    <svg viewBox="0 0 92 100" width="25" height="27" fill="currentColor" aria-hidden="true"><polygon points="72,0 0,100 16,100 58,41.7 58,100 72,100"/><polygon points="27.4,62 92,62 92,75 18,75"/></svg><span aria-hidden="true">LN<small>sz</small></span>
+  </a>
+</header>
+
+<main class="wrap nf" id="main">
+  <p class="nf-code" aria-hidden="true">404</p>
+  <h1 class="nf-title" data-i18n="notFound.title"></h1>
+  <p class="nf-body" data-i18n="notFound.body"></p>
+  <a class="cv-act cv-act--pri nf-home" href="/"><span data-i18n="notFound.home">4lnsz.github.io</span></a>
+</main>
+
+<script type="module" src="/src/notfound.js"></script>
+</body>
+</html>

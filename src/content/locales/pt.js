@@ -307,6 +307,13 @@ export default {
     ],
   },
 
+  // A página 404 (404.html): o endereço pedido não existe aqui.
+  notFound: {
+    title: "Página não encontrada",
+    body: "Este endereço não existe aqui. O portfólio está na página inicial.",
+    home: "Ir para o portfólio",
+  },
+
   contact: {
     big: "VAMOS CONVERSAR",
     primary: "Canal principal",

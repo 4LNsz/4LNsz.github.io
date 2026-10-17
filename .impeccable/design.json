@@ -497,7 +497,7 @@
       {
         "name": "ease-out",
         "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "The header leaving and returning, the burger, the skip link."
+        "purpose": "The header leaving and returning, and the burger."
       },
       {
         "name": "t-ui",
@@ -505,9 +505,9 @@
         "purpose": "Every state change: background, border and colour only."
       },
       {
-        "name": "theme-crossfade",
-        "value": "0.45s ease",
-        "purpose": "Ground, ink and border cross-fade on themed surfaces when the theme changes."
+        "name": "theme-swap",
+        "value": "0s",
+        "purpose": "The theme changes in one frame with every transition held off; any fade of the themed surfaces restyled and repainted the whole page on every frame."
       },
       {
         "name": "header-hide",

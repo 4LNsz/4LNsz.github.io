@@ -19,7 +19,7 @@ header {
   display: flex;
   align-items: center;
   gap: clamp(16px, 3vw, 40px);
-  padding: 0 var(--pad);
+  padding: 0 max(var(--pad), env(safe-area-inset-right)) 0 max(var(--pad), env(safe-area-inset-left));
   height: var(--header-h);
   color: var(--fg);
   border-bottom: 1px solid var(--line);
@@ -56,8 +56,11 @@ header.is-hidden { transform: translateY(-100%); }
   border-bottom: 2px solid transparent;
   transition: color var(--t-ui), border-color var(--t-ui);
 }
-.nav a:hover,
-.nav a:focus-visible { color: var(--fg); }
+.nav a:focus-visible,
+.nav a:active { color: var(--fg); }
+@media (hover: hover) {
+  .nav a:hover { color: var(--fg); }
+}
 .nav a[aria-current="true"] { color: var(--fg); border-bottom-color: var(--signal); }
 
 .hud { display: flex; align-items: center; gap: 6px; padding-left: clamp(12px, 2vw, 30px); border-left: 1px solid var(--line); }
@@ -76,8 +79,12 @@ header.is-hidden { transform: translateY(-100%); }
   place-items: center;
   transition: color var(--t-ui);
 }
-.icon-btn:hover,
-.icon-btn:focus-visible { color: var(--signal); }
+.icon-btn:focus-visible,
+.icon-btn:active { color: var(--signal); }
+.icon-btn:active { transition-duration: 0s; }
+@media (hover: hover) {
+  .icon-btn:hover { color: var(--signal); }
+}
 .icon-btn::after {
   content: "";
   position: absolute;
@@ -89,21 +96,28 @@ header.is-hidden { transform: translateY(-100%); }
 }
 .icon-btn svg { width: 20px; height: 20px; }
 
-/* ── language switch ─────────────────────────────────────── */
-.lang { display: flex; align-items: center; font: 600 0.9375rem/1 var(--f-label); letter-spacing: 0.12em; }
-.lang button {
+/* ── language switch ─────────────────────────────────────
+   The code of the language in use, and under it, on demand, the list of
+   every language the page has: code and own name, the one in use ticked.
+   The list is a raised surface, the sheet's own step up, not a menu
+   with a shadow. */
+.lang { position: relative; }
+.lang__btn {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   background: none;
   border: none;
-  color: var(--fg-subtle);
-  font: inherit;
-  letter-spacing: inherit;
   cursor: pointer;
   padding: 12px 6px;
+  color: var(--fg);
+  font: 700 0.9375rem/1 var(--f-label);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   transition: color var(--t-ui);
 }
-.lang button::after {
+.lang__btn::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -113,11 +127,52 @@ header.is-hidden { transform: translateY(-100%); }
   height: var(--tap);
   transform: translate(-50%, -50%);
 }
-.lang button[aria-current="true"] { color: var(--fg); font-weight: 700; }
-.lang button:hover,
-.lang button:focus-visible { color: var(--fg); }
-/* The slash between the codes is typography, not a control. */
-.lang span { color: var(--fg-subtle); }
+.lang__btn svg { width: 10px; height: 10px; fill: none; stroke: currentColor; stroke-width: 1.8; color: var(--fg-muted); }
+.lang__btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+.lang__btn:focus-visible,
+.lang__btn:active { color: var(--signal); }
+.lang__btn:active { transition-duration: 0s; }
+@media (hover: hover) {
+  .lang__btn:hover { color: var(--signal); }
+}
+
+.lang__list {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: -6px;
+  z-index: 900;
+  min-width: 13rem;
+  list-style: none;
+  padding: 4px 0;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-top: 1.5px solid var(--signal);
+}
+.lang__list[hidden] { display: none; }
+.lang__list button {
+  width: 100%;
+  min-height: var(--tap);
+  display: grid;
+  grid-template-columns: 2.6em minmax(0, 1fr) 16px;
+  align-items: center;
+  column-gap: 10px;
+  padding: 0 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--fg-muted);
+  font: 400 1rem/1.2 var(--f-text);
+  transition: background-color var(--t-ui), color var(--t-ui);
+}
+.lang__list b { font: 700 0.875rem/1 var(--f-label); letter-spacing: 0.12em; color: var(--fg); }
+.lang__list button[aria-current="true"] { color: var(--fg); }
+.lang__list svg { width: 16px; height: 16px; fill: none; stroke: var(--signal); stroke-width: 1.8; }
+.lang__list button:focus-visible { outline-offset: -3px; }
+.lang__list button:active { background: var(--surface-2); color: var(--fg); transition-duration: 0s; }
+@media (hover: hover) {
+  .lang__list button:hover { background: var(--surface-2); color: var(--fg); }
+}
 
 /* ── burger ──────────────────────────────────────────────── */
 .nav-toggle { display: none; }
@@ -140,10 +195,14 @@ header.is-hidden { transform: translateY(-100%); }
   z-index: 790;
   display: none;
   flex-direction: column;
-  justify-content: center;
-  padding: calc(var(--header-h) + 28px) var(--pad) var(--pad);
+  /* `safe`: when the links are taller than the panel (a phone on its
+     side), plain centring pushed the first of them up under the header,
+     out of reach of the scroll. */
+  justify-content: safe center;
+  padding: calc(var(--header-h) + 28px) max(var(--pad), env(safe-area-inset-right)) max(var(--pad), env(safe-area-inset-bottom)) max(var(--pad), env(safe-area-inset-left));
   background: var(--bg);
   overflow-y: auto;
+  overscroll-behavior: contain;
   visibility: hidden;
   opacity: 0;
   /* Asymmetric on purpose. Opening flips visibility instantly (0s) so
@@ -168,9 +227,12 @@ header.is-hidden { transform: translateY(-100%); }
   transition: color var(--t-ui);
 }
 .nav-drawer a:first-child { border-top: 1.5px solid var(--signal); }
-.nav-drawer a:hover,
 .nav-drawer a:focus-visible,
+.nav-drawer a:active,
 .nav-drawer a[aria-current="true"] { color: var(--signal); }
+@media (hover: hover) {
+  .nav-drawer a:hover { color: var(--signal); }
+}
 
 @media (max-width: 900px) {
   .nav { display: none; }

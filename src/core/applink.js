@@ -51,7 +51,13 @@ export function mountAppLinks() {
     if (!a?.dataset.app || !a.href) return;
 
     e.preventDefault();
-    handoff(a.dataset.app, a.href);
+    handoff(a.dataset.app, a.href, a);
+  });
+
+  // A page restored from the back/forward cache comes back exactly as
+  // it was left, which can be mid-handoff, still saying it is opening.
+  window.addEventListener("pageshow", () => {
+    for (const el of document.querySelectorAll(".is-opening")) el.classList.remove("is-opening");
   });
 }
 
@@ -86,9 +92,14 @@ export function mountAppLinks() {
  * they were already heading for, one Back press from the portfolio,
  * whereas the other mistake breaks the contact channel outright.
  */
-function handoff(app, web) {
+function handoff(app, web, el) {
   let aborted = false;
   const abort = () => (aborted = true);
+
+  // For the length of the wait the link says what is happening. It used
+  // to give no sign at all for the 1.5s before either outcome. The text
+  // is in the link's own markup (`app-wait`); this only shows it.
+  el?.classList.add("is-opening");
 
   // pagehide, and nothing else: the document is genuinely going away,
   // so a queued navigation would be pointless at best. Deliberately NOT
@@ -101,6 +112,7 @@ function handoff(app, web) {
 
   setTimeout(() => {
     window.removeEventListener("pagehide", abort);
+    el?.classList.remove("is-opening");
     if (aborted) return;
 
     // Something else holds the focus, or the tab is not on screen. The

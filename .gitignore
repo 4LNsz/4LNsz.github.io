@@ -7,10 +7,11 @@ dist/
 # Claude Code scaffolding, not part of the project
 .claude/
 
-# Impeccable working files: decision comps, review captures, question
+# Impeccable working files: decision comps, review captures, critique snapshots, question
 # state and the hook's cache. The brief (surfaces/), config.json and
 # design.json are part of the project and stay tracked.
 .impeccable/mocks/
 .impeccable/review/
 .impeccable/questions/
+.impeccable/critique/
 .impeccable/hook.cache.json

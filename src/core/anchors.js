@@ -25,6 +25,17 @@ export function initAnchors() {
     if (!target) return;
 
     e.preventDefault();
+
+    // The header hides while the page moves down, and a jump down the
+    // page is exactly that: it used to leave on the way and land the
+    // section under an empty band where the header had been. `jumping`
+    // holds it in place until the scroll has finished (see nav.js).
+    const root = document.documentElement;
+    root.classList.add("jumping");
+    const landed = () => root.classList.remove("jumping");
+    window.addEventListener("scrollend", landed, { once: true });
+    setTimeout(landed, 1200);
+
     // A click is a discrete request, not a continuous gesture: gliding
     // to the section is the browser's own behaviour and costs nothing in
     // wheel latency. Reduced motion still gets the jump.

@@ -1,4 +1,5 @@
 import { t } from "../core/i18n.js";
+import { SITE } from "../config.js";
 
 /**
  * Perfil — who Alan is, driven entirely by the locale data.
@@ -15,9 +16,16 @@ export function renderProfile() {
   const about = t("profile.about") ?? [];
   const blocks = t("profile.blocks") ?? [];
 
-  document.getElementById("profile-about").innerHTML = about
-    .map((_, i) => `<p data-i18n="profile.about.${i}"></p>`)
-    .join("");
+  const paras = about.map((_, i) => `<p data-i18n="profile.about.${i}"></p>`).join("");
+
+  // The portrait, once Alan supplies one (`photo` in config.js). With no
+  // photograph the column is the text alone, exactly as before; nothing
+  // stands in for the picture. The name is the alt text because it is a
+  // proper noun, the same in every language.
+  const p = SITE.photo;
+  document.getElementById("profile-about").innerHTML = p
+    ? `<figure class="pf-photo"><img src="${import.meta.env.BASE_URL}${p.file}" width="${p.width}" height="${p.height}" alt="Alan Sena" loading="lazy" decoding="async"></figure><div class="pf-text">${paras}</div>`
+    : paras;
 
   // A block carries EITHER `items` or `chips`, and the difference is
   // about length, not about kind. `items` is a line, for a fact that

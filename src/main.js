@@ -53,8 +53,8 @@ function render() {
   applyI18n();
 
   if (booted) {
-    // Already-revealed elements must not snap back to their pre-animation state.
-    gsap.set(".rv", { opacity: 1, y: 0 });
+    // Rows already revealed stay revealed: buildScroll() shows whatever
+    // the visitor has passed and arms the rest, so nothing is set here.
     field?.repaint();
     field?.layout();
     ScrollTrigger.refresh();
@@ -80,6 +80,10 @@ initAnchors();
 // switch performs on the doors and the channel cells.
 mountAppLinks();
 startClock();
+
+// iOS Safari only applies :active to a tap when some touch listener
+// exists. This one does nothing else; the press states are in the CSS.
+document.addEventListener("touchstart", () => {}, { passive: true });
 
 /**
  * The hero simulation builds its own readout, which carries data-i18n

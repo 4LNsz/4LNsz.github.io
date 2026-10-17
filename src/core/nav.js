@@ -38,6 +38,9 @@ export function mountNav() {
     drawerOpen = next;
 
     drawer.classList.toggle("open", drawerOpen);
+    // The page behind the overlay leaves the tab order while it is
+    // covered: Tab used to walk through 25 links nobody could see.
+    for (const el of document.querySelectorAll("main, footer")) el.inert = drawerOpen;
     // The lock is `html.nav-open { overflow: hidden }` in header.css and
     // nothing else. It used to need a lenis.stop() beside it, because
     // the library kept its own scroll loop running behind the overlay.
@@ -105,7 +108,9 @@ export function mountHeaderChrome() {
 
     // The drawer is a full-page overlay whose only close affordance is
     // the toggle inside this bar. Hiding it would strand the visitor.
-    if (drawerOpen) {
+    // An anchor jump (`jumping`, set by anchors.js) keeps it too: the
+    // section lands at the header's height and expects it to be there.
+    if (drawerOpen || document.documentElement.classList.contains("jumping")) {
       header.classList.remove("is-hidden");
     } else if (Math.abs(moved) > DELTA) {
       header.classList.toggle("is-hidden", moved > 0 && y > HIDE_AFTER);
@@ -131,8 +136,8 @@ export function mountHeaderChrome() {
 /**
  * Marks the section currently in view on both menus. Uses an
  * IntersectionObserver rather than a ScrollTrigger so it survives the
- * gsap.context().revert() that buildScroll() performs on every language
- * switch and breakpoint change.
+ * gsap.context().kill() that buildScroll() performs on every language
+ * switch.
  */
 function trackActiveSection() {
   const links = [...document.querySelectorAll('header .nav a[href^="#"], #nav-drawer a[href^="#"]')];

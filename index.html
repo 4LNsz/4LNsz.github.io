@@ -55,9 +55,17 @@
      hidden: before the page has been rendered that leaves the static
      card (see vite.config.js); after it, the whole page, at rest.
      src/main.js calls window.__boot() as its last line to say it made
-     it. A bundle that turns up late simply starts as usual. -->
+     it. A bundle that turns up late simply starts as usual.
+
+     It also sets a saved theme. core/theme.js does that as well, but
+     only once the bundle has run, and a visitor who had chosen light was
+     shown the dark page first, fading across on every load. -->
 <script>
 (function (root) {
+  try {
+    var saved = localStorage.getItem("4lnsz:theme");
+    if (saved === "light" || saved === "dark") root.setAttribute("data-theme", saved);
+  } catch (e) {}
   var alive = false;
   function giveUp() {
     if (alive) return;
@@ -106,7 +114,7 @@
   </nav>
 
   <div class="hud">
-    <div class="lang" id="lang" role="group" aria-label="Language"></div>
+    <div class="lang" id="lang"></div>
     <button class="icon-btn" id="theme" type="button">
       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
         <circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.7"/>

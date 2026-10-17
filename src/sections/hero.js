@@ -37,10 +37,15 @@ export function renderHero() {
 
   const ch = SITE.channels.find((c) => c.featured) ?? SITE.channels[0];
   const appAttr = ch.app ? ` data-app="${ch.app}"` : "";
+  // The handle follows Alan's sentence on the same line, so a visitor
+  // can add him from their own app. While the app is being asked to
+  // open, the line says so instead (see core/applink.js).
+  const handle = ch.value ? `<span class="door__h">${ch.value}</span>` : "";
+  const wait = ch.app ? `<span class="app-wait" data-i18n="ui.opening" data-i18n-args='${JSON.stringify({ app: ch.label })}'></span>` : "";
 
   document.getElementById("doors").innerHTML = `
     <a class="door door--pri" href="${ch.url}" target="_blank" rel="noopener noreferrer"${appAttr}>
-      <div><b data-i18n="hero.doors.project.t"></b><span data-i18n="hero.doors.project.d"></span></div>
+      <div><b data-i18n="hero.doors.project.t"></b><span class="app-note"><span data-i18n="hero.doors.project.d"></span>${handle}</span>${wait}</div>
       ${OUT}
     </a>
     <a class="door" href="${cvHref()}" target="_blank" rel="noopener">

@@ -38,13 +38,14 @@ export const SITE = {
     {
       label: "Discord",
       /**
-       * No `value` on purpose. The card previously showed "4LNsz" as the
-       * Discord handle, which was inferred from the site's brand name —
-       * the actual username appears in neither the CV nor the GitHub
-       * profile, and the ID is not something a reader can use. The card
-       * links straight to the profile instead of claiming a handle.
-       * Add `value: "<username>"` here to show one.
+       * [AL, 2026-10-16] Alan's own username. It stayed off the page
+       * until he gave it: an earlier version printed "4LNsz", inferred
+       * from the brand name, and nothing showed it was his. It is what a
+       * visitor types into their own app to add him, which matters when
+       * the handoff below cannot open the app for them. The ID is never
+       * printed; it rides in the link.
        */
+      value: "@4lnsz",
       url: `https://discord.com/users/${DISCORD_ID}`,
       /**
        * Optional. A custom scheme the desktop client registers with the
@@ -83,6 +84,14 @@ export const SITE = {
    * `code` matches a locale __meta.code so the renderer can mark the one
    * matching the active language.
    */
+  /**
+   * The portrait in Perfil. None yet: Alan is to supply a photograph.
+   * Put the file in public/ and set { file, width, height } here, with
+   * the file's real pixel size, so the page reserves its box before it
+   * loads. sections/profile.js draws nothing while this is null.
+   */
+  photo: null,
+
   cv: [
     { code: "PT", label: "Português", file: "cv-alan-sena-pt-br.pdf" },
     { code: "EN", label: "English", file: "cv-alan-sena-en.pdf" },

@@ -212,6 +212,17 @@ audiences only. The two doors on the first screen already say how to
 reach him. Do not bring back a status pill, an "open to work" line or
 anything of that family.
 
+**No process or pricing section.** A "Como trabalho" section (the steps
+of a project, then the ways to hire: fixed project, monthly, one-off)
+was built on 2026-10-16 from two of Alan's references and removed the
+same day. Both references were companies, a studio and an AI firm, and
+on a person's page that section is an agency's menu: claims any studio
+writes the same way, aimed at one of the two audiences only. It is also
+the same call Alan made about "Disponível para mudança": a subject for
+the conversation, not for the showcase. What a person's page can add
+instead is work that can be looked at, such as a documented public
+repository.
+
 **A field with no data stays empty.** The sheet has tables, and tables
 tempt a row to be filled. A path row with no `note` renders an empty
 cell. Nothing is written to balance it.
@@ -354,6 +365,21 @@ it today, and the page presents a developer in general.
 set `__meta.order`. The registry globs the folder and the switcher builds
 itself from `Object.keys(CONTENT)`. No other file changes.
 
+The switcher is one button with the code in use, opening a list of
+every language by code and own name (`mountLangSwitch()` in
+`core/i18n.js`). It was a row of codes, "PT / EN", which would not hold
+five in the header. A sentence that carries a value is one string with
+the value's place marked, `"Abrindo o {app}…"`, filled through `t(key,
+vars)` or a `data-i18n-args` attribute: never two fragments glued round
+the value, because word order and articles change between languages.
+
+Every locale file is in the main bundle, about 5 KB gzipped each, so
+each language costs every visitor that much. Past four or five it is
+worth loading the others on demand; the price is that a visitor whose
+language is not the default waits for one more request before the
+first render, so the detected locale would need preloading from the
+inline script in the head.
+
 **Add a stack row or a practice row.** Add the object to *every* locale
 file. The Stack drawing grows a plate per row, as wide as the row has
 `items`. A stack row carries `src: ["cv", "gh"]`, the same source the
@@ -373,12 +399,24 @@ twenty items once and had to be cut back. If a fact already appears in
 another section, it does not repeat here: "building since 2018" used to,
 and it lives on the dashed run of the career diagram now.
 
+**Add the portrait.** Put the photograph in `public/` and set
+`SITE.photo = { file, width, height }` in `config.js`, with the file's
+real pixel size. Perfil then sets it beside the text (above it on a
+phone), 4:5, in one tone. It has to be a photograph of Alan, not an
+image generated from one: on a page whose argument is that nothing on
+it is invented, a generated face would be the one thing that is.
+
 **Add a contact channel.** One object in `SITE.channels` in `config.js`.
 The table wraps and the last row stretches, so the count absorbs it with
 no CSS change. Set `mono: true` for long, machine-ish values (an
 address), and `external: false` for anything that must not open a tab
 (`mailto:`). The static card picks it up as well; both are built by
-`channelCell()` in `sections/contact.js`.
+`channelCell()` in `sections/contact.js`. The featured channel's
+`value` is set beside its name, and in the first screen's project door
+after Alan's sentence: Discord's is `@4lnsz`, which he gave on
+2026-10-16. While the desktop app is being asked to open, both say so
+in place of their line of prose ("Abrindo o Discord…", the `app-wait`
+spans, shown by `is-opening` from `core/applink.js`).
 
 **Change an accent.** `--brass` / `--brass-deep` and `--ruby` /
 `--ruby-deep` in the primitives block of `tokens.css`. The two tunings
@@ -406,9 +444,14 @@ engineer's site argues against him:
 
 - Neighbour search runs on a spatial grid, never all-pairs.
 - Link radius derives from the resting density, not a fixed px value.
-- The loop stops when the dial leaves the viewport or the tab is hidden;
-  the readout, the ring and the leader lines write 5×/s, not per frame;
-  DPR is capped at 2.
+- The loop runs only while the dial or the record is on screen, and
+  never in a hidden tab; the readout, the ring and the leader lines
+  write 5×/s, not per frame; DPR is capped at 2. It used to watch the
+  dial alone, and on a phone, where the record sits a screen and a half
+  lower, the record stood still under a caption saying it moves.
+- A resize that leaves the dial and the record their size does not
+  re-seed. A phone's address bar resizes the window on the first scroll,
+  and re-seeding there sent every session back to its start mid-scroll.
 - `prefers-reduced-motion` measures one frame and never starts a loop.
 - The run is seeded (`SEED`), so the same seed draws the same field.
 - It is the same instrument on every device. Links used to be skipped on
@@ -476,8 +519,35 @@ together:
 - `ScrollTrigger.refresh()` must follow any DOM change that alters height.
   The resize handler debounces it and ignores height-only changes on
   touch, where the collapsing address bar fires resize mid-scroll.
-- Hover styling is wrapped in `@media (hover: hover)`. On touch, `:hover`
-  latches after a tap and the element stays lit until you tap elsewhere.
+- Hover styling is wrapped in `@media (hover: hover)`, every rule of it,
+  `:focus-visible` beside it outside. On touch, `:hover` latches after a
+  tap and the element stays lit until you tap elsewhere. A tap's
+  feedback is `:active`, beside each control's hover: the same tokens,
+  applied at once (`transition-duration: 0s`), easing back on release.
+  The browser's own tap flash is off, and main.js keeps one empty
+  `touchstart` listener because iOS Safari ignores `:active` without one.
+- `buildScroll()` kills the old reveals on a rebuild; it never reverts
+  them. `revert()` put every finished row back to its pre-state, so a
+  language switch blanked the row being read for a second while all the
+  rows above it replayed. Rows already passed (above the viewport on
+  the first build, above the reveal line on a rebuild) are set straight
+  to their end state, and a batch's stagger is capped at 0.3s in total,
+  so a link straight to #path does not open on an empty section.
+- An anchor jump holds the header in place. The header hides while the
+  page moves down, and a jump down is that; it used to land the section
+  under an empty band. anchors.js sets `html.jumping` until `scrollend`.
+- A theme change is instant. It was a 0.45s colour fade on every themed
+  surface, and every frame of it restyled and repainted the whole page:
+  measured with the CPU slowed four times, ten to twelve frames dropped
+  over the half-second, with the simulation stopped as much as running,
+  so the stutter was the fade and not the tick loop. A View Transition
+  cross-fade was tried next and cost more again. Now `html.theming`
+  turns every transition off, the new colours land in one frame, and the
+  class comes off two frames later; slowed four times, two frames drop
+  and none at normal speed. Do not bring back a colour transition on the
+  themed surfaces. A saved theme is set by the inline script in the
+  head, before the first paint, from the same localStorage key theme.js
+  uses; a visitor who had chosen light used to get the dark page first.
 - The hero's pre-animation state lives in `base.css` under `html.js`, and
   `html.js` is set by an inline script in `<head>` — not by `main.js`.
   A deferred module can run after the browser's first paint, which would

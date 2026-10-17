@@ -814,11 +814,24 @@ export function initField() {
     // One frame, no loop. The readout still reports the real cost.
     panel.dataset.static = "true";
   } else {
-    new IntersectionObserver(([e]) => (e.isIntersecting ? start() : stop()), { threshold: 0 }).observe(dial);
+    // The loop runs while either instrument is on screen: the dial, or
+    // the record, which writes one dot per frame. On a wide screen the
+    // two share the first viewport. On a phone the record sits a screen
+    // and a half below the dial, and watching the dial alone left it
+    // standing still, under a caption that says it moves, exactly while
+    // someone was reading it.
+    const onScreen = new Set();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) e.isIntersecting ? onScreen.add(e.target) : onScreen.delete(e.target);
+      if (onScreen.size && !document.hidden) start();
+      else stop();
+    }, { threshold: 0 });
+    io.observe(dial);
+    io.observe(trace.closest(".strip") ?? trace);
 
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) stop();
-      else if (dial.getBoundingClientRect().bottom > 0) start();
+      else if (onScreen.size) start();
     });
   }
 
@@ -826,6 +839,17 @@ export function initField() {
   window.addEventListener("resize", () => {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
+      // A phone's address bar collapsing or coming back resizes the
+      // window without changing anything drawn here: the dial and the
+      // record are sized by width. Re-seeding on it sent every session
+      // back to its starting point in the middle of a scroll. Only the
+      // leaders, which hang off the page's layout, are re-laid.
+      const tr = trace.getBoundingClientRect();
+      if (canvas.offsetWidth === R * 2 && Math.round(tr.width) === tw && Math.round(tr.height) === th) {
+        layoutLeaders();
+        return;
+      }
+
       const before = R;
       resize();
 

@@ -74,6 +74,8 @@
   .cv-act:hover { background: var(--surface-2); border-color: var(--fg); }
   .cv-act--pri:hover { background: var(--fg-muted); border-color: var(--fg-muted); color: var(--bg); }
 }
+.cv-act:active { background: var(--surface-2); border-color: var(--fg); transition-duration: 0s; }
+.cv-act--pri:active { background: var(--fg-muted); border-color: var(--fg-muted); color: var(--bg); }
 
 @media (max-width: 900px) {
   .rec__h { display: none; }

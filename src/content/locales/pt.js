@@ -21,6 +21,11 @@ export default {
     menu: "Abrir o menu",
     menuClose: "Fechar o menu",
     skip: "Ir para o conteúdo",
+    // Enquanto o app é chamado (core/applink.js). {app} é o nome do
+    // canal. A frase é uma só, com o lugar do nome marcado: cada idioma
+    // põe o nome e o artigo onde a própria gramática pede.
+    opening: "Abrindo o {app}…",
+    language: "Idioma",
     source: "Fonte",
   },
 

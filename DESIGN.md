@@ -383,9 +383,10 @@ Two lockups set a drawing beside a word, both in Sofia Sans Condensed, the face 
 
 ### Motion
 - **State changes:** 0.18s on background, border and colour.
-- **Theme change:** a 0.45s cross-fade of ground, ink and border on the surfaces that carry a themed fill.
+- **Theme change:** instant, in one frame, with every transition held off while the new colours land. A cross-fade of the whole page cost more than it gave.
+- **Press:** a tap or click shows the control's hover state at once; the release eases back over 0.18s.
 - **Arrival:** the first screen settles once (opacity, and up to 20px of travel, 0.7s to 1.1s, exponential ease-out). Rows below settle as they enter the viewport (22px, 0.8s, 0.06s apart), once.
-- **Loop:** the record is the only thing that loops, and it stops when the dial leaves the viewport or the tab is hidden.
+- **Loop:** the record is the only thing that loops, and it runs only while the dial or the record is on screen and the tab is visible.
 - **Reduced motion:** the finished page, not a slower version of the animated one.
 
 ### Named Rules

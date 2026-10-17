@@ -21,6 +21,11 @@ export default {
     menu: "Open menu",
     menuClose: "Close menu",
     skip: "Skip to content",
+    // While the app is being asked to open (core/applink.js). {app} is
+    // the channel's name. One sentence with the name's place marked, so
+    // each language puts it, and any article, where its grammar wants.
+    opening: "Opening {app}…",
+    language: "Language",
     source: "Source",
   },
 

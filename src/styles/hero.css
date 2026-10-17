@@ -153,6 +153,12 @@
 }
 .door b { display: block; font: 700 1.1875rem/1.1 var(--f-label); letter-spacing: 0.06em; text-transform: uppercase; }
 .door span { display: block; margin-top: 3px; font-size: 1.0625rem; line-height: 1.25; color: var(--fg-muted); }
+/* The sentence and the handle after it share one line. */
+.door span span { display: inline; margin-top: 0; }
+.door__h { font: 700 1rem/1 var(--f-label); letter-spacing: 0.03em; white-space: nowrap; }
+.door__h::before { content: "·"; margin: 0 0.45em; font-weight: 500; }
+.door--pri .door__h { color: var(--on-signal); }
+.door--pri .door__h::before { color: var(--on-signal-muted); }
 .door svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; }
 .door--pri { background: var(--signal); border-color: var(--signal); color: var(--on-signal); }
 .door--pri span { color: var(--on-signal-muted); }
@@ -161,6 +167,10 @@
   .door:hover { background: var(--surface-2); border-color: var(--line-strong); }
   .door--pri:hover { background: var(--signal-hover); border-color: var(--signal-hover); }
 }
+/* The press: the hover state, at once. The release eases back over the
+   usual 0.18s. On touch this is the only feedback a tap gets. */
+.door:active { background: var(--surface-2); border-color: var(--line-strong); transition-duration: 0s; }
+.door--pri:active { background: var(--signal-hover); border-color: var(--signal-hover); }
 
 /* ── the tick record ─────────────────────────────────────── */
 .strip { background: var(--bg-sunken); border-block: 1px solid var(--line); }
@@ -205,6 +215,8 @@
   .instr button:not(:disabled):hover { background: var(--surface-2); border-color: var(--fg); color: var(--fg); }
   .instr button.go:not(:disabled):hover { background: var(--fg-muted); border-color: var(--fg-muted); color: var(--bg-sunken); }
 }
+.instr button:not(:disabled):active { background: var(--surface-2); border-color: var(--fg); color: var(--fg); transition-duration: 0s; }
+.instr button.go:not(:disabled):active { background: var(--fg-muted); border-color: var(--fg-muted); color: var(--bg-sunken); }
 
 /* ── narrower ────────────────────────────────────────────
    Below 1100px there is no room for a callout column on each side, so

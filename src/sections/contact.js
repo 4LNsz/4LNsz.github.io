@@ -42,8 +42,14 @@ export function channelCell(c, { note = true } = {}) {
   // which is not translated, over the handle. `value` is optional:
   // a channel with no public handle worth printing shows just its
   // name, and nothing is filled in for it.
+  //
+  // The featured cell sets its handle beside the name, on one baseline.
+  // While core/applink.js is asking the desktop app to open, the line of
+  // prose gives way to one saying so (`app-wait`); that needs a running
+  // script, so the static card leaves it out with the prose.
+  const wait = note && c.app ? `<span class="app-wait" data-i18n="ui.opening" data-i18n-args='${JSON.stringify({ app: c.label })}'></span>` : "";
   const body = c.featured
-    ? `<span class="chan__v">${c.label}</span>${note ? `<span class="chan__d" data-i18n="contact.primary"></span>` : ""}`
+    ? `<span class="chan__t"><span class="chan__v">${c.label}</span>${c.value ? `<span class="chan__h">${c.value}</span>` : ""}</span>${note ? `<span class="chan__d app-note" data-i18n="contact.primary"></span>${wait}` : ""}`
     : `<span class="chan__k">${c.label}</span><span class="chan__v${c.mono ? " chan__v--long" : ""}">${c.value ?? c.label}</span>`;
 
   return `

@@ -65,11 +65,17 @@ The page demonstrates performance instead of claiming it `[REPO]`.
 - FiveM / roleplay may be named as one context, never as the scope.
   In his words: he works in FiveM today, but the page presents a
   developer in general `[AL, 2026-10-11]`.
-- The Discord ID is never printed on the page.
+- The Discord ID is never printed on the page. His username is printed,
+  `@4lnsz` `[AL, 2026-10-16]`, so that a visitor can add him from their
+  own app.
 - **No availability line** `[AL, 2026-10-12]`. "Disponível para
   projetos" was inherited from the previous page and removed at his
   request: to him it reads as AI-written. Nothing of that family comes
   back.
+- **No process or pricing section** `[AL, 2026-10-16]`. How a project
+  runs and the ways to hire him were proposed from two company sites
+  and dropped: on a person's page they read as an agency's menu, and
+  they are a subject for the conversation, not the page.
 - A fact appears in one section only.
 - Every number on the hero readout is measured at runtime. None may
   become decorative.
@@ -78,7 +84,10 @@ Undecided, and not to be invented:
 
 - numeric scale claims (users, servers, percentages);
 - a public project for Atuação;
-- a photo;
+- a photo. The slot exists (`photo` in config.js, empty) and he has
+  agreed to supply one; it has to be a photograph, not a generated
+  portrait;
+
 - a timeline entry for 2018–2022;
 - the name and address products are sold under. No store exists today;
   it is a plan `[AL, 2026-10-11]`. The mark has to be ready for it

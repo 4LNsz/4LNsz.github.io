@@ -2,7 +2,9 @@
 *::before,
 *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { -webkit-text-size-adjust: 100%; scrollbar-color: var(--line-strong) var(--bg); }
+/* No tap flash: on touch a blue box drew over whatever was pressed. The
+   press states are :active rules beside each control's hover. */
+html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; scrollbar-color: var(--line-strong) var(--bg); }
 
 body {
   background: var(--bg);
@@ -26,14 +28,23 @@ section[id], main[id] { scroll-margin-top: calc(var(--header-h) + 12px); }
 .sec { padding-block: var(--section-y); }
 #profile { padding-top: calc(var(--section-y) * 0.8); }
 
-/* Theme cross-fade. Scoped to the elements that actually carry a themed
-   surface: a blanket `* { transition }` would also animate every GSAP
-   tween and the hover states below. */
-body, .strip, .dial, .door, .field, .chan, footer, .nav-drawer {
-  transition:
-    background-color 0.45s ease,
-    color 0.45s ease,
-    border-color 0.45s ease;
+/* The theme swap (core/theme.js) is instant. While it lands, nothing on
+   the page transitions, not even the controls' own colour changes. */
+html.theming *,
+html.theming *::before,
+html.theming *::after { transition: none !important; }
+
+/* Read aloud, not shown. */
+.vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* The parts a browser draws for itself still belong to the sheet. */
@@ -50,6 +61,14 @@ img, svg { max-width: 100%; }
 /* Long unbroken strings, an email address or a handle, must not be
    able to push the layout wider than the viewport on a narrow screen. */
 .brand, .chan__v, .rec__who { overflow-wrap: anywhere; }
+
+/* The desktop-app handoff (core/applink.js). While the app is being
+   asked to open, the line under the name says so, in place of the
+   line of prose. The selectors are long so that they outrank each
+   section's own `span` rules. */
+a[data-app] span.app-wait { display: none; }
+a[data-app].is-opening span.app-note { display: none; }
+a[data-app].is-opening span.app-wait { display: block; }
 
 /* ── focus ───────────────────────────────────────────────
    Keyboard users get a ring everywhere. Mouse users never see it. */
@@ -69,13 +88,16 @@ img, svg { max-width: 100%; }
   letter-spacing: 0.12em;
   text-transform: uppercase;
   transform: translateY(-160%);
-  transition: transform 0.25s var(--ease-out);
 }
+/* No transition: it answers a key press, and a keyboard action gets an
+   immediate result, not a slide. */
 .skip:focus-visible { transform: translateY(0); }
 
+/* The safe-area insets matter only with the page drawn under a notch,
+   which `viewport-fit=cover` asks for; elsewhere they are zero. */
 .wrap {
-  padding-left: var(--pad);
-  padding-right: var(--pad);
+  padding-left: max(var(--pad), env(safe-area-inset-left));
+  padding-right: max(var(--pad), env(safe-area-inset-right));
   max-width: var(--wrap-max);
   margin-inline: auto;
 }

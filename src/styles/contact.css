@@ -43,6 +43,11 @@
 }
 .chan--featured .chan__v { margin-top: 0; font: 800 clamp(2rem, 3.4vw, 2.75rem)/1 var(--f-display); letter-spacing: 0.014em; text-transform: uppercase; }
 .chan__d { display: block; margin-top: 5px; font-size: 1.0625rem; line-height: 1.25; color: var(--on-signal-muted); }
+/* The name and, beside it on its baseline, the handle a visitor types
+   into their own app. The waiting line takes the prose line's place. */
+.chan__t { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 16px; row-gap: 2px; }
+.chan--featured .chan__h { font: 700 1.375rem/1.15 var(--f-label); letter-spacing: 0.03em; }
+.chan--featured .app-wait { margin-top: 5px; font-size: 1.0625rem; line-height: 1.25; color: var(--on-signal-muted); }
 .chan--featured .chan__go { color: var(--on-signal); width: 28px; height: 28px; }
 .chan__mark { width: 40px; height: auto; fill: currentColor; }
 
@@ -52,6 +57,10 @@
   .chan--featured:hover { background: var(--signal-hover); }
   .chan--featured:hover .chan__go { color: var(--on-signal); }
 }
+.chan:active { background: var(--surface); transition-duration: 0s; }
+.chan:active .chan__go { color: var(--signal); transition-duration: 0s; }
+.chan--featured:active { background: var(--signal-hover); }
+.chan--featured:active .chan__go { color: var(--on-signal); }
 
 footer {
   display: flex;

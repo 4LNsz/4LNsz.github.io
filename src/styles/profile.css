@@ -10,6 +10,30 @@
   align-items: start;
 }
 
+/* The portrait, once there is one (`photo` in config.js): a plate in
+   the sheet's own hairline, the photograph in one tone so it sits in a
+   page that has one colour per theme. Beside the text on a wide screen,
+   above it on a narrow one. */
+.pf-about:has(.pf-photo) {
+  display: grid;
+  grid-template-columns: minmax(0, 13rem) minmax(0, 1fr);
+  column-gap: clamp(20px, 2.4vw, 36px);
+  align-items: start;
+}
+.pf-photo { border: 1px solid var(--line); background: var(--bg-sunken); }
+.pf-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  filter: grayscale(1) sepia(0.12) contrast(1.04);
+}
+@media (max-width: 860px) {
+  .pf-about:has(.pf-photo) { grid-template-columns: minmax(0, 1fr); row-gap: 22px; }
+  .pf-photo { width: min(100%, 16rem); }
+}
+
 .pf-about p {
   max-width: 34em;
   line-height: 1.52;
